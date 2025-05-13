@@ -1,9 +1,4 @@
-//
-//  ContentView.swift
-//  TrainityApp
-//
-//  Created by riccardo raffa on 13/05/25.
-//
+
 
 import SwiftUI
 
