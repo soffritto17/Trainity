@@ -2,75 +2,139 @@
 //  CustomizeWorkoutView.swift
 //  TrainityApp
 //
-//  Created by riccardo raffa on 13/05/25.
+//  Created by Antonio Fiorito on 13/05/25.
 //
 
 import SwiftUI
 
-struct Exercise: Identifiable {
-    let id = UUID()
-    let name: String
-    var isSelected: Bool = false
-    var sets: Int = 3
-    var restTime: Int = 60 // Tempo di recupero in secondi
-}
-
 struct CustomizeWorkoutView: View {
-    @Binding var workoutPlan: [Exercise] // Passato da ContentView
-    
-    @State private var exercises = [
-        Exercise(name: "Push-ups"),
-        Exercise(name: "Squats"),
-        Exercise(name: "Russian twists"),
-        Exercise(name: "Mountain Climbers"),
-        Exercise(name: "Diamond Push-ups"),
-        Exercise(name: "Shoulder Push-ups")
-    ]
+    @EnvironmentObject var workoutManager: WorkoutManager
+    @State private var duration: Int = 30
+    @State private var exerciseCount: Int = 4
+    @State private var restTime: Int = 30
+    @State private var goal: String = "Build Muscle"
+    @State private var showWorkout = false
+    @State private var generatedWorkout: Workout?
     
     var body: some View {
-        VStack {
-            Text("Customize Workout")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
+        ZStack {
+            Color(red: 0.7, green: 0.9, blue: 0.9).edgesIgnoringSafeArea(.all)
             
-            List {
-                ForEach($exercises) { $exercise in
-                    HStack {
-                        Toggle(isOn: $exercise.isSelected) {
-                            Text(exercise.name)
-                        }
-                        
-                        if exercise.isSelected {
-                            VStack {
-                                HStack {
-                                    Text("Sets")
-                                    Stepper(value: $exercise.sets, in: 1...5) {
-                                        Text("\(exercise.sets)")
-                                    }
-                                }
-                                
-                                HStack {
-                                    Text("Rest Time (sec)")
-                                    Stepper(value: $exercise.restTime, in: 30...180, step: 30) {
-                                        Text("\(exercise.restTime)")
-                                    }
-                                }
-                            }
-                        }
-                    }
+            VStack(spacing: 20) {
+                Text("Customize\nWorkout")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .padding(.top, 40)
+                
+                Text("* Select your preferences")
+                    .font(.headline)
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                
+                // Duration
+                HStack {
+                    Label("Duration", systemImage: "clock")
+                        .font(.headline)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    
+                    Spacer()
+                    
+                    Text("\(duration) min")
+                        .font(.headline)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                 }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                // Exercise Count
+                HStack {
+                    Label("Exercises", systemImage: "list.bullet")
+                        .font(.headline)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    
+                    Spacer()
+                    
+                    Text("\(exerciseCount)")
+                        .font(.headline)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                // Rest Time
+                HStack {
+                    Label("Rest Time", systemImage: "timer")
+                        .font(.headline)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    
+                    Spacer()
+                    
+                    Text("\(restTime) sec")
+                        .font(.headline)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                // Goal
+                HStack {
+                    Label("Goal", systemImage: "person.fill")
+                        .font(.headline)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    
+                    Spacer()
+                    
+                    Text(goal)
+                        .font(.headline)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                Spacer()
+                
+                Button(action: {
+                    generatedWorkout = workoutManager.generateWorkout(
+                        duration: duration,
+                        exerciseCount: exerciseCount,
+                        goal: goal,
+                        restTime: restTime
+                    )
+                    showWorkout = true
+                }) {
+                    Text("Generate Workout")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal, 40)
+                .padding(.bottom, 40)
             }
-            
-            Button("Confirm Workout") {
-                // Filtra gli esercizi selezionati e salva nel workoutPlan
-                workoutPlan = exercises.filter { $0.isSelected }
-            }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(10)
-            .padding()
         }
+        .sheet(isPresented: $showWorkout, content: {
+            if let workout = generatedWorkout {
+                WorkoutDetailView(workout: workout)
+                    .environmentObject(workoutManager)
+            }
+        })
     }
+}
+
+
+#Preview {
+    CustomizeWorkoutView()
 }

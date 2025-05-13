@@ -2,7 +2,7 @@
 //  TrainityAppUITestsLaunchTests.swift
 //  TrainityAppUITests
 //
-//  Created by riccardo raffa on 13/05/25.
+//  Created by Antonio Fiorito on 13/05/25.
 //
 
 import XCTest

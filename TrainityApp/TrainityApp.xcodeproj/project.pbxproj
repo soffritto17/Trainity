@@ -7,40 +7,40 @@
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
-		0C5EB6F82DD34809001E74DF /* PBXContainerItemProxy */ = {
+		2599D3A42DD386C300B526D9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 0C5EB6E22DD34808001E74DF /* Project object */;
+			containerPortal = 2599D38E2DD386C200B526D9 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0C5EB6E92DD34808001E74DF;
+			remoteGlobalIDString = 2599D3952DD386C200B526D9;
 			remoteInfo = TrainityApp;
 		};
-		0C5EB7022DD34809001E74DF /* PBXContainerItemProxy */ = {
+		2599D3AE2DD386C300B526D9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 0C5EB6E22DD34808001E74DF /* Project object */;
+			containerPortal = 2599D38E2DD386C200B526D9 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0C5EB6E92DD34808001E74DF;
+			remoteGlobalIDString = 2599D3952DD386C200B526D9;
 			remoteInfo = TrainityApp;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0C5EB6EA2DD34808001E74DF /* TrainityApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrainityApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0C5EB6F72DD34809001E74DF /* TrainityAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrainityAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0C5EB7012DD34809001E74DF /* TrainityAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrainityAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2599D3962DD386C200B526D9 /* TrainityApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrainityApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2599D3A32DD386C300B526D9 /* TrainityAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrainityAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2599D3AD2DD386C300B526D9 /* TrainityAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrainityAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		0C5EB6EC2DD34808001E74DF /* TrainityApp */ = {
+		2599D3982DD386C200B526D9 /* TrainityApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrainityApp;
 			sourceTree = "<group>";
 		};
-		0C5EB6FA2DD34809001E74DF /* TrainityAppTests */ = {
+		2599D3A62DD386C300B526D9 /* TrainityAppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrainityAppTests;
 			sourceTree = "<group>";
 		};
-		0C5EB7042DD34809001E74DF /* TrainityAppUITests */ = {
+		2599D3B02DD386C300B526D9 /* TrainityAppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrainityAppUITests;
 			sourceTree = "<group>";
@@ -48,21 +48,21 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0C5EB6E72DD34808001E74DF /* Frameworks */ = {
+		2599D3932DD386C200B526D9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0C5EB6F42DD34809001E74DF /* Frameworks */ = {
+		2599D3A02DD386C300B526D9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0C5EB6FE2DD34809001E74DF /* Frameworks */ = {
+		2599D3AA2DD386C300B526D9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -72,22 +72,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0C5EB6E12DD34808001E74DF = {
+		2599D38D2DD386C200B526D9 = {
 			isa = PBXGroup;
 			children = (
-				0C5EB6EC2DD34808001E74DF /* TrainityApp */,
-				0C5EB6FA2DD34809001E74DF /* TrainityAppTests */,
-				0C5EB7042DD34809001E74DF /* TrainityAppUITests */,
-				0C5EB6EB2DD34808001E74DF /* Products */,
+				2599D3982DD386C200B526D9 /* TrainityApp */,
+				2599D3A62DD386C300B526D9 /* TrainityAppTests */,
+				2599D3B02DD386C300B526D9 /* TrainityAppUITests */,
+				2599D3972DD386C200B526D9 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		0C5EB6EB2DD34808001E74DF /* Products */ = {
+		2599D3972DD386C200B526D9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0C5EB6EA2DD34808001E74DF /* TrainityApp.app */,
-				0C5EB6F72DD34809001E74DF /* TrainityAppTests.xctest */,
-				0C5EB7012DD34809001E74DF /* TrainityAppUITests.xctest */,
+				2599D3962DD386C200B526D9 /* TrainityApp.app */,
+				2599D3A32DD386C300B526D9 /* TrainityAppTests.xctest */,
+				2599D3AD2DD386C300B526D9 /* TrainityAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,134 +95,134 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0C5EB6E92DD34808001E74DF /* TrainityApp */ = {
+		2599D3952DD386C200B526D9 /* TrainityApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0C5EB70B2DD34809001E74DF /* Build configuration list for PBXNativeTarget "TrainityApp" */;
+			buildConfigurationList = 2599D3B72DD386C300B526D9 /* Build configuration list for PBXNativeTarget "TrainityApp" */;
 			buildPhases = (
-				0C5EB6E62DD34808001E74DF /* Sources */,
-				0C5EB6E72DD34808001E74DF /* Frameworks */,
-				0C5EB6E82DD34808001E74DF /* Resources */,
+				2599D3922DD386C200B526D9 /* Sources */,
+				2599D3932DD386C200B526D9 /* Frameworks */,
+				2599D3942DD386C200B526D9 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				0C5EB6EC2DD34808001E74DF /* TrainityApp */,
+				2599D3982DD386C200B526D9 /* TrainityApp */,
 			);
 			name = TrainityApp;
 			packageProductDependencies = (
 			);
 			productName = TrainityApp;
-			productReference = 0C5EB6EA2DD34808001E74DF /* TrainityApp.app */;
+			productReference = 2599D3962DD386C200B526D9 /* TrainityApp.app */;
 			productType = "com.apple.product-type.application";
 		};
-		0C5EB6F62DD34809001E74DF /* TrainityAppTests */ = {
+		2599D3A22DD386C300B526D9 /* TrainityAppTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0C5EB70E2DD34809001E74DF /* Build configuration list for PBXNativeTarget "TrainityAppTests" */;
+			buildConfigurationList = 2599D3BA2DD386C300B526D9 /* Build configuration list for PBXNativeTarget "TrainityAppTests" */;
 			buildPhases = (
-				0C5EB6F32DD34809001E74DF /* Sources */,
-				0C5EB6F42DD34809001E74DF /* Frameworks */,
-				0C5EB6F52DD34809001E74DF /* Resources */,
+				2599D39F2DD386C300B526D9 /* Sources */,
+				2599D3A02DD386C300B526D9 /* Frameworks */,
+				2599D3A12DD386C300B526D9 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				0C5EB6F92DD34809001E74DF /* PBXTargetDependency */,
+				2599D3A52DD386C300B526D9 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				0C5EB6FA2DD34809001E74DF /* TrainityAppTests */,
+				2599D3A62DD386C300B526D9 /* TrainityAppTests */,
 			);
 			name = TrainityAppTests;
 			packageProductDependencies = (
 			);
 			productName = TrainityAppTests;
-			productReference = 0C5EB6F72DD34809001E74DF /* TrainityAppTests.xctest */;
+			productReference = 2599D3A32DD386C300B526D9 /* TrainityAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		0C5EB7002DD34809001E74DF /* TrainityAppUITests */ = {
+		2599D3AC2DD386C300B526D9 /* TrainityAppUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0C5EB7112DD34809001E74DF /* Build configuration list for PBXNativeTarget "TrainityAppUITests" */;
+			buildConfigurationList = 2599D3BD2DD386C300B526D9 /* Build configuration list for PBXNativeTarget "TrainityAppUITests" */;
 			buildPhases = (
-				0C5EB6FD2DD34809001E74DF /* Sources */,
-				0C5EB6FE2DD34809001E74DF /* Frameworks */,
-				0C5EB6FF2DD34809001E74DF /* Resources */,
+				2599D3A92DD386C300B526D9 /* Sources */,
+				2599D3AA2DD386C300B526D9 /* Frameworks */,
+				2599D3AB2DD386C300B526D9 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				0C5EB7032DD34809001E74DF /* PBXTargetDependency */,
+				2599D3AF2DD386C300B526D9 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				0C5EB7042DD34809001E74DF /* TrainityAppUITests */,
+				2599D3B02DD386C300B526D9 /* TrainityAppUITests */,
 			);
 			name = TrainityAppUITests;
 			packageProductDependencies = (
 			);
 			productName = TrainityAppUITests;
-			productReference = 0C5EB7012DD34809001E74DF /* TrainityAppUITests.xctest */;
+			productReference = 2599D3AD2DD386C300B526D9 /* TrainityAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		0C5EB6E22DD34808001E74DF /* Project object */ = {
+		2599D38E2DD386C200B526D9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
-					0C5EB6E92DD34808001E74DF = {
+					2599D3952DD386C200B526D9 = {
 						CreatedOnToolsVersion = 16.3;
 					};
-					0C5EB6F62DD34809001E74DF = {
+					2599D3A22DD386C300B526D9 = {
 						CreatedOnToolsVersion = 16.3;
-						TestTargetID = 0C5EB6E92DD34808001E74DF;
+						TestTargetID = 2599D3952DD386C200B526D9;
 					};
-					0C5EB7002DD34809001E74DF = {
+					2599D3AC2DD386C300B526D9 = {
 						CreatedOnToolsVersion = 16.3;
-						TestTargetID = 0C5EB6E92DD34808001E74DF;
+						TestTargetID = 2599D3952DD386C200B526D9;
 					};
 				};
 			};
-			buildConfigurationList = 0C5EB6E52DD34808001E74DF /* Build configuration list for PBXProject "TrainityApp" */;
+			buildConfigurationList = 2599D3912DD386C200B526D9 /* Build configuration list for PBXProject "TrainityApp" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 0C5EB6E12DD34808001E74DF;
+			mainGroup = 2599D38D2DD386C200B526D9;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 0C5EB6EB2DD34808001E74DF /* Products */;
+			productRefGroup = 2599D3972DD386C200B526D9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0C5EB6E92DD34808001E74DF /* TrainityApp */,
-				0C5EB6F62DD34809001E74DF /* TrainityAppTests */,
-				0C5EB7002DD34809001E74DF /* TrainityAppUITests */,
+				2599D3952DD386C200B526D9 /* TrainityApp */,
+				2599D3A22DD386C300B526D9 /* TrainityAppTests */,
+				2599D3AC2DD386C300B526D9 /* TrainityAppUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		0C5EB6E82DD34808001E74DF /* Resources */ = {
+		2599D3942DD386C200B526D9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0C5EB6F52DD34809001E74DF /* Resources */ = {
+		2599D3A12DD386C300B526D9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0C5EB6FF2DD34809001E74DF /* Resources */ = {
+		2599D3AB2DD386C300B526D9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -232,21 +232,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		0C5EB6E62DD34808001E74DF /* Sources */ = {
+		2599D3922DD386C200B526D9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0C5EB6F32DD34809001E74DF /* Sources */ = {
+		2599D39F2DD386C300B526D9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0C5EB6FD2DD34809001E74DF /* Sources */ = {
+		2599D3A92DD386C300B526D9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -256,20 +256,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0C5EB6F92DD34809001E74DF /* PBXTargetDependency */ = {
+		2599D3A52DD386C300B526D9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0C5EB6E92DD34808001E74DF /* TrainityApp */;
-			targetProxy = 0C5EB6F82DD34809001E74DF /* PBXContainerItemProxy */;
+			target = 2599D3952DD386C200B526D9 /* TrainityApp */;
+			targetProxy = 2599D3A42DD386C300B526D9 /* PBXContainerItemProxy */;
 		};
-		0C5EB7032DD34809001E74DF /* PBXTargetDependency */ = {
+		2599D3AF2DD386C300B526D9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0C5EB6E92DD34808001E74DF /* TrainityApp */;
-			targetProxy = 0C5EB7022DD34809001E74DF /* PBXContainerItemProxy */;
+			target = 2599D3952DD386C200B526D9 /* TrainityApp */;
+			targetProxy = 2599D3AE2DD386C300B526D9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0C5EB7092DD34809001E74DF /* Debug */ = {
+		2599D3B52DD386C300B526D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -332,7 +332,7 @@
 			};
 			name = Debug;
 		};
-		0C5EB70A2DD34809001E74DF /* Release */ = {
+		2599D3B62DD386C300B526D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -388,7 +388,7 @@
 			};
 			name = Release;
 		};
-		0C5EB70C2DD34809001E74DF /* Debug */ = {
+		2599D3B82DD386C300B526D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -407,7 +407,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = pippoProject.TrainityApp;
+				PRODUCT_BUNDLE_IDENTIFIER = it.parthenope.TrainityApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -415,7 +415,7 @@
 			};
 			name = Debug;
 		};
-		0C5EB70D2DD34809001E74DF /* Release */ = {
+		2599D3B92DD386C300B526D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -434,7 +434,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = pippoProject.TrainityApp;
+				PRODUCT_BUNDLE_IDENTIFIER = it.parthenope.TrainityApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -442,7 +442,7 @@
 			};
 			name = Release;
 		};
-		0C5EB70F2DD34809001E74DF /* Debug */ = {
+		2599D3BB2DD386C300B526D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -451,7 +451,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = pippoProject.TrainityAppTests;
+				PRODUCT_BUNDLE_IDENTIFIER = it.parthenope.TrainityAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -460,7 +460,7 @@
 			};
 			name = Debug;
 		};
-		0C5EB7102DD34809001E74DF /* Release */ = {
+		2599D3BC2DD386C300B526D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -469,7 +469,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = pippoProject.TrainityAppTests;
+				PRODUCT_BUNDLE_IDENTIFIER = it.parthenope.TrainityAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -478,14 +478,14 @@
 			};
 			name = Release;
 		};
-		0C5EB7122DD34809001E74DF /* Debug */ = {
+		2599D3BE2DD386C300B526D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = pippoProject.TrainityAppUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = it.parthenope.TrainityAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -494,14 +494,14 @@
 			};
 			name = Debug;
 		};
-		0C5EB7132DD34809001E74DF /* Release */ = {
+		2599D3BF2DD386C300B526D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = pippoProject.TrainityAppUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = it.parthenope.TrainityAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -513,43 +513,43 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0C5EB6E52DD34808001E74DF /* Build configuration list for PBXProject "TrainityApp" */ = {
+		2599D3912DD386C200B526D9 /* Build configuration list for PBXProject "TrainityApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0C5EB7092DD34809001E74DF /* Debug */,
-				0C5EB70A2DD34809001E74DF /* Release */,
+				2599D3B52DD386C300B526D9 /* Debug */,
+				2599D3B62DD386C300B526D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0C5EB70B2DD34809001E74DF /* Build configuration list for PBXNativeTarget "TrainityApp" */ = {
+		2599D3B72DD386C300B526D9 /* Build configuration list for PBXNativeTarget "TrainityApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0C5EB70C2DD34809001E74DF /* Debug */,
-				0C5EB70D2DD34809001E74DF /* Release */,
+				2599D3B82DD386C300B526D9 /* Debug */,
+				2599D3B92DD386C300B526D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0C5EB70E2DD34809001E74DF /* Build configuration list for PBXNativeTarget "TrainityAppTests" */ = {
+		2599D3BA2DD386C300B526D9 /* Build configuration list for PBXNativeTarget "TrainityAppTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0C5EB70F2DD34809001E74DF /* Debug */,
-				0C5EB7102DD34809001E74DF /* Release */,
+				2599D3BB2DD386C300B526D9 /* Debug */,
+				2599D3BC2DD386C300B526D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0C5EB7112DD34809001E74DF /* Build configuration list for PBXNativeTarget "TrainityAppUITests" */ = {
+		2599D3BD2DD386C300B526D9 /* Build configuration list for PBXNativeTarget "TrainityAppUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0C5EB7122DD34809001E74DF /* Debug */,
-				0C5EB7132DD34809001E74DF /* Release */,
+				2599D3BE2DD386C300B526D9 /* Debug */,
+				2599D3BF2DD386C300B526D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 0C5EB6E22DD34808001E74DF /* Project object */;
+	rootObject = 2599D38E2DD386C200B526D9 /* Project object */;
 }

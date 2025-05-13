@@ -2,38 +2,45 @@
 //  ContentView.swift
 //  TrainityApp
 //
-//  Created by riccardo raffa on 13/05/25.
+//  Created by Antonio Fiorito on 13/05/25.
 //
 
+// VISTE PRINCIPALI
 import SwiftUI
 
-struct ContentView: View {
-    @State private var workoutPlan: [Exercise] = [] // Piano di allenamento che sarà passato
 
+struct ContentView: View {
+    @StateObject private var workoutManager = WorkoutManager()
+    
     var body: some View {
         TabView {
-            // Prima schermata: Daily Challenge
-            DailyChallengeView()
+            HomeView()
+                .environmentObject(workoutManager)
                 .tabItem {
-                    Label("Daily Challenge", systemImage: "bolt.fill")
+                    Label("Home", systemImage: "house")
                 }
-
-            // Seconda schermata: Customize Workout
-            CustomizeWorkoutView(workoutPlan: $workoutPlan)
+            
+            DailyChallengeView()
+                .environmentObject(workoutManager)
+                .tabItem {
+                    Label("Challenge", systemImage: "flame")
+                }
+            
+            CustomizeWorkoutView()
+                .environmentObject(workoutManager)
                 .tabItem {
                     Label("Customize", systemImage: "slider.horizontal.3")
                 }
-
-            // Terza schermata: My Workout
-            MyWorkoutView(workoutPlan: workoutPlan)
+            
+            MyWorkoutView()
+                .environmentObject(workoutManager)
                 .tabItem {
-                    Label("My Workou", systemImage: "heart.fill")
+                    Label("My Workout", systemImage: "heart")
                 }
         }
+        .accentColor(Color(red: 0.1, green: 0.4, blue: 0.4))
     }
 }
-
-
 #Preview {
     ContentView()
 }

@@ -2,92 +2,106 @@
 //  MyWorkoutView.swift
 //  TrainityApp
 //
-//  Created by riccardo raffa on 13/05/25.
+//  Created by Antonio Fiorito on 13/05/25.
 //
-
 
 import SwiftUI
 
 struct MyWorkoutView: View {
-    @State var workoutPlan: [Exercise]
-    @State private var currentExerciseIndex = 0
-    @State private var isResting = false
-    @State private var timeRemaining = 0
-    @State private var timer: Timer? = nil
+    @EnvironmentObject var workoutManager: WorkoutManager
+    @State private var selectedWorkout: Workout?
     
     var body: some View {
-        VStack {
-            Text("My Workout")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
-            
-            if currentExerciseIndex < workoutPlan.count {
-                let currentExercise = workoutPlan[currentExerciseIndex]
+        NavigationView {
+            ZStack {
+                Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
                 
-                Text("Exercise: \(currentExercise.name)")
-                    .font(.title2)
-                    .padding()
-                
-                Text("Sets: \(currentExercise.sets)")
-                    .font(.title3)
-                
-                Text(isResting ? "Resting" : "Working")
-                    .foregroundColor(isResting ? .green : .red)
-                    .font(.title2)
-                    .padding()
-                
-                Text("Time Remaining: \(timeRemaining) sec")
-                    .font(.headline)
-                    .padding()
-                
-                Button(action: {
-                    startWorkout()
-                }) {
-                    Text("Start")
-                        .font(.title)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding()
-                }
-            }
-        }
-    }
-    
-    func startWorkout() {
-        // Imposta il tempo di recupero per il primo esercizio
-        let firstExercise = workoutPlan[currentExerciseIndex]
-        timeRemaining = firstExercise.restTime
-        
-        // Avvia il cronometro
-        isResting = false
-        startTimer()
-    }
-    
-    func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            if timeRemaining > 0 {
-                timeRemaining -= 1
-            } else {
-                // Passa al prossimo esercizio o al periodo di riposo
-                if isResting {
-                    // Cambia esercizio
-                    currentExerciseIndex += 1
-                    if currentExerciseIndex < workoutPlan.count {
-                        let nextExercise = workoutPlan[currentExerciseIndex]
-                        timeRemaining = nextExercise.restTime
+                VStack(spacing: 20) {
+                    ZStack {
+                        Circle()
+                            .fill(Color(red: 0.7, green: 0.9, blue: 0.9))
+                            .frame(width: 100, height: 100)
+                        
+                        Image(systemName: "plus")
+                            .font(.system(size: 40))
+                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                     }
-                } else {
-                    // Inizia il recupero
-                    isResting = true
-                    timeRemaining = workoutPlan[currentExerciseIndex].restTime
+                    .padding(.top, 30)
+                    
+                    Text("My Workout")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    
+                    // Display selected workout or first workout if available
+                    if let workout = selectedWorkout ?? workoutManager.savedWorkouts.first {
+                        VStack(alignment: .leading, spacing: 15) {
+                            HStack {
+                                Image(systemName: "dumbbell.fill")
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                Text(workout.goal)
+                                    .font(.headline)
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                            }
+                            
+                            HStack {
+                                Image(systemName: "calendar")
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                Text("\(workout.duration) min")
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                Spacer()
+                                Text("\(workout.exercises.count)")
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                            }
+                            
+                            ForEach(workout.exercises) { exercise in
+                                HStack {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    
+                                    Text(exercise.name)
+                                        .font(.headline)
+                                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    
+                                    Spacer()
+                                    
+                                    Text("\(exercise.sets)x \(exercise.reps)")
+                                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                }
+                                .padding(.vertical, 5)
+                            }
+                            
+                            Button(action: {
+                                // Start workout action
+                            }) {
+                                Text("Start Workout")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .cornerRadius(10)
+                            }
+                            .padding(.top)
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                    } else {
+                        Text("No workouts saved")
+                            .foregroundColor(.gray)
+                            .padding()
+                    }
+                    
+                    Spacer()
                 }
             }
+            .navigationBarHidden(true)
         }
     }
 }
 
-
+#Preview {
+    MyWorkoutView()
+}
