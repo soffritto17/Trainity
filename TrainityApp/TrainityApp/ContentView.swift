@@ -27,7 +27,7 @@ struct ContentView: View {
             // Terza schermata: My Workout
             MyWorkoutView(workoutPlan: workoutPlan)
                 .tabItem {
-                    Label("My Workout", systemImage: "heart.fill")
+                    Label("My Workou", systemImage: "heart.fill")
                 }
         }
     }
