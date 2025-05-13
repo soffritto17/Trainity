@@ -35,7 +35,7 @@ struct ContentView: View {
             MyWorkoutView()
                 .environmentObject(workoutManager)
                 .tabItem {
-                    Label("My Workout", systemImage: "heart")
+                    Label("My Workou", systemImage: "heart")
                 }
         }
         .accentColor(Color(red: 0.1, green: 0.4, blue: 0.4))
