@@ -9,6 +9,8 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @State private var showDailyChallenge = false
+    @State private var showCreateWorkout = false
     
     var body: some View {
         NavigationView {
@@ -23,105 +25,151 @@ struct HomeView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                         .padding(.top)
+                        .padding(.bottom, 30)
                         .background(Color(red: 0.1, green: 0.4, blue: 0.4))
                     
-                    HStack(spacing: 20) {
-                        VStack {
+                    Button(action: {
+                        showDailyChallenge = true
+                    }) {
+                        HStack {
                             ZStack {
                                 Circle()
                                     .fill(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                    .frame(width: 80, height: 80)
+                                    .frame(width: 60, height: 60)
                                 
-                                Image(systemName: "figure.run")
+                                Image(systemName: "flame.fill")
                                     .font(.system(size: 30))
                                     .foregroundColor(.white)
                             }
                             
-                            Text("Daily\nChallenge")
-                                .multilineTextAlignment(.center)
-                                .font(.system(size: 16, weight: .medium))
-                        }
-                        .frame(width: 120, height: 150)
-                        .background(Color(red: 0.9, green: 0.95, blue: 0.95))
-                        .cornerRadius(10)
-                        
-                        VStack {
-                            ZStack {
-                                Circle()
-                                    .fill(Color(red: 0.7, green: 0.9, blue: 0.9))
-                                    .frame(width: 80, height: 80)
-                                
-                                Image(systemName: "figure.yoga")
-                                    .font(.system(size: 30))
+                            VStack(alignment: .leading) {
+                                Text("Daily Challenge")
+                                    .font(.headline)
                                     .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                
+                                Text("Complete daily workouts to earn badges")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
                             }
                             
-                            Text("How to\nimprove")
-                                .multilineTextAlignment(.center)
-                                .font(.system(size: 16, weight: .medium))
-                        }
-                        .frame(width: 120, height: 150)
-                        .background(Color(red: 0.9, green: 0.95, blue: 0.95))
-                        .cornerRadius(10)
-                    }
-                    .padding(.horizontal)
-                    
-                    Button(action: {}) {
-                        HStack {
-                            Image(systemName: "dumbbell")
-                                .font(.title2)
-                            Text("My Workouts")
-                                .font(.headline)
                             Spacer()
-                        }
-                        .padding()
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                        .background(Color(red: 0.7, green: 0.9, blue: 0.9))
-                        .cornerRadius(10)
-                    }
-                    .padding(.horizontal)
-                    
-                    Button(action: {}) {
-                        HStack {
-                            Image(systemName: "checkmark.circle")
-                                .font(.title2)
-                            Text("How to Improve")
-                                .font(.headline)
-                            Spacer()
-                        }
-                        .padding()
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                        .background(Color(red: 0.7, green: 0.9, blue: 0.9))
-                        .cornerRadius(10)
-                    }
-                    .padding(.horizontal)
-                    
-                    Spacer()
-                    
-                    // Progress bar
-                    VStack(alignment: .trailing) {
-                        ZStack(alignment: .leading) {
-                            Capsule()
-                                .frame(height: 10)
-                                .foregroundColor(Color(red: 0.7, green: 0.9, blue: 0.9))
                             
-                            Capsule()
-                                .frame(width: CGFloat(workoutManager.progress) / 100 * UIScreen.main.bounds.width * 0.8, height: 10)
+                            Image(systemName: "chevron.right")
                                 .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                         }
-                        
-                        Text("\(workoutManager.progress) / 100")
-                            .font(.caption)
-                            .foregroundColor(.gray)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(15)
+                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                     }
                     .padding(.horizontal)
-                    .padding(.bottom, 40)
+                    .sheet(isPresented: $showDailyChallenge) {
+                        DailyChallengeView()
+                            .environmentObject(workoutManager)
+                    }
+                    
+                    Button(action: {
+                        showCreateWorkout = true
+                    }) {
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .fill(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .frame(width: 60, height: 60)
+                                
+                                Image(systemName: "dumbbell.fill")
+                                    .font(.system(size: 30))
+                                    .foregroundColor(.white)
+                            }
+                            
+                            VStack(alignment: .leading) {
+                                Text("My Workouts")
+                                    .font(.headline)
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                
+                                Text("Create and manage your custom workouts")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(15)
+                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                    }
+                    .padding(.horizontal)
+                    .sheet(isPresented: $showCreateWorkout) {
+                        CustomizeWorkoutView()
+                            .environmentObject(workoutManager)
+                    }
+                    
+                    // Progress overview
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Your Progress")
+                            .font(.headline)
+                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        
+                        HStack {
+                            VStack {
+                                Text("\(workoutManager.totalWorkoutsCompleted)")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                Text("Workouts")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                            .frame(maxWidth: .infinity)
+                            
+                            Divider()
+                                .frame(height: 40)
+                            
+                            VStack {
+                                Text("\(workoutManager.weeklyStreak)")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                Text("Days Streak")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                            .frame(maxWidth: .infinity)
+                            
+                            Divider()
+                                .frame(height: 40)
+                            
+                            VStack {
+                                Text("\(workoutManager.badgesEarned)")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                Text("Badges")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(15)
+                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                    .padding(.horizontal)
+                    .padding(.top, 10)
+                    
+                    Spacer()
                 }
             }
             .navigationBarHidden(true)
         }
     }
 }
+
 #Preview {
     HomeView()
 }

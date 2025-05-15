@@ -17,30 +17,25 @@ struct ContentView: View {
             HomeView()
                 .environmentObject(workoutManager)
                 .tabItem {
-                    Label("Home", systemImage: "house")
+                    Label("Menù", systemImage: "house")
                 }
             
-            DailyChallengeView()
+            WorkoutHistoryView()
                 .environmentObject(workoutManager)
                 .tabItem {
-                    Label("Challenge", systemImage: "flame")
+                    Label("Cronologia", systemImage: "clock.arrow.circlepath")
                 }
             
-            CustomizeWorkoutView()
+            ProfileView()
                 .environmentObject(workoutManager)
                 .tabItem {
-                    Label("Customize", systemImage: "slider.horizontal.3")
-                }
-            
-            MyWorkoutView()
-                .environmentObject(workoutManager)
-                .tabItem {
-                    Label("My Workout", systemImage: "heart")
+                    Label("Profilo", systemImage: "person.fill")
                 }
         }
         .accentColor(Color(red: 0.1, green: 0.4, blue: 0.4))
     }
 }
+
 #Preview {
     ContentView()
 }

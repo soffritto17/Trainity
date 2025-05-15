@@ -101,7 +101,6 @@ struct MyWorkoutView: View {
         }
     }
 }
-
 #Preview {
     MyWorkoutView()
 }
