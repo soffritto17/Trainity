@@ -18,6 +18,13 @@ struct Exercise: Identifiable {
     var isCompleted: Bool = false
 }
 
+struct DailyChallenge {
+    var exercises: [Exercise]
+    var difficulty: String
+    var description: String
+    var estimatedTime: Int // in minuti
+}
+
 struct Workout: Identifiable {
     var id = UUID()
     var name: String
