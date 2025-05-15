@@ -54,6 +54,8 @@ class WorkoutManager: ObservableObject {
     @Published var badges: [Badge] = []
     
     // Esempio di allenamento per "Build Muscle"
+    
+    
     let buildMuscleWorkout = Workout(
         name: "Build Muscle",
         duration: 30,
