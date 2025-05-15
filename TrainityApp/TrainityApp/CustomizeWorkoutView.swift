@@ -34,6 +34,7 @@ struct CustomizeWorkoutView: View {
                 // Lista dei programmi salvati
                 if workoutManager.savedWorkouts.isEmpty {
                     VStack {
+                        
                         Spacer()
                         Text("Nessun programma salvato")
                             .font(.headline)
@@ -43,6 +44,7 @@ struct CustomizeWorkoutView: View {
                             .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                         Spacer()
                     }
+                    .background(Color(red: 0.9, green: 0.95, blue: 0.95))
                 } else {
                     List {
                         ForEach(workoutManager.savedWorkouts) { workout in
@@ -54,9 +56,10 @@ struct CustomizeWorkoutView: View {
                     }
                     .listStyle(InsetGroupedListStyle())
                     .background(Color(red: 0.9, green: 0.95, blue: 0.95))
+                    .scrollContentBackground(.hidden)
                 }
             }
-            
+            .background(Color(red: 0.9, green: 0.95, blue: 0.95))
             // NavigationLink nascosto
             NavigationLink(
                 destination: CreateNewWorkoutView().environmentObject(workoutManager),
