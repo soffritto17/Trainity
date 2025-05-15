@@ -1,13 +1,4 @@
-//
-//  CreateNewWorkoutView.swift
-//  TrainityApp
-//
-//  Created by Giovanni De Rosa on 15/05/25.
-//
-
 import SwiftUI
-
-
 
 struct CreateNewWorkoutView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
@@ -21,114 +12,111 @@ struct CreateNewWorkoutView: View {
     let goalOptions = ["Build Muscle", "Weight Loss", "Endurance", "Strength"]
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color(red: 0.7, green: 0.9, blue: 0.9).edgesIgnoringSafeArea(.all)
-                
-                ScrollView {
-                    VStack(spacing: 20) {
-                        Text("Crea nuovo programma")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .multilineTextAlignment(.center)
+        // Rimuovi NavigationView da qui
+        ZStack {
+            Color(red: 0.7, green: 0.9, blue: 0.9).edgesIgnoringSafeArea(.all)
+            
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("Crea  programma")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .padding(.top, 20)
+                    
+                    // Nome programma
+                    VStack(alignment: .leading) {
+                        Text("Nome programma")
+                            .font(.headline)
                             .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                            .padding(.top, 20)
                         
-                        // Nome programma
-                        VStack(alignment: .leading) {
-                            Text("Nome programma")
+                        TextField("Inserisci nome", text: $workoutName)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+                    
+                    // Exercises section
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("Esercizi")
                                 .font(.headline)
                                 .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                             
-                            TextField("Inserisci nome", text: $workoutName)
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(10)
+                            Spacer()
                         }
                         .padding(.horizontal)
                         
-                       
-                        
-                       
-                        
-                        // Exercises section
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text("Esercizi")
-                                    .font(.headline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-                            
-                            if exercises.isEmpty {
-                                Text("Nessun esercizio aggiunto")
-                                    .foregroundColor(.gray)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.white.opacity(0.5))
-                                    .cornerRadius(10)
-                                    .padding(.horizontal)
-                            } else {
-                                ForEach(0..<exercises.count, id: \.self) { index in
-                                    ExerciseRowView(exercise: $exercises[index])
-                                        .padding(.vertical, 5)
-                                }
-                                .onDelete(perform: deleteExercise)
-                            }
-                            
-                            Button(action: {
-                                showExerciseSelector = true
-                            }) {
-                                HStack {
-                                    Image(systemName: "plus.circle.fill")
-                                    Text("Aggiungi Esercizio")
-                                        .fontWeight(.semibold)
-                                }
-                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        if exercises.isEmpty {
+                            Text("Nessun esercizio aggiunto")
+                                .foregroundColor(.gray)
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color.white)
+                                .background(Color.white.opacity(0.5))
                                 .cornerRadius(10)
                                 .padding(.horizontal)
+                        } else {
+                            ForEach(0..<exercises.count, id: \.self) { index in
+                                ExerciseRowView(exercise: $exercises[index])
+                                    .padding(.vertical, 5)
                             }
+                            .onDelete(perform: deleteExercise)
                         }
-                        
-                        Spacer()
                         
                         Button(action: {
-                            saveWorkout()
-                            presentationMode.wrappedValue.dismiss()
+                            showExerciseSelector = true
                         }) {
-                            Text("Salva Programma")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                .cornerRadius(10)
+                            HStack {
+                                Image(systemName: "plus.circle.fill")
+                                Text("Aggiungi Esercizio")
+                                    .fontWeight(.semibold)
+                            }
+                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal, 40)
-                        .padding(.bottom, 40)
-                        .disabled(workoutName.isEmpty || exercises.isEmpty)
                     }
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        saveWorkout()
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Text("Salva Programma")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color(red: 0.1, green: 0.4, blue: 0.4))
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal, 40)
+                    .padding(.bottom, 40)
+                    .disabled(workoutName.isEmpty || exercises.isEmpty)
                 }
             }
-            .navigationBarItems(
-                leading: Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                    Text("Annulla")
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                }
-            )
-            .sheet(isPresented: $showExerciseSelector) {
-                ExerciseSelectorView(onExerciseSelected: { exercise in
-                    exercises.append(exercise)
-                    showExerciseSelector = false
-                })
+        }
+        .navigationTitle("Crea Programma")
+        .navigationBarBackButtonHidden(true) // Nascondi il pulsante back standard
+        .navigationBarItems(
+            leading: Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                Image(systemName: "arrow.left") // Usa la freccia personalizzata
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
             }
+        )
+        .sheet(isPresented: $showExerciseSelector) {
+            ExerciseSelectorView(onExerciseSelected: { exercise in
+                exercises.append(exercise)
+                showExerciseSelector = false
+            })
         }
     }
     

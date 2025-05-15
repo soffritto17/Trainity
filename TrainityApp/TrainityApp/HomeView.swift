@@ -9,8 +9,9 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
-    @State private var showDailyChallenge = false
-    @State private var showCreateWorkout = false
+    // Rimuovi queste variabili di stato poiché non saranno più necessarie con NavigationLink
+    // @State private var showDailyChallenge = false
+    // @State private var showCreateWorkout = false
     
     var body: some View {
         NavigationView {
@@ -28,9 +29,8 @@ struct HomeView: View {
                         .padding(.bottom, 30)
                         .background(Color(red: 0.1, green: 0.4, blue: 0.4))
                     
-                    Button(action: {
-                        showDailyChallenge = true
-                    }) {
+                    // Sostituisci il Button con NavigationLink
+                    NavigationLink(destination: DailyChallengeView().environmentObject(workoutManager)) {
                         HStack {
                             ZStack {
                                 Circle()
@@ -63,14 +63,9 @@ struct HomeView: View {
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                     }
                     .padding(.horizontal)
-                    .sheet(isPresented: $showDailyChallenge) {
-                        DailyChallengeView()
-                            .environmentObject(workoutManager)
-                    }
                     
-                    Button(action: {
-                        showCreateWorkout = true
-                    }) {
+                    // Sostituisci il secondo Button con NavigationLink
+                    NavigationLink(destination: CustomizeWorkoutView().environmentObject(workoutManager)) {
                         HStack {
                             ZStack {
                                 Circle()
@@ -103,12 +98,8 @@ struct HomeView: View {
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                     }
                     .padding(.horizontal)
-                    .sheet(isPresented: $showCreateWorkout) {
-                        CustomizeWorkoutView()
-                            .environmentObject(workoutManager)
-                    }
                     
-                    // Progress overview
+                    // Progress overview (resta invariato)
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Your Progress")
                             .font(.headline)
@@ -172,4 +163,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environmentObject(WorkoutManager())
 }
