@@ -1,13 +1,4 @@
-//
-//  ContentView.swift
-//  TrainityApp
-//
-//  Created by Antonio Fiorito on 13/05/25.
-//
-
-// VISTE PRINCIPALI
 import SwiftUI
-
 
 struct ContentView: View {
     @StateObject private var workoutManager = WorkoutManager()
@@ -20,6 +11,12 @@ struct ContentView: View {
                     Label("Menù", systemImage: "house")
                 }
             
+                FitnessQuestionnaireView()
+                    .environmentObject(workoutManager)
+            
+                    .tabItem {
+                        Label("Questionario", systemImage: "list.bullet.clipboard")
+                    }
             WorkoutHistoryView()
                 .environmentObject(workoutManager)
                 .tabItem {
