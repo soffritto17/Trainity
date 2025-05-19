@@ -2,6 +2,7 @@ import SwiftUI
 
 struct DailyChallengeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @Environment(\.presentationMode) var presentationMode
     @State private var showingChallengeDetails = false
     @State private var showingLevelUpTips = false
     
@@ -183,26 +184,22 @@ struct DailyChallengeView: View {
     
     var body: some View {
         ZStack {
-            Color(red: 0.7, green: 0.9, blue: 0.9).edgesIgnoringSafeArea(.all)
+            // Colore di sfondo più chiaro come nello screenshot
+            Color(red: 0.94, green: 0.98, blue: 0.99).edgesIgnoringSafeArea(.all)
             
-            VStack(spacing: 25) {
-                Text("Daily\nChallenge")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                    .padding(.top, 40)
-                
+            VStack(spacing: 20) {
+                // Icona del manubrio
                 ZStack {
                     Circle()
-                        .fill(Color(red: 0.7, green: 0.9, blue: 0.9))
-                        .frame(width: 120, height: 120)
-                        .shadow(radius: 5)
+                        .fill(Color(red: 0.25, green: 0.45, blue: 0.45))
+                        .frame(width: 80, height: 80)
+                        .shadow(radius: 3)
                     
                     Image(systemName: "dumbbell.fill")
-                        .font(.system(size: 50))
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .font(.system(size: 36))
+                        .foregroundColor(.white)
                 }
+                .padding(.top, 20)
                 
                 // Sezione del calendario settimanale
                 VStack(spacing: 8) {
@@ -211,15 +208,16 @@ struct DailyChallengeView: View {
                             let weekdays = ["L", "M", "M", "G", "V", "S", "D"]
                             ZStack {
                                 Circle()
-                                    .fill(workoutManager.dailyChallengeCompleted[day] ? Color(red: 0.1, green: 0.4, blue: 0.4) : Color(red: 0.7, green: 0.9, blue: 0.9))
+                                    .fill(workoutManager.dailyChallengeCompleted[day] ? Color(red: 0.25, green: 0.45, blue: 0.45) : Color.white)
                                     .frame(width: 40, height: 40)
                                     .overlay(
                                         Circle()
-                                            .stroke(Color(red: 0.1, green: 0.4, blue: 0.4), lineWidth: 2)
+                                            .stroke(Color(red: 0.25, green: 0.45, blue: 0.45), lineWidth: 2)
                                     )
+                                    .shadow(radius: 1)
                                 
                                 Text(weekdays[day])
-                                    .foregroundColor(workoutManager.dailyChallengeCompleted[day] ? .white : Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(workoutManager.dailyChallengeCompleted[day] ? .white : Color(red: 0.25, green: 0.45, blue: 0.45))
                                     .font(.headline)
                             }
                         }
@@ -227,7 +225,7 @@ struct DailyChallengeView: View {
                     
                     Text("\(completedDays) / 7 Completati")
                         .font(.headline)
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                 }
                 
                 // Sezione del livello attuale
@@ -235,7 +233,7 @@ struct DailyChallengeView: View {
                     HStack {
                         Text("Livello attuale:")
                             .font(.headline)
-                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                         
                         Text(selectedDifficultyLevel)
                             .font(.headline)
@@ -258,7 +256,7 @@ struct DailyChallengeView: View {
                                     .foregroundColor(.white)
                                     .padding(.horizontal, 10)
                                     .padding(.vertical, 6)
-                                    .background(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .background(Color(red: 0.25, green: 0.45, blue: 0.45))
                                     .cornerRadius(8)
                             }
                         }
@@ -270,7 +268,7 @@ struct DailyChallengeView: View {
                         // Sfide completate sul totale
                         Text("Sfide completate: \(completedChallengesCount)")
                             .font(.subheadline)
-                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                             .padding(.bottom, 5)
                         
                         ScrollView {
@@ -283,7 +281,7 @@ struct DailyChallengeView: View {
                                         
                                         Text("Tempo stimato: \(challenge.estimatedTime) min")
                                             .font(.subheadline)
-                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                                     }
                                     
                                     Spacer()
@@ -296,12 +294,12 @@ struct DailyChallengeView: View {
                                 
                                 Text(challenge.description)
                                     .font(.subheadline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                                     .padding(.horizontal)
                                 
                                 Text("Esercizi:")
                                     .font(.headline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                                     .padding(.horizontal)
                                     .padding(.top, 5)
                                 
@@ -309,17 +307,17 @@ struct DailyChallengeView: View {
                                     HStack {
                                         Image(systemName: "circle.fill")
                                             .font(.system(size: 8))
-                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                                         
                                         Text(exercise.name)
                                             .font(.body)
-                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                                         
                                         Spacer()
                                         
                                         Text("\(exercise.sets) × \(exercise.reps)")
                                             .font(.body)
-                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                                     }
                                     .padding(.vertical, 5)
                                     .padding(.horizontal)
@@ -327,8 +325,9 @@ struct DailyChallengeView: View {
                             }
                             .padding(.vertical)
                         }
-                        .background(Color(red: 0.75, green: 0.95, blue: 0.95))
+                        .background(Color.white)
                         .cornerRadius(10)
+                        .shadow(radius: 2)
                         .padding(.horizontal)
                         
                         HStack(spacing: 15) {
@@ -346,11 +345,12 @@ struct DailyChallengeView: View {
                             } label: {
                                 Text("Livello")
                                     .font(.headline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(Color(red: 0.8, green: 0.95, blue: 0.95))
+                                    .background(Color.white)
                                     .cornerRadius(10)
+                                    .shadow(radius: 1)
                             }
                             
                             Button(action: {
@@ -361,8 +361,9 @@ struct DailyChallengeView: View {
                                     .foregroundColor(.white)
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .background(Color(red: 0.25, green: 0.45, blue: 0.45))
                                     .cornerRadius(10)
+                                    .shadow(radius: 1)
                             }
                         }
                         .padding(.horizontal)
@@ -385,7 +386,7 @@ struct DailyChallengeView: View {
                     Text("Sei pronto per il prossimo livello!")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                     
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.system(size: 60))
@@ -394,13 +395,13 @@ struct DailyChallengeView: View {
                     Text("Hai completato \(completedChallengesCount) sfide di livello \(selectedDifficultyLevel). Il tuo corpo e la tua mente si sono adattati e ora puoi passare al livello \(nextLevel)!")
                         .font(.body)
                         .multilineTextAlignment(.center)
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                         .padding()
                     
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Cosa ti aspetta nel livello \(nextLevel):")
                             .font(.headline)
-                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                         
                         HStack {
                             Image(systemName: "flame.fill")
@@ -421,7 +422,7 @@ struct DailyChallengeView: View {
                         }
                     }
                     .padding()
-                    .background(Color(red: 0.75, green: 0.95, blue: 0.95))
+                    .background(Color(red: 0.94, green: 0.98, blue: 0.99))
                     .cornerRadius(10)
                     
                     HStack(spacing: 20) {
@@ -430,11 +431,12 @@ struct DailyChallengeView: View {
                         }) {
                             Text("Non ancora")
                                 .font(.headline)
-                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color(red: 0.8, green: 0.95, blue: 0.95))
+                                .background(Color.white)
                                 .cornerRadius(10)
+                                .shadow(radius: 1)
                         }
                         
                         Button(action: {
@@ -448,6 +450,7 @@ struct DailyChallengeView: View {
                                 .padding()
                                 .background(difficultyColor(for: nextLevel))
                                 .cornerRadius(10)
+                                .shadow(radius: 1)
                         }
                     }
                 }
@@ -460,7 +463,15 @@ struct DailyChallengeView: View {
             }
         }
         .navigationTitle("Daily Challenge")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            leading: Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                Image(systemName: "arrow.left")
+                    .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+            }
+        )
         .onAppear {
             checkForNewDay()
         }
@@ -553,7 +564,10 @@ struct DailyChallengeView: View {
 
 struct DailyChallengeView_Previews: PreviewProvider {
     static var previews: some View {
-        DailyChallengeView()
-            .environmentObject(WorkoutManager())
+        NavigationView {
+            DailyChallengeView()
+                .environmentObject(WorkoutManager())
+        }
     }
 }
+
