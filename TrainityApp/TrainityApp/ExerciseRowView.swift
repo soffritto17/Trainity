@@ -7,28 +7,41 @@
 
 import SwiftUI
 
-struct ExerciseRowView: View {
-    @Binding var exercise: Exercise
+struct ExerciseRow: View {
+    let exercise: Exercise
+    let onDelete: () -> Void
     
     var body: some View {
-        VStack {
-            Text(exercise.name)
-                .font(.headline)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal)
-            
-            HStack {
-                Stepper("Serie: \(exercise.sets)", value: $exercise.sets, in: 1...10)
-                    .frame(maxWidth: .infinity)
+        HStack {
+            VStack(alignment: .leading, spacing: 5) {
+                Text(exercise.name)
+                    .font(.headline)
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                 
-                Stepper("Rep: \(exercise.reps)", value: $exercise.reps, in: 1...30)
-                    .frame(maxWidth: .infinity)
+                HStack {
+                    Text("Serie: \(exercise.sets)")
+                        .font(.subheadline)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    
+                    Text("•")
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    
+                    Text("Ripetizioni: \(exercise.reps)")
+                        .font(.subheadline)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                }
             }
-            .padding(.horizontal)
+            
+            Spacer()
+            
+            Button(action: onDelete) {
+                Image(systemName: "trash")
+                    .foregroundColor(.red)
+                    .padding(8)
+            }
         }
         .padding()
         .background(Color.white)
         .cornerRadius(10)
-        .padding(.horizontal)
     }
 }

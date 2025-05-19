@@ -61,11 +61,11 @@ struct CreateNewWorkoutView: View {
                                     .cornerRadius(10)
                                     .padding(.horizontal)
                             } else {
-                                ForEach(0..<exercises.count, id: \.self) { index in
-                                    ExerciseRowView(exercise: $exercises[index])
+                                ForEach(exercises.indices, id: \.self) { index in
+                                    ExerciseEditRow(exercise: $exercises[index])
                                         .padding(.vertical, 5)
+                                        .padding(.horizontal)
                                 }
-                                .onDelete(perform: deleteExercise)
                             }
                             
                             Button(action: {
@@ -82,6 +82,36 @@ struct CreateNewWorkoutView: View {
                                 .background(Color.white)
                                 .cornerRadius(10)
                                 .padding(.horizontal)
+                            }
+                        }
+                        
+                        // Pulsante per eliminare esercizi
+                        if !exercises.isEmpty {
+                            VStack(alignment: .leading) {
+                                Text("Gestione esercizi")
+                                    .font(.headline)
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .padding(.horizontal)
+                                
+                                ForEach(exercises.indices, id: \.self) { index in
+                                    HStack {
+                                        Text(exercises[index].name)
+                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                        
+                                        Spacer()
+                                        
+                                        Button(action: {
+                                            exercises.remove(at: index)
+                                        }) {
+                                            Image(systemName: "trash")
+                                                .foregroundColor(.red)
+                                        }
+                                    }
+                                    .padding()
+                                    .background(Color.white)
+                                    .cornerRadius(10)
+                                    .padding(.horizontal)
+                                }
                             }
                         }
                         
@@ -123,10 +153,6 @@ struct CreateNewWorkoutView: View {
         }
     }
     
-    private func deleteExercise(at offsets: IndexSet) {
-        exercises.remove(atOffsets: offsets)
-    }
-
     private func saveWorkout() {
         // Calcola la durata in base agli esercizi
         let calculatedDuration = exercises.count * 5 // semplice esempio: 5 minuti per esercizio
