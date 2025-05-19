@@ -263,7 +263,7 @@ class WorkoutManager: ObservableObject {
             caloriesBurned: workout.caloriesBurned
         )
         
-        workoutHistory.append(record)
+        //workoutHistory.append(record)
         
         // Aggiorna tutte le statistiche
         recalculateAllStats()

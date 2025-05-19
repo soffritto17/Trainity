@@ -227,7 +227,7 @@ struct ActiveWorkoutView: View {
         print("Allenamento aggiunto alla cronologia. Totale record: \(workoutManager.workoutHistory.count)")
         
         // Per sicurezza, salva esplicitamente i dati utilizzando UserDefaults
-        if let encoded = try? JSONEncoder().encode(historyRecord) {
+        if let encoded = try? JSONEncoder().encode(workoutManager.workoutHistory) {
             UserDefaults.standard.set(encoded, forKey: "WorkoutHistory")
             print("Cronologia salvata in UserDefaults")
         }
