@@ -45,10 +45,41 @@ struct FitnessQuestionnaireView: View {
         }
         .navigationTitle("Valutazione Fitness")
         .background(Color(UIColor.systemGray6).ignoresSafeArea())
+        .navigationBarHidden(true)
     }
     
     var questionView: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 15) {
+            // Navigazione in alto
+            HStack {
+                Button(action: {
+                    withAnimation { currentQuestionIndex -= 1 }
+                }) {
+                    Image(systemName: "arrow.left.circle.fill")
+                        .font(.title)
+                        .foregroundColor(currentQuestionIndex == 0 ? .gray.opacity(0.5) : .gray)
+                }
+                .disabled(currentQuestionIndex == 0)
+                
+                Spacer()
+                
+                Button(action: {
+                    if currentQuestionIndex < questions.count - 1 {
+                        withAnimation { currentQuestionIndex += 1 }
+                    } else {
+                        calculateResults()
+                        showResults = true
+                    }
+                }) {
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.title)
+                        .foregroundColor(answers[currentQuestionIndex] == -1 ? .gray.opacity(0.5) : .teal)
+                }
+                .disabled(answers[currentQuestionIndex] == -1)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 10)
+            
             ProgressBar(value: Double(currentQuestionIndex) / Double(questions.count - 1))
                 .frame(height: 10)
                 .padding(.horizontal)
@@ -67,12 +98,23 @@ struct FitnessQuestionnaireView: View {
                 .padding(.horizontal)
             
             VStack(spacing: 12) {
-                ForEach(0..<questions[currentQuestionIndex].options.count, id: \ .self) { index in
+                ForEach(0..<questions[currentQuestionIndex].options.count, id: \.self) { index in
                     OptionButton(
                         text: questions[currentQuestionIndex].options[index],
                         isSelected: answers[currentQuestionIndex] == index,
                         action: {
                             answers[currentQuestionIndex] = index
+                            // Avanza automaticamente dopo la selezione
+                            if currentQuestionIndex < questions.count - 1 {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    withAnimation { currentQuestionIndex += 1 }
+                                }
+                            } else {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    calculateResults()
+                                    showResults = true
+                                }
+                            }
                         }
                     )
                 }
@@ -80,29 +122,6 @@ struct FitnessQuestionnaireView: View {
             .padding()
             
             Spacer()
-            
-            HStack {
-                if currentQuestionIndex > 0 {
-                    Button("Indietro") {
-                        withAnimation { currentQuestionIndex -= 1 }
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.gray)
-                }
-                
-                Button(currentQuestionIndex < questions.count - 1 ? "Avanti" : "Completa") {
-                    if currentQuestionIndex < questions.count - 1 {
-                        withAnimation { currentQuestionIndex += 1 }
-                    } else {
-                        calculateResults()
-                        showResults = true
-                    }
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(answers[currentQuestionIndex] == -1 ? .gray : .teal)
-                .disabled(answers[currentQuestionIndex] == -1)
-            }
-            .padding(.horizontal)
         }
     }
     
@@ -119,10 +138,6 @@ struct FitnessQuestionnaireView: View {
             Text("Livello consigliato: \(recommendedLevel)")
                 .font(.title3)
                 .foregroundColor(.teal)
-            
-
-            .buttonStyle(.borderedProminent)
-            .tint(.teal)
             
             Button("Riprova il questionario") {
                 resetQuestionnaire()
@@ -207,3 +222,4 @@ struct OptionButton: View {
         }
     }
 }
+
