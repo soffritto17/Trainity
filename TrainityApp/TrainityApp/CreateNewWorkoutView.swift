@@ -12,103 +12,106 @@ struct CreateNewWorkoutView: View {
     let goalOptions = ["Build Muscle", "Weight Loss", "Endurance", "Strength"]
     
     var body: some View {
-        // Rimuovi NavigationView da qui
         ZStack {
-            Color(red: 0.7, green: 0.9, blue: 0.9).edgesIgnoringSafeArea(.all)
+            Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
             
-            ScrollView {
-                VStack(spacing: 20) {
-                    Text("Crea  programma")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                        .padding(.top, 20)
-                    
-                    // Nome programma
-                    VStack(alignment: .leading) {
-                        Text("Nome programma")
-                            .font(.headline)
-                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                        
-                        TextField("Inserisci nome", text: $workoutName)
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(10)
-                    }
-                    .padding(.horizontal)
-                    
-                    // Exercises section
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text("Esercizi")
+            VStack(spacing: 0) {
+                // Titolo in alto
+                Text("Crea programma")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .padding(.top, 20)
+                    .padding(.bottom, 30)
+                
+                // Resto del contenuto in uno ScrollView
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // Nome programma
+                        VStack(alignment: .leading) {
+                            Text("Nome programma")
                                 .font(.headline)
                                 .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                             
-                            Spacer()
+                            TextField("Inserisci nome", text: $workoutName)
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(10)
                         }
                         .padding(.horizontal)
                         
-                        if exercises.isEmpty {
-                            Text("Nessun esercizio aggiunto")
-                                .foregroundColor(.gray)
+                        // Exercises section
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text("Esercizi")
+                                    .font(.headline)
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            
+                            if exercises.isEmpty {
+                                Text("Nessun esercizio aggiunto")
+                                    .foregroundColor(.gray)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.white.opacity(0.5))
+                                    .cornerRadius(10)
+                                    .padding(.horizontal)
+                            } else {
+                                ForEach(0..<exercises.count, id: \.self) { index in
+                                    ExerciseRowView(exercise: $exercises[index])
+                                        .padding(.vertical, 5)
+                                }
+                                .onDelete(perform: deleteExercise)
+                            }
+                            
+                            Button(action: {
+                                showExerciseSelector = true
+                            }) {
+                                HStack {
+                                    Image(systemName: "plus.circle.fill")
+                                    Text("Aggiungi Esercizio")
+                                        .fontWeight(.semibold)
+                                }
+                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color.white.opacity(0.5))
+                                .background(Color.white)
                                 .cornerRadius(10)
                                 .padding(.horizontal)
-                        } else {
-                            ForEach(0..<exercises.count, id: \.self) { index in
-                                ExerciseRowView(exercise: $exercises[index])
-                                    .padding(.vertical, 5)
                             }
-                            .onDelete(perform: deleteExercise)
                         }
                         
+                        Spacer()
+                        
                         Button(action: {
-                            showExerciseSelector = true
+                            saveWorkout()
+                            presentationMode.wrappedValue.dismiss()
                         }) {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text("Aggiungi Esercizio")
-                                    .fontWeight(.semibold)
-                            }
-                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .padding(.horizontal)
+                            Text("Salva Programma")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                .cornerRadius(10)
                         }
+                        .padding(.horizontal, 40)
+                        .padding(.bottom, 40)
+                        .disabled(workoutName.isEmpty || exercises.isEmpty)
                     }
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        saveWorkout()
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Text("Salva Programma")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color(red: 0.1, green: 0.4, blue: 0.4))
-                            .cornerRadius(10)
-                    }
-                    .padding(.horizontal, 40)
-                    .padding(.bottom, 40)
-                    .disabled(workoutName.isEmpty || exercises.isEmpty)
                 }
             }
         }
-        .navigationTitle("Crea Programma")
-        .navigationBarBackButtonHidden(true) // Nascondi il pulsante back standard
+        .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading: Button(action: {
                 presentationMode.wrappedValue.dismiss()
             }) {
-                Image(systemName: "arrow.left") // Usa la freccia personalizzata
+                Image(systemName: "arrow.left")
                     .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
             }
         )
