@@ -22,21 +22,6 @@ struct WorkoutDetailView: View {
                             .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                             .padding(.top, 40)
                         
-                        // Informazioni sul workout
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("Numero esercizi: \(workout.exercises.count)")
-                                    .font(.subheadline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                
-                                Text("Durata stimata: \(workout.duration) min")
-                                    .font(.subheadline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                            }
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                        
                         // Lista esercizi
                         VStack(alignment: .leading, spacing: 15) {
                             Text("Esercizi:")
@@ -82,10 +67,8 @@ struct WorkoutDetailView: View {
                                 )
                         }
                         
-                        Button(action: {
-                            // Qui andrebbe il codice per iniziare l'allenamento
-                            print("Inizio allenamento: \(workout.name)")
-                        }) {
+                        // Sostituito il Button con NavigationLink
+                        NavigationLink(destination: ActiveWorkoutView(workout: workout)) {
                             Text("Inizia Allenamento")
                                 .font(.headline)
                                 .foregroundColor(.white)
@@ -137,5 +120,3 @@ struct WorkoutDetailView: View {
         }
     }
 }
-
-

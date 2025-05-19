@@ -10,7 +10,7 @@ struct TrainityApp: App {
 }
 
 // MODELLI DI DATI
-struct Exercise: Identifiable {
+struct Exercise: Identifiable, Codable {
     var id = UUID()
     var name: String
     var sets: Int
@@ -25,7 +25,7 @@ struct DailyChallenge {
     var estimatedTime: Int // in minuti
 }
 
-struct Workout: Identifiable {
+struct Workout: Identifiable, Codable {
     var id = UUID()
     var name: String
     var duration: Int // in minuti
@@ -37,7 +37,7 @@ struct Workout: Identifiable {
 }
 
 // Tipi di allenamento per tracciare i badge specifici
-enum WorkoutType {
+enum WorkoutType: Codable {
     case general
     case strength
     case cardio
@@ -53,7 +53,7 @@ struct Question {
 }
 
 
-struct WorkoutRecord: Identifiable {
+struct WorkoutRecord: Identifiable,Codable {
     var id = UUID()
     var workout: Workout
     var date: Date
