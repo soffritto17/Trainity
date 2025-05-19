@@ -6,6 +6,7 @@ struct FitnessQuestionnaireView: View {
     @State private var answers = [Int](repeating: -1, count: 5)
     @State private var showResults = false
     @State private var recommendedLevel = ""
+    @State private var navigateToWorkouts = false // Per la navigazione a My Workouts
     
     let questions = [
         Question(
@@ -46,6 +47,13 @@ struct FitnessQuestionnaireView: View {
         .navigationTitle("Valutazione Fitness")
         .background(Color(UIColor.systemGray6).ignoresSafeArea())
         .navigationBarHidden(true)
+        // Aggiungiamo un NavigationLink nascosto per andare a CustomizeWorkoutView
+        .background(
+            NavigationLink(destination: CustomizeWorkoutView().environmentObject(workoutManager),
+                           isActive: $navigateToWorkouts) {
+                EmptyView()
+            }
+        )
     }
     
     var questionView: some View {
@@ -68,6 +76,7 @@ struct FitnessQuestionnaireView: View {
                         withAnimation { currentQuestionIndex += 1 }
                     } else {
                         calculateResults()
+                        createRecommendedWorkout() // Crea un workout basato sui risultati
                         showResults = true
                     }
                 }) {
@@ -112,6 +121,7 @@ struct FitnessQuestionnaireView: View {
                             } else {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                     calculateResults()
+                                    createRecommendedWorkout() // Crea un workout basato sui risultati
                                     showResults = true
                                 }
                             }
@@ -126,7 +136,7 @@ struct FitnessQuestionnaireView: View {
     }
     
     var resultsView: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 25) {
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 70))
                 .foregroundColor(.teal)
@@ -138,12 +148,39 @@ struct FitnessQuestionnaireView: View {
             Text("Livello consigliato: \(recommendedLevel)")
                 .font(.title3)
                 .foregroundColor(.teal)
+                .padding(.bottom, 10)
+                
+            Text("Abbiamo creato un programma di allenamento personalizzato basato sul tuo livello!")
+                .font(.headline)
+                .multilineTextAlignment(.center)
+                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                .padding(.horizontal)
+            
+            Button(action: {
+                navigateToWorkouts = true
+            }) {
+                HStack {
+                    Image(systemName: "dumbbell.fill")
+                    Text("Vai alla sezione My Workouts")
+                }
+                .font(.headline)
+                .foregroundColor(.white)
+                .frame(height: 55)
+                .frame(maxWidth: .infinity)
+                .background(Color(red: 0.1, green: 0.4, blue: 0.4))
+                .cornerRadius(15)
+                .padding(.horizontal, 30)
+                .padding(.top, 20)
+            }
             
             Button("Riprova il questionario") {
                 resetQuestionnaire()
             }
             .buttonStyle(.bordered)
             .tint(.teal)
+            .padding(.top, 10)
+            
+            Spacer()
         }
         .padding()
     }
@@ -160,6 +197,83 @@ struct FitnessQuestionnaireView: View {
         }
     }
     
+    func createRecommendedWorkout() {
+        // Crea un workout basato sul livello dell'utente
+        var newWorkout: Workout
+        
+        switch recommendedLevel {
+        case "Principiante":
+            newWorkout = Workout(
+                name: "Programma Principiante",
+                duration: 30,
+                exercises: [
+                    Exercise(name: "Push-up sulle ginocchia", sets: 3, reps: 8),
+                    Exercise(name: "Squat assistiti", sets: 3, reps: 10),
+                    Exercise(name: "Plank", sets: 3, reps: 20), // secondi
+                    Exercise(name: "Jumping Jack", sets: 3, reps: 15)
+                ],
+                goal: "Condizionamento Base",
+                restTime: 60,
+                type: .general,
+                caloriesBurned: 180
+            )
+        case "Intermedio":
+            newWorkout = Workout(
+                name: "Programma Intermedio",
+                duration: 40,
+                exercises: [
+                    Exercise(name: "Push-up", sets: 3, reps: 12),
+                    Exercise(name: "Squat", sets: 3, reps: 15),
+                    Exercise(name: "Plank laterale", sets: 3, reps: 30), // secondi per lato
+                    Exercise(name: "Burpees", sets: 3, reps: 10),
+                    Exercise(name: "Mountain climbers", sets: 3, reps: 20)
+                ],
+                goal: "Forza e Resistenza",
+                restTime: 45,
+                type: .general,
+                caloriesBurned: 250
+            )
+        case "Avanzato":
+            newWorkout = Workout(
+                name: "Programma Avanzato",
+                duration: 50,
+                exercises: [
+                    Exercise(name: "Push-up con battuta", sets: 4, reps: 12),
+                    Exercise(name: "Squat jump", sets: 4, reps: 15),
+                    Exercise(name: "Plank con alternanza", sets: 3, reps: 45), // secondi
+                    Exercise(name: "Burpees avanzati", sets: 3, reps: 15),
+                    Exercise(name: "Pike push-up", sets: 3, reps: 10),
+                    Exercise(name: "Affondi alternati", sets: 3, reps: 20)
+                ],
+                goal: "Forza e Potenza",
+                restTime: 30,
+                type: .strength,
+                caloriesBurned: 320
+            )
+        default: // Esperto
+            newWorkout = Workout(
+                name: "Programma Esperto",
+                duration: 60,
+                exercises: [
+                    Exercise(name: "Push-up con applauso", sets: 4, reps: 15),
+                    Exercise(name: "Pistol squat", sets: 3, reps: 8),
+                    Exercise(name: "Plank con spostamento", sets: 4, reps: 60), // secondi
+                    Exercise(name: "Burpees con pull-up", sets: 4, reps: 10),
+                    Exercise(name: "Handstand push-up", sets: 3, reps: 8),
+                    Exercise(name: "Box jump", sets: 4, reps: 12),
+                    Exercise(name: "Muscle-up", sets: 3, reps: 6)
+                ],
+                goal: "Forza e Resistenza Avanzata",
+                restTime: 20,
+                type: .strength,
+                caloriesBurned: 400
+            )
+        }
+        
+        // Aggiungi il nuovo workout alla lista dei workout salvati
+        workoutManager.savedWorkouts.append(newWorkout)
+    }
+    
     func resetQuestionnaire() {
         currentQuestionIndex = 0
         answers = [Int](repeating: -1, count: questions.count)
@@ -168,58 +282,5 @@ struct FitnessQuestionnaireView: View {
     }
 }
 
-struct Question {
-    let text: String
-    let options: [String]
-    let bodyPart: String
-}
 
-struct ProgressBar: View {
-    var value: Double
-    
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                
-                Rectangle()
-                    .fill(Color.teal)
-                    .frame(width: CGFloat(self.value) * geometry.size.width, height: geometry.size.height)
-                    .animation(.linear, value: value)
-            }
-            .cornerRadius(45)
-        }
-    }
-}
-
-struct OptionButton: View {
-    let text: String
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Text(text)
-                    .font(.body)
-                    .foregroundColor(isSelected ? .white : .black)
-                Spacer()
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.white)
-                }
-            }
-            .padding()
-            .background(isSelected ? Color.teal : Color.white)
-            .cornerRadius(10)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(isSelected ? Color.clear : Color.gray.opacity(0.3), lineWidth: 1)
-            )
-            .shadow(color: isSelected ? Color.teal.opacity(0.3) : .clear, radius: 5)
-        }
-    }
-}
 

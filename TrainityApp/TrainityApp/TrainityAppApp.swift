@@ -46,6 +46,13 @@ enum WorkoutType {
     case hiit
 }
 
+struct Question {
+    let text: String
+    let options: [String]
+    let bodyPart: String
+}
+
+
 struct WorkoutRecord: Identifiable {
     var id = UUID()
     var workout: Workout
