@@ -64,7 +64,7 @@ struct ProfileView: View {
                                         newNickname = workoutManager.nickname
                                         editingNickname = true
                                     }) {
-                                        Image(systemName: "pencil.circle")
+                                        Image(systemName: "square.and.pencil")
                                             .font(.title3)
                                             .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                                     }
@@ -260,3 +260,4 @@ struct ProfileView: View {
     ProfileView()
         .environmentObject(WorkoutManager()) // Assicurati che WorkoutManager sia configurato per il preview
 }
+
