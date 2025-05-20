@@ -201,18 +201,6 @@ struct ActiveWorkoutView: View {
         
         print("Durata calcolata: \(durationInMinutes) minuti")
         
-        // Crea un nuovo record per la cronologia usando la struttura esistente
-        let historyRecord = WorkoutRecord(
-            workout: workout,
-            date: endTime,
-            duration: durationInMinutes,
-            completed: true
-        )
-        
-        print("Record creato: \(historyRecord.workout.name), durata: \(historyRecord.duration) min")
-        
-        // Aggiungi il record alla cronologia
-        workoutManager.workoutHistory.append(historyRecord)
         
         // Usa direttamente il metodo completeWorkout che già esiste nel workoutManager
         // questo dovrebbe fare tutto ciò che serve (aggiungere il record e aggiornare le statistiche)

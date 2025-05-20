@@ -84,7 +84,7 @@ struct WorkoutHistoryView: View {
                             }
                         }
                         .onAppear(){
-                            if let data = UserDefaults.standard.data(forKey: "WorkoutHistory") {
+                            if UserDefaults.standard.data(forKey: "WorkoutHistory") != nil {
                                   
                                    }
                                }

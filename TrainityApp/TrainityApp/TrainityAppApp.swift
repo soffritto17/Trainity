@@ -289,22 +289,39 @@ class WorkoutManager: ObservableObject {
         checkAndAwardBadges(totalExercisesCompleted: 0) // Controlla solo per il badge challenge_master
     }
     
-    // Funzione per completare un allenamento
+    // Proprietà per evitare duplicati
+    private var lastWorkoutCompletionTime: Date? = nil
+
     func completeWorkout(_ workout: Workout) {
-        // Aggiunge il workout alla cronologia
+        // Verifica se è passato almeno 1 secondo dall'ultima registrazione
+        // per evitare registrazioni duplicate accidentali
+        let now = Date()
+        if let lastTime = lastWorkoutCompletionTime,
+           now.timeIntervalSince(lastTime) < 1.0 {
+            print("Evitata registrazione duplicata per: \(workout.name)")
+            return
+        }
+        
+        // Aggiorna il timestamp dell'ultimo completamento
+        lastWorkoutCompletionTime = now
+        
+        // Crea e aggiungi il nuovo record
         let record = WorkoutRecord(
             workout: workout,
-            date: Date(),
+            date: now,
             duration: workout.duration,
             completed: true,
-            caloriesBurned: 0 // Non calcoliamo calorie per evitare imprecisioni
+            caloriesBurned: 0
         )
-        
+       
         workoutHistory.append(record)
         
-        // Aggiorna tutte le statistiche
+        // Aggiorna le statistiche
         recalculateAllStats()
+        
+        print("Workout completato: \(workout.name)")
     }
+    
     
     // Funzione di utilità per assegnare un badge specifico
     private func awardBadge(withId id: String) {
