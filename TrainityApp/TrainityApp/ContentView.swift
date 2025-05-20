@@ -8,15 +8,9 @@ struct ContentView: View {
             HomeView()
                 .environmentObject(workoutManager)
                 .tabItem {
-                    Label("Menù", systemImage: "house")
+                    Label("Menù", systemImage: "list.dash")
                 }
             
-                FitnessQuestionnaireView()
-                    .environmentObject(workoutManager)
-            
-                    .tabItem {
-                        Label("Questionario", systemImage: "list.bullet.clipboard")
-                    }
             WorkoutHistoryView()
                 .environmentObject(workoutManager)
                 .tabItem {
