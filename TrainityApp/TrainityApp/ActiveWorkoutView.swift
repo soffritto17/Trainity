@@ -201,18 +201,12 @@ struct ActiveWorkoutView: View {
         
         print("Durata calcolata: \(durationInMinutes) minuti")
         
-        // Stima delle calorie bruciate basata sulla durata
-        let estimatedCalories = workout.caloriesBurned > 0 ?
-                            workout.caloriesBurned :
-                            (durationInMinutes * 7) // approx 7 calorie al minuto se non specificato
-        
         // Crea un nuovo record per la cronologia usando la struttura esistente
         let historyRecord = WorkoutRecord(
             workout: workout,
             date: endTime,
             duration: durationInMinutes,
-            completed: true,
-            caloriesBurned: estimatedCalories
+            completed: true
         )
         
         print("Record creato: \(historyRecord.workout.name), durata: \(historyRecord.duration) min")
@@ -226,11 +220,7 @@ struct ActiveWorkoutView: View {
         
         print("Allenamento aggiunto alla cronologia. Totale record: \(workoutManager.workoutHistory.count)")
         
-        // Per sicurezza, salva esplicitamente i dati utilizzando UserDefaults
-        if let encoded = try? JSONEncoder().encode(workoutManager.workoutHistory) {
-            UserDefaults.standard.set(encoded, forKey: "WorkoutHistory")
-            print("Cronologia salvata in UserDefaults")
-        }
+       
     }
     
     private func setupTimer() {

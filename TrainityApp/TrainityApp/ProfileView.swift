@@ -1,10 +1,3 @@
-//
-//  ProfileView.swift
-//  TrainityApp
-//
-//  Created by Antonio Fiorito on 15/05/25.
-//
-
 import SwiftUI
 
 struct ProfileView: View {
@@ -15,249 +8,196 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
+                Color(red: 0.95, green: 0.97, blue: 0.97).edgesIgnoringSafeArea(.all)
                 
                 ScrollView {
-                    VStack(spacing: 20) {
+                    VStack(spacing: 25) {
                         // Profilo header
-                        VStack {
-                            ZStack {
-                                Circle()
-                                    .fill(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                    .frame(width: 100, height: 100)
-                                
-                                Text(String(workoutManager.nickname.prefix(1)))
-                                    .font(.system(size: 50, weight: .bold))
-                                    .foregroundColor(.white)
-                            }
-                            .padding(.top)
-                            
-                            if editingNickname {
-                                HStack {
-                                    TextField("Nickname", text: $newNickname)
-                                        .font(.title2)
-                                        .multilineTextAlignment(.center)
-                                        .padding(10)
-                                        .background(Color.white)
-                                        .cornerRadius(8)
-                                    
-                                    Button(action: {
-                                        if !newNickname.isEmpty {
-                                            workoutManager.nickname = newNickname
-                                        }
-                                        editingNickname = false
-                                    }) {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .font(.title2)
-                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                    }
-                                }
-                                .padding(.horizontal, 50)
-                            } else {
-                                HStack {
-                                    Text(workoutManager.nickname)
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                    
-                                    Button(action: {
-                                        newNickname = workoutManager.nickname
-                                        editingNickname = true
-                                    }) {
-                                        Image(systemName: "square.and.pencil")
-                                            .font(.title3)
-                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                    }
-                                }
-                            }
-                            
-                            HStack(spacing: 30) {
-                                VStack {
-                                    Text("\(workoutManager.totalWorkoutsCompleted)")
-                                        .font(.title)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                    Text("Allenamenti")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
-                                
-                                VStack {
-                                    Text("\(workoutManager.badgesEarned)")
-                                        .font(.title)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                    Text("Badge")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                            .padding()
-                        }
-                        .frame(maxWidth: .infinity)
-                        .background(Color.white)
-                        .cornerRadius(15)
-                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-                        .padding(.horizontal)
+                        profileHeaderView
                         
                         // Sezione badge
-                        VStack(alignment: .leading) {
-                            Text("I tuoi Badge")
-                                .font(.headline)
-                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                .padding(.horizontal)
-                            
-                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                                ForEach(workoutManager.badges) { badge in
-                                    VStack {
-                                        ZStack {
-                                            Circle()
-                                                .fill(badge.isEarned ? Color(red: 0.1, green: 0.4, blue: 0.4) : Color.gray.opacity(0.3))
-                                                .frame(width: 70, height: 70)
-                                            
-                                            Image(systemName: badge.imageName)
-                                                .font(.system(size: 30))
-                                                .foregroundColor(badge.isEarned ? .white : .gray)
-                                        }
-                                        
-                                        Text(badge.name)
-                                            .font(.subheadline)
-                                            .fontWeight(.medium)
-                                            .multilineTextAlignment(.center)
-                                            .lineLimit(1)
-                                            .minimumScaleFactor(0.8)
-                                    }
-                                }
-                            }
-                            .padding(.horizontal)
-                        }
+                        badgesSectionView
                     }
+                    .padding(.bottom)
                 }
-            }
-            .onAppear {
-                addNewBadges()
             }
             .navigationBarTitle("Profilo", displayMode: .inline)
         }
     }
     
-    // Funzione per aggiungere i nuovi badge
-    private func addNewBadges() {
-        // Controlla se il primo nuovo badge è già presente
-        if !workoutManager.badges.contains(where: { $0.name == "Costanza" }) {
-            // Badge 1: Costanza
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Costanza",
-                     description: "Completa allenamenti per 7 giorni consecutivi",
-                     imageName: "figure.walk.motion",
-                     isEarned: false)
-            )
+    // Header del profilo con avatar e statistiche
+    private var profileHeaderView: some View {
+        VStack(spacing: 15) {
+            // Avatar e nickname
+            ZStack {
+                Circle()
+                    .fill(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .frame(width: 100, height: 100)
+                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                
+                Text(String(workoutManager.nickname.prefix(1)))
+                    .font(.system(size: 46, weight: .bold))
+                    .foregroundColor(.white)
+            }
+            .padding(.top, 10)
             
-            // Badge 2: Forza
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Forza",
-                     description: "Completa 10 allenamenti di forza",
-                     imageName: "dumbbell.fill",
-                     isEarned: false)
-            )
+            // Nickname con opzione di modifica
+            if editingNickname {
+                HStack {
+                    TextField("Nickname", text: $newNickname)
+                        .font(.title3)
+                        .multilineTextAlignment(.center)
+                        .padding(8)
+                        .background(Color.white)
+                        .cornerRadius(8)
+                    
+                    Button(action: {
+                        if !newNickname.isEmpty {
+                            workoutManager.nickname = newNickname
+                        }
+                        editingNickname = false
+                    }) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.title3)
+                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    }
+                }
+                .padding(.horizontal, 50)
+            } else {
+                HStack {
+                    Text(workoutManager.nickname)
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    
+                    Button(action: {
+                        newNickname = workoutManager.nickname
+                        editingNickname = true
+                    }) {
+                        Image(systemName: "square.and.pencil")
+                            .font(.body)
+                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    }
+                }
+            }
             
-            // Badge 3: Esploratore
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Esploratore",
-                     description: "Prova 5 tipi diversi di allenamento",
-                     imageName: "figure.hiking",
-                     isEarned: false)
-            )
+            // Statistiche principali
+            HStack(spacing: 40) {
+                statItem(value: "\(workoutManager.totalWorkoutsCompleted)", label: "Allenamenti", icon: "figure.run")
+                
+                statItem(value: "\(workoutManager.badgesEarned)", label: "Badge", icon: "trophy.fill")
+                
+                statItem(value: "\(workoutManager.weeklyStreak)", label: "Streak", icon: "flame.fill")
+            }
+            .padding()
             
-            // Badge 4: Mattiniero
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Mattiniero",
-                     description: "Completa 5 allenamenti prima delle 9:00",
-                     imageName: "sunrise.fill",
-                     isEarned: false)
-            )
+            // Linea divisoria
+            Rectangle()
+                .fill(Color.gray.opacity(0.2))
+                .frame(height: 1)
+                .padding(.horizontal)
             
-            // Badge 5: Cardio Pro
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Cardio Pro",
-                     description: "Completa 15 allenamenti cardiovascolari",
-                     imageName: "heart.fill",
-                     isEarned: false)
-            )
-            
-            // Badge 6: Maratoneta
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Maratoneta",
-                     description: "Completa un totale di 50 km di corsa",
-                     imageName: "figure.run",
-                     isEarned: false)
-            )
-            
-            // Badge 7: Flessibilità
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Flessibilità",
-                     description: "Completa 8 sessioni di stretching/yoga",
-                     imageName: "figure.mind.and.body",
-                     isEarned: false)
-            )
-            
-            // Badge 8: Fuoco
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Fuoco",
-                     description: "Brucia 5000 calorie totali",
-                     imageName: "flame.fill",
-                     isEarned: false)
-            )
-            
-            // Badge 9: Notturno
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Notturno",
-                     description: "Completa 5 allenamenti dopo le 20:00",
-                     imageName: "moon.stars.fill",
-                     isEarned: false)
-            )
-            
-            // Badge 10: Campione
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Campione",
-                     description: "Completa 30 allenamenti totali",
-                     imageName: "trophy.fill",
-                     isEarned: false)
-            )
-            
-            // Badge 11: Resistenza
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Resistenza",
-                     description: "Completa un allenamento di durata superiore a 60 minuti",
-                     imageName: "stopwatch.fill",
-                     isEarned: false)
-            )
-            
-            // Badge 12: Precisione
-            workoutManager.badges.append(
-                Badge(id: UUID().uuidString,
-                     name: "Precisione",
-                     description: "Esegui correttamente 20 esercizi di precisione",
-                     imageName: "scope",
-                     isEarned: false)
-            )
+            // Statistiche secondarie
+            HStack(spacing: 0) {
+                VStack {
+                    Text("\(workoutManager.totalWorkoutMinutes)")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    Text("minuti totali")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .padding(.vertical, 10)
         }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.white)
+                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+        )
+        .padding(.horizontal)
+    }
+    
+    // Funzione per creare un elemento statistico con icona
+    private func statItem(value: String, label: String, icon: String) -> some View {
+        VStack(spacing: 5) {
+            Image(systemName: icon)
+                .font(.system(size: 22))
+                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+            
+            Text(value)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+            
+            Text(label)
+                .font(.caption)
+                .foregroundColor(.gray)
+        }
+    }
+    
+    // Vista della sezione badge
+    private var badgesSectionView: some View {
+        VStack(alignment: .leading) {
+            Text("I tuoi Badge")
+                .font(.headline)
+                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                .padding(.horizontal)
+            
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                ForEach(workoutManager.badges) { badge in
+                    badgeView(badge: badge)
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+    
+    // Vista di un singolo badge
+    private func badgeView(badge: Badge) -> some View {
+        VStack(spacing: 5) {
+            ZStack {
+                Circle()
+                    .fill(badge.isEarned ? Color(red: 0.1, green: 0.4, blue: 0.4) : Color.gray.opacity(0.2))
+                    .frame(width: 70, height: 70)
+                
+                if !badge.isEarned {
+                    Image(systemName: "lock.fill")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 24))
+                } else {
+                    Image(systemName: badge.imageName)
+                        .font(.system(size: 30))
+                        .foregroundColor(.white)
+                }
+            }
+            
+            Text(badge.name)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(badge.isEarned ? Color(red: 0.1, green: 0.4, blue: 0.4) : .gray)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+            
+            // Mostro la descrizione del badge
+            
+                Text(badge.description)
+                    .font(.caption2)
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+                    .frame(height: 25)
+
+        }
+        .padding(.vertical, 5)
     }
 }
 
 #Preview {
     ProfileView()
-        .environmentObject(WorkoutManager()) // Assicurati che WorkoutManager sia configurato per il preview
+        .environmentObject(WorkoutManager())
 }
-

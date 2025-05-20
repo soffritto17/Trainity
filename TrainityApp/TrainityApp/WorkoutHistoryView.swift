@@ -85,12 +85,11 @@ struct WorkoutHistoryView: View {
                         }
                         .onAppear(){
                             if let data = UserDefaults.standard.data(forKey: "WorkoutHistory") {
-                                   if let decoded = try? JSONDecoder().decode([WorkoutRecord].self, from: data) {
-                                       workoutManager.workoutHistory = decoded
+                                  
                                    }
                                }
     
-                        }
+                        
                         .background(Color(red: 0.9, green: 0.95, blue: 0.95))
                         .listStyle(InsetGroupedListStyle())
                     }
