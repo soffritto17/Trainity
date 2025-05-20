@@ -97,14 +97,24 @@ struct ProfileView: View {
                 .frame(height: 1)
                 .padding(.horizontal)
             
-            // Statistiche secondarie
+                            // Statistiche secondarie - MODIFICATO
             HStack(spacing: 0) {
+                // Statistiche allenamenti totali
+              
+            
+                
+                // Aggiunto divisore verticale
+                Rectangle()
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(width: 1, height: 30)
+                
+                // Statistiche sfide giornaliere
                 VStack {
-                    Text("\(workoutManager.totalWorkoutMinutes)")
+                    Text("\(workoutManager.dailyChallengeCompleted.filter { $0 }.count)")
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                    Text("minuti totali")
+                    Text("Sfide completate")
                         .font(.caption)
                         .foregroundColor(.gray)
                 }
