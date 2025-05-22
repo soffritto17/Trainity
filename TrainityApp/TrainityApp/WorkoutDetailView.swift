@@ -15,12 +15,6 @@ struct WorkoutDetailView: View {
             VStack(spacing: 0) {
                 ScrollView {
                     VStack(spacing: 20) {
-                        Text(workout.name)
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .foregroundColor(Color("blk"))
-                            .padding(.top, 40)
-                        
                         VStack(alignment: .leading, spacing: 15) {
                             Text("Esercizi:")
                                 .font(.headline)
@@ -35,6 +29,7 @@ struct WorkoutDetailView: View {
                             }
                         }
                         .padding(.horizontal)
+                        .padding(.top, 20)
                         
                         Spacer()
                             .frame(height: 100)
@@ -79,13 +74,20 @@ struct WorkoutDetailView: View {
                 .background(Color("wht"))
             }
         }
+        .navigationTitle(workout.name)
+        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading: Button(action: {
                 presentationMode.wrappedValue.dismiss()
             }) {
-                Image(systemName: "arrow.left")
-                    .foregroundColor(Color("blk"))
+                HStack(spacing: 6) {
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(Color("blk"))
+                    
+                   
+                }
             }
         )
         .sheet(isPresented: $showingEditView) {

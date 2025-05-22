@@ -16,7 +16,7 @@ struct WorkoutHistoryView: View {
                 Color("wht").edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    Text("Cronologia Allenamenti")
+                    Text("Cronologia")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(Color("blk"))

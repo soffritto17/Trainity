@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WorkoutRecordDetailView: View {
     let record: WorkoutRecord
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         ZStack {
@@ -75,61 +76,82 @@ struct WorkoutRecordDetailView: View {
                     .cornerRadius(15)
                     .shadow(color: Color("blk").opacity(0.1), radius: 5, x: 0, y: 2)
                     
-                    // Lista degli esercizi
+                    // Lista degli esercizi con dettagli per serie
                     VStack(alignment: .leading, spacing: 15) {
                         Text("Esercizi Completati")
                             .font(.headline)
                             .foregroundColor(Color("blk"))
                         
                         ForEach(record.workout.exercises, id: \.id) { exercise in
-                            VStack(alignment: .leading, spacing: 8) {
+                            VStack(alignment: .leading, spacing: 12) {
+                                // Nome dell'esercizio
                                 Text(exercise.name)
                                     .font(.headline)
                                     .foregroundColor(Color("blk"))
                                 
-                                HStack {
-                                    HStack {
-                                        Image(systemName: "repeat")
-                                            .foregroundColor(Color("blk").opacity(0.6))
-                                        Text("Serie: \(exercise.sets)")
-                                            .font(.subheadline)
-                                            .foregroundColor(Color("blk").opacity(0.6))
+                                // Dettagli per ogni serie
+                                VStack(alignment: .leading, spacing: 8) {
+                                    ForEach(1...exercise.sets, id: \.self) { setNumber in
+                                        HStack {
+                                            Text("Serie \(setNumber):")
+                                                .font(.subheadline)
+                                                .fontWeight(.medium)
+                                                .foregroundColor(Color("blk"))
+                                                .frame(width: 70, alignment: .leading)
+                                            
+                                            HStack(spacing: 15) {
+                                                // Ripetizioni per questa serie
+                                                HStack(spacing: 4) {
+                                                    Image(systemName: "arrow.up.and.down")
+                                                        .font(.caption)
+                                                        .foregroundColor(Color("blk").opacity(0.6))
+                                                    Text("\(exercise.reps) rep")
+                                                        .font(.subheadline)
+                                                        .foregroundColor(Color("blk").opacity(0.7))
+                                                }
+                                                
+                                                // Peso per questa serie
+                                                HStack(spacing: 4) {
+                                                    Image(systemName: "scalemass")
+                                                        .font(.caption)
+                                                        .foregroundColor(Color("blk").opacity(0.6))
+                                                    Text("\(exercise.weight ?? 0.0, specifier: "%.1f") kg")
+                                                        .font(.subheadline)
+                                                        .foregroundColor(Color("blk").opacity(0.7))
+                                                }
+                                                
+                                                Spacer()
+                                                
+                                                // Stato completamento serie
+                                                Image(systemName: "checkmark.circle.fill")
+                                                    .font(.caption)
+                                                    .foregroundColor(.green)
+                                            }
+                                        }
+                                        .padding(.vertical, 4)
+                                        .padding(.horizontal, 12)
+                                        .background(Color("blk").opacity(0.03))
+                                        .cornerRadius(8)
                                     }
-                                    
-                                    Text("•")
-                                        .foregroundColor(Color("blk").opacity(0.6))
-                                    
-                                    HStack {
-                                        Image(systemName: "arrow.up.and.down")
-                                            .foregroundColor(Color("blk").opacity(0.6))
-                                        Text("Ripetizioni: \(exercise.reps)")
-                                            .font(.subheadline)
-                                            .foregroundColor(Color("blk").opacity(0.6))
-                                    }
-                                    
-                                    Text("•")
-                                        .foregroundColor(Color("blk").opacity(0.6))
-                                    
-                                    HStack {
-                                        Image(systemName: "scalemass")
-                                            .foregroundColor(Color("blk").opacity(0.6))
-                                        Text("Peso: \(exercise.weight ?? 0.0, specifier: "%.1f") kg")
-                                            .font(.subheadline)
-                                            .foregroundColor(Color("blk").opacity(0.6))
-                                    }
-                                    
-                                    Spacer()
                                 }
                                 
-                                if exercise.isCompleted {
-                                    HStack {
+                                // Riepilogo totale dell'esercizio
+                                HStack {
+                                    HStack(spacing: 4) {
                                         Image(systemName: "checkmark.circle.fill")
                                             .foregroundColor(.green)
-                                        Text("Completato")
+                                        Text("Esercizio completato")
                                             .font(.caption)
                                             .foregroundColor(.green)
                                     }
+                                    
+                                    Spacer()
+                                    
+                                    Text("Totale: \(exercise.sets) serie")
+                                        .font(.caption)
+                                        .foregroundColor(Color("blk").opacity(0.6))
                                 }
+                                .padding(.top, 4)
                             }
                             .padding()
                             .background(Color("wht"))
@@ -146,6 +168,20 @@ struct WorkoutRecordDetailView: View {
                 .padding()
             }
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            leading: Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                HStack(spacing: 6) {
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(Color("blk"))
+                    
+                    
+                }
+            }
+        )
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("Dettagli Allenamento")
     }
