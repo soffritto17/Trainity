@@ -4,22 +4,19 @@ struct TimerSheetView: View {
     @Binding var timeRemaining: Int
     @Binding var isTimerRunning: Bool
     @Environment(\.presentationMode) var presentationMode
+    @State private var initialTime: Int = 60
+    @State private var displayTime: Int = 60
     
     var body: some View {
         ZStack {
             Color("wht").edgesIgnoringSafeArea(.all)
             
             VStack {
-                RoundedRectangle(cornerRadius: 3)
-                    .fill(Color("blk").opacity(0.3))
-                    .frame(width: 40, height: 5)
-                    .padding(.top, 8)
-                
                 Text("Timer di Recupero")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(Color("blk"))
-                    .padding(.top, 10)
+                    .padding(.top, 20)
                 
                 ZStack {
                     Circle()
@@ -27,11 +24,11 @@ struct TimerSheetView: View {
                         .frame(width: 250, height: 250)
                     
                     Circle()
-                        .trim(from: 0, to: timeRemaining == 0 ? 1 : CGFloat(timeRemaining) / 60.0)
+                        .trim(from: 0, to: displayTime == 0 ? 0 : CGFloat(displayTime) / CGFloat(initialTime))
                         .stroke(Color("blk"), lineWidth: 15)
                         .frame(width: 250, height: 250)
                         .rotationEffect(.degrees(-90))
-                        .animation(.linear, value: timeRemaining)
+                        .animation(.easeInOut(duration: 0.5), value: displayTime)
                     
                     VStack {
                         Text("\(timeRemaining)")
@@ -64,7 +61,20 @@ struct TimerSheetView: View {
                 HStack(spacing: 15) {
                     ForEach([30, 60, 90, 120], id: \.self) { seconds in
                         Button(action: {
-                            timeRemaining = seconds
+                            // Prima svuota il cerchio
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                displayTime = 0
+                            }
+                            
+                            // Poi imposta i nuovi valori e riempie il cerchio
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                initialTime = seconds
+                                timeRemaining = seconds
+                                withAnimation(.easeInOut(duration: 0.4)) {
+                                    displayTime = seconds
+                                }
+                            }
+                            
                             isTimerRunning = false
                         }) {
                             Text("\(seconds)s")
@@ -85,6 +95,15 @@ struct TimerSheetView: View {
                 Spacer()
             }
             .padding(.bottom, 30)
+        }
+        .onAppear {
+            displayTime = timeRemaining
+            initialTime = timeRemaining
+        }
+        .onChange(of: timeRemaining) { newValue in
+            if isTimerRunning {
+                displayTime = newValue
+            }
         }
     }
 }
