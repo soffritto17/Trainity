@@ -184,195 +184,262 @@ struct DailyChallengeView: View {
     
     var body: some View {
         ZStack {
-            // Colore di sfondo più chiaro come nello screenshot
             Color("wht").edgesIgnoringSafeArea(.all)
             
-            VStack(spacing: 20) {
-                // Icona del manubrio
-                ZStack {
-                    Circle()
-                        .fill(Color("blk"))
-                        .frame(width: 80, height: 80)
-                        .shadow(radius: 3)
+            VStack(spacing: 25) {
+                // Header con icona
+                VStack(spacing: 15) {
+                    ZStack {
+                        Circle()
+                            .fill(Color("blk"))
+                            .frame(width: 70, height: 70)
+                            .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+                        
+                        Image(systemName: "figure.walk")
+                            .font(.system(size: 32, weight: .medium))
+                            .foregroundColor(Color("wht"))
+                    }
                     
-                    Image(systemName: "figure.walk")  // icona più pertinente daily habits
-                        .font(.system(size: 36))
-                        .foregroundColor(Color("wht"))
+                    Text("Daily Challenge")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(Color("blk"))
                 }
-                .padding(.top, 20)
+                .padding(.top, 10)
                 
-                // Sezione del calendario settimanale
-                VStack(spacing: 8) {
-                    HStack(spacing: 15) {
+                // Progresso settimanale
+                VStack(spacing: 12) {
+                    HStack(spacing: 12) {
                         let weekdays = ["L", "M", "M", "G", "V", "S", "D"]
+                        // Calcolo corretto: Lunedì=0, Martedì=1, ..., Domenica=6
+                        let todayWeekday = Calendar.current.component(.weekday, from: Date()) // 1=Dom, 2=Lun, ..., 7=Sab
+                        let todayIndex = todayWeekday == 1 ? 6 : todayWeekday - 2 // Converte in 0-6 con Lun=0
+                        
                         ForEach(0..<7) { day in
                             ZStack {
                                 Circle()
-                                    .fill(workoutManager.dailyChallengeCompleted[day] ? Color("blk") : Color("wht"))
-                                    .frame(width: 40, height: 40)
+                                    .fill(day == todayIndex ? Color("blk") : Color("wht"))
+                                    .frame(width: 36, height: 36)
                                     .overlay(
                                         Circle()
-                                            .stroke(Color("blk"), lineWidth: 2)
+                                            .stroke(
+                                                day == todayIndex ? Color("blk") : Color("blk").opacity(0.3),
+                                                lineWidth: day == todayIndex ? 2.5 : 1.5
+                                            )
                                     )
-                                    .shadow(radius: 1)
+                                    .shadow(
+                                        color: day == todayIndex ? .black.opacity(0.15) : .black.opacity(0.08),
+                                        radius: day == todayIndex ? 4 : 2,
+                                        x: 0,
+                                        y: day == todayIndex ? 2 : 1
+                                    )
                                 
-                                Text(weekdays[day])
-                                    .foregroundColor(workoutManager.dailyChallengeCompleted[day] ? Color("wht") : Color("blk"))
-                                    .font(.headline)
+                                if workoutManager.dailyChallengeCompleted[day] {
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 14, weight: .bold))
+                                        .foregroundColor(day == todayIndex ? Color("wht") : Color("blk"))
+                                } else {
+                                    Text(weekdays[day])
+                                        .foregroundColor(day == todayIndex ? Color("wht") : Color("blk"))
+                                        .font(.system(size: 14, weight: day == todayIndex ? .semibold : .medium))
+                                }
                             }
                         }
                     }
                     
-                    Text("\(completedDays) / 7 Completati")
-                        .font(.headline)
-                        .foregroundColor(Color("blk"))
+                    HStack(spacing: 4) {
+                        Text("\(completedDays) / 7 giorni completati")
+                            .font(.subheadline)
+                            .foregroundColor(Color("blk").opacity(0.7))
+                        
+                        if completedDays > 0 {
+                            Image(systemName: "flame.fill")
+                                .font(.system(size: 14))
+                                .foregroundColor(.orange)
+                        }
+                    }
                 }
                 
-                // Sezione del livello attuale
-                VStack(spacing: 10) {
-                    HStack {
-                        Text("Livello attuale:")
-                            .font(.headline)
-                            .foregroundColor(Color("blk"))
+                // Sezione livello con badge migliorato
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Livello attuale")
+                            .font(.subheadline)
+                            .foregroundColor(Color("blk").opacity(0.7))
                         
-                        Text(selectedDifficultyLevel)
-                            .font(.headline)
-                            .foregroundColor(difficultyColor(for: selectedDifficultyLevel))
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 4)
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(difficultyColor(for: selectedDifficultyLevel).opacity(0.2))
-                            )
-                        
-                        Spacer()
-                        
-                        if readyForNextLevel {
-                            Button(action: {
-                                showingLevelUpTips = true
-                            }) {
-                                Label("Consigli", systemImage: "info.circle")
-                                    .font(.subheadline)
-                                    .foregroundColor(Color("wht"))
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 6)
-                                    .background(Color("blk"))
-                                    .cornerRadius(8)
-                            }
+                        HStack(spacing: 8) {
+                            Text(selectedDifficultyLevel)
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .foregroundColor(difficultyColor(for: selectedDifficultyLevel))
+                            
+                            Circle()
+                                .fill(difficultyColor(for: selectedDifficultyLevel))
+                                .frame(width: 8, height: 8)
                         }
                     }
-                    .padding(.horizontal)
                     
-                    // Mostra i dettagli della sfida corrente
-                    if let challenge = currentChallenge {
-                        Text("Sfide completate: \(completedChallengesCount)")
-                            .font(.subheadline)
-                            .foregroundColor(Color("blk"))
-                            .padding(.bottom, 5)
-                        
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 15) {
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        Text("Sfida \((currentChallengeIndex % 4) + 1)/4")
-                                            .font(.headline)
-                                            .foregroundColor(difficultyColor(for: selectedDifficultyLevel))
-                                        
-                                        Text("Tempo stimato: \(challenge.estimatedTime) min")
-                                            .font(.subheadline)
-                                            .foregroundColor(Color("blk"))
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Image(systemName: difficultyIcon(for: selectedDifficultyLevel))
-                                        .font(.system(size: 30))
-                                        .foregroundColor(difficultyColor(for: selectedDifficultyLevel))
-                                }
-                                .padding(.horizontal)
-                                
-                                Text(challenge.description)
+                    Spacer()
+                    
+                    if readyForNextLevel {
+                        Button(action: {
+                            showingLevelUpTips = true
+                        }) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "arrow.up.circle.fill")
+                                    .font(.system(size: 16))
+                                Text("Level Up")
                                     .font(.subheadline)
-                                    .foregroundColor(Color("blk"))
-                                    .padding(.horizontal)
-                                
-                                Text("Esercizi:")
+                                    .fontWeight(.medium)
+                            }
+                            .foregroundColor(Color("wht"))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(difficultyColor(for: nextLevel))
+                            .cornerRadius(20)
+                            .shadow(color: difficultyColor(for: nextLevel).opacity(0.3), radius: 4, x: 0, y: 2)
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                
+                // Card dell'allenamento odierno
+                if let challenge = currentChallenge {
+                    VStack(spacing: 0) {
+                        // Header della card
+                        VStack(spacing: 8) {
+                            HStack {
+                                Text("Allenamento di oggi")
                                     .font(.headline)
                                     .foregroundColor(Color("blk"))
-                                    .padding(.horizontal)
-                                    .padding(.top, 5)
                                 
-                                ForEach(challenge.exercises) { exercise in
-                                    HStack {
-                                        Image(systemName: "circle.fill")
-                                            .font(.system(size: 8))
-                                            .foregroundColor(Color("blk"))
+                                Spacer()
+                                
+                                Text("\(challenge.estimatedTime) min")
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(difficultyColor(for: selectedDifficultyLevel))
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(difficultyColor(for: selectedDifficultyLevel).opacity(0.15))
+                                    .cornerRadius(12)
+                            }
+                            
+                            Text(challenge.description)
+                                .font(.subheadline)
+                                .foregroundColor(Color("blk").opacity(0.8))
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding()
+                        .background(Color("wht"))
+                        
+                        Divider()
+                            .background(Color("blk").opacity(0.1))
+                        
+                        // Lista esercizi
+                        ScrollView {
+                            LazyVStack(spacing: 0) {
+                                ForEach(Array(challenge.exercises.enumerated()), id: \.element.id) { index, exercise in
+                                    HStack(spacing: 12) {
+                                        // Numero esercizio
+                                        ZStack {
+                                            Circle()
+                                                .fill(Color("blk").opacity(0.1))
+                                                .frame(width: 28, height: 28)
+                                            
+                                            Text("\(index + 1)")
+                                                .font(.caption)
+                                                .fontWeight(.semibold)
+                                                .foregroundColor(Color("blk"))
+                                        }
                                         
-                                        Text(exercise.name)
-                                            .font(.body)
-                                            .foregroundColor(Color("blk"))
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(exercise.name)
+                                                .font(.body)
+                                                .fontWeight(.medium)
+                                                .foregroundColor(Color("blk"))
+                                            
+                                            Text("\(exercise.sets) serie × \(exercise.reps) ripetizioni")
+                                                .font(.caption)
+                                                .foregroundColor(Color("blk").opacity(0.6))
+                                        }
                                         
                                         Spacer()
-                                        
-                                        Text("\(exercise.sets) × \(exercise.reps)")
-                                            .font(.body)
-                                            .foregroundColor(Color("blk"))
                                     }
-                                    .padding(.vertical, 5)
+                                    .padding(.vertical, 12)
                                     .padding(.horizontal)
+                                    
+                                    if index < challenge.exercises.count - 1 {
+                                        Divider()
+                                            .background(Color("blk").opacity(0.05))
+                                            .padding(.leading, 52)
+                                    }
                                 }
                             }
-                            .padding(.vertical)
                         }
+                        .frame(maxHeight: 200)
                         .background(Color("wht"))
-                        .cornerRadius(10)
-                        .shadow(radius: 2)
-                        .padding(.horizontal)
-                        
-                        HStack(spacing: 15) {
-                            Menu {
-                                ForEach(["Facile", "Medio", "Difficile"], id: \.self) { level in
-                                    Button(action: {
-                                        changeDifficultyLevel(to: level)
-                                    }) {
+                    }
+                    .background(Color("wht"))
+                    .cornerRadius(15)
+                    .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 4)
+                    .padding(.horizontal)
+                    
+                    // Bottoni di azione
+                    HStack(spacing: 15) {
+                        Menu {
+                            ForEach(["Facile", "Medio", "Difficile"], id: \.self) { level in
+                                Button(action: {
+                                    changeDifficultyLevel(to: level)
+                                }) {
+                                    HStack {
                                         Text(level)
                                         if selectedDifficultyLevel == level {
                                             Image(systemName: "checkmark")
                                         }
                                     }
                                 }
-                            } label: {
-                                Text("Livello")
-                                    .font(.headline)
-                                    .foregroundColor(Color("blk"))
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color("wht"))
-                                    .cornerRadius(10)
-                                    .shadow(radius: 1)
                             }
-                            
-                            Button(action: {
-                                completeCurrentChallenge(challenge)
-                            }) {
-                                Text("Completa")
-                                    .font(.headline)
-                                    .foregroundColor(Color("wht"))
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color("blk"))
-                                    .cornerRadius(10)
-                                    .shadow(radius: 1)
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "slider.horizontal.3")
+                                    .font(.system(size: 16))
+                                Text("Cambia livello")
+                                    .fontWeight(.medium)
                             }
+                            .foregroundColor(Color("blk"))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .background(Color("wht"))
+                            .cornerRadius(12)
+                            .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 1)
                         }
-                        .padding(.horizontal)
-                        .padding(.bottom, 30)
+                        
+                        Button(action: {
+                            completeCurrentChallenge(challenge)
+                        }) {
+                            HStack(spacing: 8) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.system(size: 16))
+                                Text("Completa")
+                                    .fontWeight(.semibold)
+                            }
+                            .foregroundColor(Color("wht"))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .background(Color("blk"))
+                            .cornerRadius(12)
+                            .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
+                        }
                     }
+                    .padding(.horizontal)
                 }
                 
                 Spacer()
             }
             
+            // Overlay per level up
             if showingLevelUpTips {
                 Color.black.opacity(0.4)
                     .edgesIgnoringSafeArea(.all)
@@ -460,18 +527,24 @@ struct DailyChallengeView: View {
                 .transition(.scale)
             }
         }
-        .navigationTitle("Daily Challenge")
+        .navigationTitle("")
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading: Button(action: {
                 presentationMode.wrappedValue.dismiss()
             }) {
                 Image(systemName: "arrow.left")
+                    .font(.system(size: 18, weight: .medium))
                     .foregroundColor(Color("blk"))
             }
         )
         .onAppear {
+            
+            // RESET TEMPORANEO - Rimuovi dopo il test
+           //resetAllData()
+            
             checkForNewDay()
+            checkForNewWeek()
         }
     }
     
@@ -485,19 +558,42 @@ struct DailyChallengeView: View {
     
     // Completa la sfida corrente
     private func completeCurrentChallenge(_ challenge: DailyChallenge) {
-        let today = Calendar.current.component(.weekday, from: Date()) - 1
-        workoutManager.dailyChallengeCompleted[today % 7] = true
+        // Calcolo corretto del giorno della settimana (stesso del display)
+        let todayWeekday = Calendar.current.component(.weekday, from: Date()) // 1=Dom, 2=Lun, ..., 7=Sab
+        let todayIndex = todayWeekday == 1 ? 6 : todayWeekday - 2 // Converte in 0-6 con Lun=0
+        
+        workoutManager.dailyChallengeCompleted[todayIndex] = true
         completedChallengesCount += 1
         lastChallengeDate = Date()
         currentChallengeIndex = (currentChallengeIndex + 1) % 4
         let workout = Workout(
-            name: "Sfida Giornaliera - \(selectedDifficultyLevel) #\((currentChallengeIndex % 4) + 1)",
-            
+            name: "Sfida Giornaliera - \(selectedDifficultyLevel)",
             exercises: challenge.exercises,
-            
             restTime: getDifficultyRestTime(for: selectedDifficultyLevel)
         )
+
         workoutManager.completeWorkout(workout)
+    }
+    
+    // FUNZIONE TEMPORANEA DI RESET - Rimuovi dopo il test
+    private func resetAllData() {
+        // Cancella tutti i UserDefaults
+        UserDefaults.standard.removeObject(forKey: "lastWeekStart")
+        UserDefaults.standard.removeObject(forKey: "selectedDifficultyLevel")
+        UserDefaults.standard.removeObject(forKey: "currentChallengeIndex")
+        UserDefaults.standard.removeObject(forKey: "completedChallengesCount")
+        UserDefaults.standard.removeObject(forKey: "lastChallengeDate")
+        
+        // Reset dell'array dei completamenti
+        workoutManager.dailyChallengeCompleted = Array(repeating: false, count: 7)
+        
+        // Reset delle variabili @AppStorage (le forza ai valori di default)
+        selectedDifficultyLevel = "Facile"
+        currentChallengeIndex = 0
+        completedChallengesCount = 0
+        lastChallengeDate = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        
+        print("🔄 RESET COMPLETO ESEGUITO")
     }
     
     // Controlla nuovo giorno
@@ -506,6 +602,40 @@ struct DailyChallengeView: View {
         if !calendar.isDate(lastChallengeDate, inSameDayAs: Date()) {
             // Rotazione solo se sfida completata
         }
+    }
+    
+    // Controlla nuova settimana e resetta se necessario
+    private func checkForNewWeek() {
+        let calendar = Calendar.current
+        let today = Date()
+        
+        // Ottieni l'inizio della settimana corrente (lunedì)
+        let weekday = calendar.component(.weekday, from: today)
+        let daysFromMonday = weekday == 1 ? 6 : weekday - 2 // Domenica = 6 giorni da lunedì
+        
+        guard let startOfWeek = calendar.date(byAdding: .day, value: -daysFromMonday, to: today) else { return }
+        guard let startOfWeekNormalized = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: startOfWeek) else { return }
+        
+        // Controlla se è una nuova settimana rispetto all'ultima volta
+        if let lastWeekStart = getLastWeekStart() {
+            if !calendar.isDate(lastWeekStart, inSameDayAs: startOfWeekNormalized) {
+                // Nuova settimana - resetta tutti i completamenti
+                workoutManager.dailyChallengeCompleted = Array(repeating: false, count: 7)
+                setLastWeekStart(startOfWeekNormalized)
+            }
+        } else {
+            // Prima volta - salva l'inizio della settimana corrente
+            setLastWeekStart(startOfWeekNormalized)
+        }
+    }
+    
+    // Funzioni helper per salvare/recuperare l'inizio dell'ultima settimana
+    private func getLastWeekStart() -> Date? {
+        return UserDefaults.standard.object(forKey: "lastWeekStart") as? Date
+    }
+    
+    private func setLastWeekStart(_ date: Date) {
+        UserDefaults.standard.set(date, forKey: "lastWeekStart")
     }
     
     // Tempi di riposo per livello
@@ -522,11 +652,11 @@ struct DailyChallengeView: View {
     private func difficultyColor(for difficulty: String) -> Color {
         switch difficulty {
         case "Facile":
-            return Color("blk") // Verde scuro
+            return Color("blk")
         case "Medio":
-            return Color(red: 0.9, green: 0.6, blue: 0.0) // Arancio
+            return Color(red: 0.9, green: 0.6, blue: 0.0)
         case "Difficile":
-            return Color(red: 0.8, green: 0.2, blue: 0.2) // Rosso scuro
+            return Color(red: 0.8, green: 0.2, blue: 0.2)
         default:
             return Color.gray
         }
@@ -555,3 +685,4 @@ struct DailyChallengeView_Previews: PreviewProvider {
         }
     }
 }
+
