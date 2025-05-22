@@ -1,5 +1,6 @@
 import SwiftUI
 import AudioToolbox
+import AVFoundation
 
 struct ActiveWorkoutView: View {
     let workout: Workout
@@ -264,11 +265,55 @@ struct ActiveWorkoutView: View {
     
     // Funzione per riprodurre suono di completamento timer
     private func playTimerComplete() {
-        // Vibrazione di successo
-        let notificationFeedback = UINotificationFeedbackGenerator()
-        notificationFeedback.notificationOccurred(.success)
+        // Vibrazione forte per 3 secondi
+        startLongVibration()
         
-        // Suono di completamento (suono di invio messaggio iOS)
-        AudioServicesPlaySystemSound(1001)
+        // Suono forte di allarme (si sente anche in modalità silenziosa)
+        playLoudAlarmSound()
+    }
+    
+    // Vibrazione forte che dura 3 secondi
+    private func startLongVibration() {
+        let heavyImpact = UIImpactFeedbackGenerator(style: .heavy)
+        
+        // Vibrazione immediata
+        heavyImpact.impactOccurred()
+        
+        // Continua a vibrare ogni 0.3 secondi per 3 secondi totali
+        var vibrationCount = 0
+        let totalVibrations = 10 // 3 secondi / 0.3 = 10 vibrazioni
+        
+        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { timer in
+            vibrationCount += 1
+            heavyImpact.impactOccurred()
+            
+            if vibrationCount >= totalVibrations {
+                timer.invalidate()
+            }
+        }
+    }
+    
+    // Suono forte che si sente anche in modalità silenziosa
+    private func playLoudAlarmSound() {
+        // Configura l'audio per riprodurre anche in modalità silenziosa
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Errore configurazione audio: \(error)")
+        }
+        
+        // Suono di allarme forte (sistema iOS)
+        AudioServicesPlaySystemSound(1005) // Voicemail sound - più forte
+        
+        // Alternativa: suono di campanello
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            AudioServicesPlaySystemSound(1013) // Bell sound
+        }
+        
+        // Se ancora non si sente, usa la vibrazione di sistema classica
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+        }
     }
 }
