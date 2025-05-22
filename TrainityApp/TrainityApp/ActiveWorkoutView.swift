@@ -1,4 +1,5 @@
 import SwiftUI
+import AudioToolbox
 
 struct ActiveWorkoutView: View {
     let workout: Workout
@@ -29,6 +30,7 @@ struct ActiveWorkoutView: View {
                 ProgressView(value: Double(currentExerciseIndex), total: Double(workout.exercises.count))
                     .padding(.horizontal)
                     .padding(.top, 10)
+                    .tint(Color(red: 0.1, green: 0.4, blue: 0.4))
                 
                 Text("\(currentExerciseIndex)/\(workout.exercises.count) esercizi completati")
                     .font(.subheadline)
@@ -172,6 +174,9 @@ struct ActiveWorkoutView: View {
             // Registra l'ora di inizio
             startTime = Date()
             
+            // Configura il timer iniziale con il tempo di riposo del workout
+            timeRemaining = workout.restTime
+            
             // Configura il timer
             setupTimer()
         }
@@ -201,14 +206,11 @@ struct ActiveWorkoutView: View {
         
         print("Durata calcolata: \(durationInMinutes) minuti")
         
-        
         // Usa direttamente il metodo completeWorkout che già esiste nel workoutManager
         // questo dovrebbe fare tutto ciò che serve (aggiungere il record e aggiornare le statistiche)
         workoutManager.completeWorkout(workout)
         
         print("Allenamento aggiunto alla cronologia. Totale record: \(workoutManager.workoutHistory.count)")
-        
-       
     }
     
     private func setupTimer() {
@@ -220,21 +222,53 @@ struct ActiveWorkoutView: View {
         isTimerRunning.toggle()
     }
     
+    // AGGIORNATO: Funzione timer migliorata con auto-reset e chiusura sheet
     private func startTimer() {
         if timeRemaining > 0 {
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                 if timeRemaining > 0 {
                     timeRemaining -= 1
                 } else {
-                    // Ferma il timer quando arriva a 0
-                    isTimerRunning = false
-                    timer?.invalidate()
-                    timer = nil
-                    // Qui potresti aggiungere un suono o una vibrazione
+                    // Timer completato - implementa le nuove funzionalità
+                    handleTimerCompletion()
                 }
             }
         } else {
             isTimerRunning = false
         }
+    }
+    
+    // NUOVO: Gestisce il completamento del timer
+    private func handleTimerCompletion() {
+        // Ferma il timer
+        isTimerRunning = false
+        timer?.invalidate()
+        timer = nil
+        
+        // Chiudi la sheet del timer se è aperta
+        withAnimation(.easeInOut(duration: 0.3)) {
+            showingTimerSheet = false
+        }
+        
+        // Resetta il tempo al valore di riposo del workout
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            timeRemaining = workout.restTime
+        }
+        
+        // Suono + Vibrazione quando il timer finisce
+        playTimerComplete()
+        
+        // Opzionale: Mostra un breve messaggio di completamento
+        // Potresti aggiungere un toast o un'animazione qui
+    }
+    
+    // Funzione per riprodurre suono di completamento timer
+    private func playTimerComplete() {
+        // Vibrazione di successo
+        let notificationFeedback = UINotificationFeedbackGenerator()
+        notificationFeedback.notificationOccurred(.success)
+        
+        // Suono di completamento (suono di invio messaggio iOS)
+        AudioServicesPlaySystemSound(1001)
     }
 }
