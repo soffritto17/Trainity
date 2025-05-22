@@ -7,6 +7,7 @@ struct ActiveWorkoutView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var workoutManager: WorkoutManager
     @State private var completedSets: [String: [Int]] = [:]
+    @State private var exerciseWeights: [String: Double] = [:] // Nuovo: traccia i pesi degli esercizi
     @State private var currentExerciseIndex = 0
     @State private var showingCompletionAlert = false
     @State private var showingTimerSheet = false
@@ -17,25 +18,25 @@ struct ActiveWorkoutView: View {
     
     var body: some View {
         ZStack {
-            Color("wht").edgesIgnoringSafeArea(.all)
+            Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
             
             VStack {
                 // Header
                 Text("Allenamento: \(workout.name)")
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(Color("blk"))
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                     .padding(.top, 20)
                 
                 // Progress indicator
                 ProgressView(value: Double(currentExerciseIndex), total: Double(workout.exercises.count))
                     .padding(.horizontal)
                     .padding(.top, 10)
-                    .tint(Color("blk"))
+                    .tint(Color(red: 0.1, green: 0.4, blue: 0.4))
                 
                 Text("\(currentExerciseIndex)/\(workout.exercises.count) esercizi completati")
                     .font(.subheadline)
-                    .foregroundColor(Color("blk").opacity(0.6))
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                     .padding(.top, 5)
                 
                 // Exercise list
@@ -64,6 +65,15 @@ struct ActiveWorkoutView: View {
                                             showingCompletionAlert = true
                                         }
                                     }
+                                },
+                                onWeightUpdate: { weight in
+                                    // NUOVO: Salva il peso dell'esercizio
+                                    if let weight = weight {
+                                        exerciseWeights[exercise.id.uuidString] = weight
+                                        print("Peso aggiornato per \(exercise.name): \(weight) kg")
+                                    } else {
+                                        exerciseWeights.removeValue(forKey: exercise.id.uuidString)
+                                    }
                                 }
                             )
                             .padding(.horizontal)
@@ -77,7 +87,7 @@ struct ActiveWorkoutView: View {
                 // Mini timer display draggable
                 VStack {
                     Divider()
-                        .background(Color("blk").opacity(0.3))
+                        .background(Color(red: 0.1, green: 0.4, blue: 0.4).opacity(0.3))
                     
                     Button(action: {
                         showingTimerSheet = true
@@ -89,12 +99,12 @@ struct ActiveWorkoutView: View {
                             }) {
                                 ZStack {
                                     Circle()
-                                        .fill(Color("blk"))
+                                        .fill(Color(red: 0.1, green: 0.4, blue: 0.4))
                                         .frame(width: 50, height: 50)
                                     
                                     Image(systemName: isTimerRunning ? "pause.fill" : "play.fill")
                                         .font(.title2)
-                                        .foregroundColor(Color("wht"))
+                                        .foregroundColor(.white)
                                 }
                             }
                             .padding(.trailing, 10)
@@ -103,31 +113,30 @@ struct ActiveWorkoutView: View {
                             VStack(alignment: .leading) {
                                 Text("Timer Recupero")
                                     .font(.subheadline)
-                                    .foregroundColor(Color("blk").opacity(0.6))
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                                 
                                 Text("\(timeRemaining) secondi")
                                     .font(.title2)
                                     .fontWeight(.bold)
-                                    .foregroundColor(Color("blk"))
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                             }
                             
                             Spacer()
                             
                             // Drag indicator
                             Image(systemName: "chevron.up")
-                                .foregroundColor(Color("blk").opacity(0.6))
+                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                                 .padding(.trailing)
                         }
                         .padding()
-                        .background(Color("wht"))
+                        .background(Color.white)
                         .cornerRadius(15)
-                        .shadow(color: Color("blk").opacity(0.1), radius: 5, x: 0, y: 2)
                         .padding(.horizontal)
                         .padding(.vertical, 10)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
-                .background(Color("wht"))
+                .background(Color(red: 0.9, green: 0.95, blue: 0.95))
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -146,7 +155,7 @@ struct ActiveWorkoutView: View {
             }) {
                 Text("Termina")
                     .font(.headline)
-                    .foregroundColor(Color("blk"))
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
             }
         )
         .sheet(isPresented: $showingTimerSheet) {
@@ -178,7 +187,7 @@ struct ActiveWorkoutView: View {
         }
     }
     
-    // Funzione per salvare l'allenamento nella cronologia
+    // AGGIORNATO: Funzione per salvare l'allenamento nella cronologia con i pesi
     private func saveWorkoutToHistory() {
         print("Salvaggio allenamento nella cronologia...")
         
@@ -189,17 +198,25 @@ struct ActiveWorkoutView: View {
         
         print("Durata calcolata: \(durationInMinutes) minuti")
         
-        // Usa direttamente il metodo completeWorkout che già esiste nel workoutManager
-        // questo dovrebbe fare tutto ciò che serve (aggiungere il record e aggiornare le statistiche)
-        workoutManager.completeWorkout(workout)
+        // NUOVO: Crea una copia del workout con i pesi aggiornati
+        var updatedWorkout = workout
+        for i in 0..<updatedWorkout.exercises.count {
+            let exerciseId = updatedWorkout.exercises[i].id.uuidString
+            if let weight = exerciseWeights[exerciseId] {
+                updatedWorkout.exercises[i].weight = weight
+                print("Peso salvato per \(updatedWorkout.exercises[i].name): \(weight) kg")
+            }
+        }
+        
+        // Usa il workout aggiornato con i pesi
+        workoutManager.completeWorkout(updatedWorkout)
         
         if let encodedData = try? JSONEncoder().encode(workoutManager.workoutHistory) {
             UserDefaults.standard.set(encodedData, forKey: "workoutHistory")
             print("Salvataggio completato in UserDefaults")
         }
         
-        
-        print("Allenamento aggiunto alla cronologia. Totale record: \(workoutManager.workoutHistory.count)")
+        print("Allenamento aggiunto alla cronologia con pesi. Totale record: \(workoutManager.workoutHistory.count)")
     }
     
     private func setupTimer() {
@@ -305,3 +322,4 @@ struct ActiveWorkoutView: View {
         }
     }
 }
+

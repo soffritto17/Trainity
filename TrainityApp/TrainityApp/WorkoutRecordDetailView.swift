@@ -12,7 +12,7 @@ struct WorkoutRecordDetailView: View {
     
     var body: some View {
         ZStack {
-            Color("wht").edgesIgnoringSafeArea(.all)
+            Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -21,7 +21,7 @@ struct WorkoutRecordDetailView: View {
                         Text(record.workout.name)
                             .font(.largeTitle)
                             .fontWeight(.bold)
-                            .foregroundColor(Color("blk"))
+                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                         
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
@@ -31,94 +31,91 @@ struct WorkoutRecordDetailView: View {
                                 .foregroundColor(.green)
                         }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                    .background(Color("wht"))
+                    .background(Color.white)
                     .cornerRadius(15)
-                    .shadow(color: Color("blk").opacity(0.1), radius: 5, x: 0, y: 2)
+                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                     
                     // Informazioni dell'allenamento
                     VStack(alignment: .leading, spacing: 15) {
                         Text("Dettagli Allenamento")
                             .font(.headline)
-                            .foregroundColor(Color("blk"))
+                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                         
                         HStack {
                             Label("Data", systemImage: "calendar")
-                                .foregroundColor(Color("blk").opacity(0.6))
+                                .foregroundColor(.gray)
                             Spacer()
                             Text(formattedDateTime(record.date))
                                 .fontWeight(.semibold)
-                                .foregroundColor(Color("blk"))
                         }
                         
                         HStack {
                             Label("Esercizi", systemImage: "figure.strengthtraining.traditional")
-                                .foregroundColor(Color("blk").opacity(0.6))
+                                .foregroundColor(.gray)
                             Spacer()
                             Text("\(record.workout.exercises.count)")
                                 .fontWeight(.semibold)
-                                .foregroundColor(Color("blk"))
                         }
                         
                         if record.caloriesBurned > 0 {
                             HStack {
                                 Label("Calorie", systemImage: "flame")
-                                    .foregroundColor(Color("blk").opacity(0.6))
+                                    .foregroundColor(.gray)
                                 Spacer()
                                 Text("\(record.caloriesBurned) cal")
                                     .fontWeight(.semibold)
-                                    .foregroundColor(Color("blk"))
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                    .background(Color("wht"))
+                    .background(Color.white)
                     .cornerRadius(15)
-                    .shadow(color: Color("blk").opacity(0.1), radius: 5, x: 0, y: 2)
+                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                     
                     // Lista degli esercizi
                     VStack(alignment: .leading, spacing: 15) {
                         Text("Esercizi Completati")
                             .font(.headline)
-                            .foregroundColor(Color("blk"))
+                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                         
                         ForEach(record.workout.exercises, id: \.id) { exercise in
                             VStack(alignment: .leading, spacing: 8) {
                                 Text(exercise.name)
                                     .font(.headline)
-                                    .foregroundColor(Color("blk"))
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                                 
                                 HStack {
                                     HStack {
                                         Image(systemName: "repeat")
-                                            .foregroundColor(Color("blk").opacity(0.6))
+                                            .foregroundColor(.gray)
                                         Text("Serie: \(exercise.sets)")
                                             .font(.subheadline)
-                                            .foregroundColor(Color("blk").opacity(0.6))
+                                            .foregroundColor(.gray)
                                     }
                                     
                                     Text("•")
-                                        .foregroundColor(Color("blk").opacity(0.6))
+                                        .foregroundColor(.gray)
                                     
                                     HStack {
                                         Image(systemName: "arrow.up.and.down")
-                                            .foregroundColor(Color("blk").opacity(0.6))
+                                            .foregroundColor(.gray)
                                         Text("Ripetizioni: \(exercise.reps)")
                                             .font(.subheadline)
-                                            .foregroundColor(Color("blk").opacity(0.6))
+                                            .foregroundColor(.gray)
                                     }
                                     
-                                    if let weight = exercise.weight {
-                                        Text("•")
-                                            .foregroundColor(Color("blk").opacity(0.6))
-                                        
-                                        HStack {
-                                            Image(systemName: "scalemass")
-                                                .foregroundColor(Color("blk").opacity(0.6))
-                                            Text("Peso: \(weight, specifier: "%.1f") kg")
-                                                .font(.subheadline)
-                                                .foregroundColor(Color("blk").opacity(0.6))
-                                        }
+                                    Text("•")
+                                        .foregroundColor(.gray)
+                                    
+                                    HStack {
+                                        Image(systemName: "scalemass")
+                                            .foregroundColor(.gray)
+                                        Text("Peso: \(exercise.weight ?? 0.0, specifier: "%.1f") kg")
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
                                     }
                                     
                                     Spacer()
@@ -135,15 +132,16 @@ struct WorkoutRecordDetailView: View {
                                 }
                             }
                             .padding()
-                            .background(Color("wht"))
+                            .background(Color.white)
                             .cornerRadius(10)
-                            .shadow(color: Color("blk").opacity(0.05), radius: 2, x: 0, y: 1)
+                            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                    .background(Color("wht"))
+                    .background(Color.white)
                     .cornerRadius(15)
-                    .shadow(color: Color("blk").opacity(0.1), radius: 5, x: 0, y: 2)
+                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                 }
                 .padding()
             }
@@ -159,3 +157,4 @@ struct WorkoutRecordDetailView: View {
         return formatter.string(from: date)
     }
 }
+

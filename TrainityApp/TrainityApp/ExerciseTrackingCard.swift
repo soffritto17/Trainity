@@ -6,28 +6,31 @@ struct ExerciseTrackingCard: View {
     let isCompleted: Bool
     let completedReps: [Int]
     let onSetComplete: (Int, Int) -> Void
+    let onWeightUpdate: (Double?) -> Void // Nuovo callback per aggiornare il peso
     
     @State private var currentReps: [String] = []
     @State private var currentWeights: [String] = []
     
-    init(exercise: Exercise, isActive: Bool, isCompleted: Bool, completedReps: [Int], onSetComplete: @escaping (Int, Int) -> Void) {
+    init(exercise: Exercise, isActive: Bool, isCompleted: Bool, completedReps: [Int], onSetComplete: @escaping (Int, Int) -> Void, onWeightUpdate: @escaping (Double?) -> Void) {
         self.exercise = exercise
         self.isActive = isActive
         self.isCompleted = isCompleted
         self.completedReps = completedReps
         self.onSetComplete = onSetComplete
+        self.onWeightUpdate = onWeightUpdate
         
+        // Inizializza la state variable
         _currentReps = State(initialValue: completedReps.map { $0 > 0 ? "\($0)" : "" })
         _currentWeights = State(initialValue: Array(repeating: exercise.weight != nil ? String(format: "%.1f", exercise.weight!) : "", count: exercise.sets))
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            // Header
+            // Header dell'esercizio
             HStack {
                 Text(exercise.name)
                     .font(.headline)
-                    .foregroundColor(Color("blk"))
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                 
                 Spacer()
                 
@@ -41,59 +44,72 @@ struct ExerciseTrackingCard: View {
                 }
             }
             
+            // Visualizza il range delle ripetizioni (numero programma - 2)
             Text("Range ripetizioni: \(max(exercise.reps - 2, 1))-\(exercise.reps)")
                 .font(.subheadline)
-                .foregroundColor(Color("blk").opacity(0.6))
+                .foregroundColor(.gray)
             
             Text("Serie: \(exercise.sets)")
                 .font(.subheadline)
-                .foregroundColor(Color("blk").opacity(0.6))
+                .foregroundColor(.gray)
             
+            // Serie
             ForEach(0..<exercise.sets, id: \.self) { setIndex in
                 HStack {
                     Text("Serie \(setIndex + 1):")
                         .font(.subheadline)
-                        .foregroundColor(Color("blk"))
                     
                     Spacer()
                     
+                    // Campo per i kg
                     Text("Kg:")
                         .font(.caption)
-                        .foregroundColor(Color("blk").opacity(0.6))
+                        .foregroundColor(.gray)
                     
                     TextField("0", text: Binding(
                         get: {
                             currentWeights.count > setIndex ? currentWeights[setIndex] : ""
                         },
                         set: { newValue in
+                            // Assicurati che l'array sia abbastanza grande
                             while currentWeights.count <= setIndex {
                                 currentWeights.append("")
                             }
+                            
+                            // Filtra per permettere solo numeri e punto decimale
                             let filtered = newValue.filter { "0123456789.".contains($0) }
                             currentWeights[setIndex] = filtered
+                            
+                            // Aggiorna il peso dell'esercizio con il primo valore inserito o con la media
+                            updateExerciseWeight()
                         }
                     ))
                     .keyboardType(.decimalPad)
                     .frame(width: 50)
                     .padding(8)
-                    .background(Color("wht"))
+                    .background(Color.white)
                     .cornerRadius(8)
                     .disabled(!isActive && !isCompleted)
                     
+                    // Campo per le ripetizioni
                     Text("Rep:")
                         .font(.caption)
-                        .foregroundColor(Color("blk").opacity(0.6))
+                        .foregroundColor(.gray)
                     
                     TextField("0", text: Binding(
                         get: {
                             currentReps.count > setIndex ? currentReps[setIndex] : ""
                         },
                         set: { newValue in
+                            // Assicurati che l'array sia abbastanza grande
                             while currentReps.count <= setIndex {
                                 currentReps.append("")
                             }
+                            
+                            // Aggiorna il valore
                             currentReps[setIndex] = newValue.filter { "0123456789".contains($0) }
                             
+                            // Notifica il completamento della serie se viene inserito un valore
                             if let reps = Int(currentReps[setIndex]), reps > 0 {
                                 onSetComplete(setIndex, reps)
                             }
@@ -102,21 +118,34 @@ struct ExerciseTrackingCard: View {
                     .keyboardType(.numberPad)
                     .frame(width: 50)
                     .padding(8)
-                    .background(Color("wht"))
+                    .background(Color.white)
                     .cornerRadius(8)
                     .disabled(!isActive && !isCompleted)
                 }
                 .padding(8)
-                .background(Color("wht").opacity(isActive ? 1.0 : 0.5))
+                .background(isActive ? Color.white : Color.white.opacity(0.5))
                 .cornerRadius(8)
             }
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color("wht").opacity(isActive ? 1.0 : 0.8))
-                .shadow(color: isActive ? Color("blk").opacity(0.15) : .clear, radius: 3)
+                .fill(isActive ? Color.white : Color.white.opacity(0.8))
+                .shadow(color: isActive ? Color.gray.opacity(0.3) : Color.clear, radius: 3)
         )
         .opacity(isActive || isCompleted ? 1.0 : 0.7)
+    }
+    
+    // Funzione per aggiornare il peso dell'esercizio
+    private func updateExerciseWeight() {
+        let validWeights = currentWeights.compactMap { Double($0) }.filter { $0 > 0 }
+        
+        if validWeights.isEmpty {
+            onWeightUpdate(nil)
+        } else {
+            // Usa il primo peso valido inserito o la media di tutti i pesi
+            let averageWeight = validWeights.reduce(0, +) / Double(validWeights.count)
+            onWeightUpdate(averageWeight)
+        }
     }
 }
