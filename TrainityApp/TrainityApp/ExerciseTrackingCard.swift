@@ -8,6 +8,7 @@ struct ExerciseTrackingCard: View {
     let onSetComplete: (Int, Int) -> Void
     
     @State private var currentReps: [String] = []
+    @State private var currentWeights: [String] = []
     
     init(exercise: Exercise, isActive: Bool, isCompleted: Bool, completedReps: [Int], onSetComplete: @escaping (Int, Int) -> Void) {
         self.exercise = exercise
@@ -18,6 +19,7 @@ struct ExerciseTrackingCard: View {
         
         // Inizializza la state variable
         _currentReps = State(initialValue: completedReps.map { $0 > 0 ? "\($0)" : "" })
+        _currentWeights = State(initialValue: Array(repeating: exercise.weight != nil ? String(format: "%.1f", exercise.weight!) : "", count: exercise.sets))
     }
     
     var body: some View {
@@ -56,6 +58,33 @@ struct ExerciseTrackingCard: View {
                         .font(.subheadline)
                     
                     Spacer()
+                    
+                    // Campo per i kg
+                    Text("Kg:")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    
+                    TextField("0", text: Binding(
+                        get: {
+                            currentWeights.count > setIndex ? currentWeights[setIndex] : ""
+                        },
+                        set: { newValue in
+                            // Assicurati che l'array sia abbastanza grande
+                            while currentWeights.count <= setIndex {
+                                currentWeights.append("")
+                            }
+                            
+                            // Filtra per permettere solo numeri e punto decimale
+                            let filtered = newValue.filter { "0123456789.".contains($0) }
+                            currentWeights[setIndex] = filtered
+                        }
+                    ))
+                    .keyboardType(.decimalPad)
+                    .frame(width: 50)
+                    .padding(8)
+                    .background(Color.white)
+                    .cornerRadius(8)
+                    .disabled(!isActive && !isCompleted)
                     
                     // Modificato "Ripetizioni:" in "Rep:"
                     Text("Rep:")
@@ -102,3 +131,4 @@ struct ExerciseTrackingCard: View {
         .opacity(isActive || isCompleted ? 1.0 : 0.7)
     }
 }
+

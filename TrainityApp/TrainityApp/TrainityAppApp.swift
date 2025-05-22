@@ -15,6 +15,7 @@ struct Exercise: Identifiable, Codable {
     var name: String
     var sets: Int
     var reps: Int
+    var weight: Double?
     var isCompleted: Bool = false
 }
 
@@ -334,3 +335,4 @@ class WorkoutManager: ObservableObject {
         }
     }
 }
+

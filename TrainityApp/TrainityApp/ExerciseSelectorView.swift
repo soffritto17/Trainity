@@ -42,25 +42,7 @@ struct ExerciseSelectorView: View {
                         .cornerRadius(10)
                         .padding()
                     
-                    // Custom exercise input
-                    HStack {
-                        TextField("Aggiungi esercizio personalizzato", text: $customExerciseName)
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(10)
-                        
-                        Button(action: {
-                            if !customExerciseName.isEmpty {
-                                let newExercise = Exercise(name: customExerciseName, sets: 3, reps: 10)
-                                onExerciseSelected(newExercise)
-                            }
-                        }) {
-                            Image(systemName: "plus.circle.fill")
-                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                .font(.title2)
-                        }
-                    }
-                    .padding(.horizontal)
+                   
                     
                     List {
                         ForEach(filteredExercises, id: \.self) { exerciseName in

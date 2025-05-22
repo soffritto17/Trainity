@@ -29,6 +29,13 @@ struct ExerciseRow: View {
                     Text("Ripetizioni: \(exercise.reps)")
                         .font(.subheadline)
                         .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    
+                    Text("•")
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    
+                    Text("Peso: \(exercise.weight ?? 0.0, specifier: "%.1f") kg")
+                        .font(.subheadline)
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                 }
             }
             
@@ -45,3 +52,4 @@ struct ExerciseRow: View {
         .cornerRadius(10)
     }
 }
+

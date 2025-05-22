@@ -17,16 +17,26 @@ struct ExerciseEditRow: View {
                 Text("Serie:")
                     .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                 
-                Stepper("\(exercise.sets)", value: $exercise.sets, in: 1...10)
+                Text("\(exercise.sets)")
                     .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .fontWeight(.semibold)
+                
+                Stepper("", value: $exercise.sets, in: 1...10)
+                    .labelsHidden()
+                    .scaleEffect(0.8)
                 
                 Spacer()
                 
-                Text("Ripetizioni:")
+                Text("Rep:")
                     .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                 
-                Stepper("\(exercise.reps)", value: $exercise.reps, in: 1...30)
+                Text("\(exercise.reps)")
                     .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .fontWeight(.semibold)
+                
+                Stepper("", value: $exercise.reps, in: 1...30)
+                    .labelsHidden()
+                    .scaleEffect(0.8)
             }
         }
         .padding()
@@ -34,3 +44,4 @@ struct ExerciseEditRow: View {
         .cornerRadius(10)
     }
 }
+
