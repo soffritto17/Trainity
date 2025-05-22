@@ -46,15 +46,15 @@ struct WorkoutDetailView: View {
                         .background(Color("blk").opacity(0.3))
                         .padding(.bottom, 8)
                     
-                    HStack(spacing: 20) {
+                    HStack(spacing: 15) {
                         Button(action: {
                             showingEditView = true
                         }) {
                             Text("Modifica")
                                 .font(.headline)
                                 .foregroundColor(Color("blk"))
-                                .frame(maxWidth: .infinity)
-                                .padding()
+                                .frame(minWidth: 0, maxWidth: .infinity)
+                                .frame(height: 50)
                                 .background(Color("wht"))
                                 .cornerRadius(10)
                                 .overlay(
@@ -67,8 +67,8 @@ struct WorkoutDetailView: View {
                             Text("Inizia Allenamento")
                                 .font(.headline)
                                 .foregroundColor(Color("wht"))
-                                .frame(maxWidth: .infinity)
-                                .padding()
+                                .frame(minWidth: 0, maxWidth: .infinity)
+                                .frame(height: 50)
                                 .background(Color("blk"))
                                 .cornerRadius(10)
                         }
