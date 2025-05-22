@@ -203,6 +203,7 @@ class WorkoutManager: ObservableObject, Codable {
                 
                 // Copia i dati caricati nelle proprietà @Published
                 self.dailyChallengeCompleted = decodedManager.dailyChallengeCompleted
+                print("dailyChallengeCompleted: \(dailyChallengeCompleted)")
                 self.savedWorkouts = decodedManager.savedWorkouts
                 self.workoutHistory = decodedManager.workoutHistory
                 self.nickname = decodedManager.nickname
@@ -500,6 +501,7 @@ class WorkoutManager: ObservableObject, Codable {
     // Funzione per completare una daily challenge
     func completeDailyChallenge(dayIndex: Int) {
         if dayIndex < dailyChallengeCompleted.count {
+            print("Completata sfida del giorno \(dayIndex )")
             dailyChallengeCompleted[dayIndex] = true
             dailyChallengesCompleted += 1
             checkAndAwardBadges(totalExercisesCompleted: 0)

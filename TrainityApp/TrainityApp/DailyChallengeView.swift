@@ -542,7 +542,9 @@ struct DailyChallengeView: View {
             
             // RESET TEMPORANEO - Rimuovi dopo il test
            //resetAllData()
-            
+            //workoutManager.dailyChallengeCompleted[0] = true
+            //workoutManager.dailyChallengeCompleted[1] = true
+    
             checkForNewDay()
             checkForNewWeek()
         }
@@ -561,7 +563,7 @@ struct DailyChallengeView: View {
         // Calcolo corretto del giorno della settimana (stesso del display)
         let todayWeekday = Calendar.current.component(.weekday, from: Date()) // 1=Dom, 2=Lun, ..., 7=Sab
         let todayIndex = todayWeekday == 1 ? 6 : todayWeekday - 2 // Converte in 0-6 con Lun=0
-        
+        print("Today index: \(todayIndex)")
         workoutManager.dailyChallengeCompleted[todayIndex] = true
         completedChallengesCount += 1
         lastChallengeDate = Date()
@@ -576,6 +578,7 @@ struct DailyChallengeView: View {
     }
     
     // FUNZIONE TEMPORANEA DI RESET - Rimuovi dopo il test
+
     private func resetAllData() {
         // Cancella tutti i UserDefaults
         UserDefaults.standard.removeObject(forKey: "lastWeekStart")
@@ -583,9 +586,19 @@ struct DailyChallengeView: View {
         UserDefaults.standard.removeObject(forKey: "currentChallengeIndex")
         UserDefaults.standard.removeObject(forKey: "completedChallengesCount")
         UserDefaults.standard.removeObject(forKey: "lastChallengeDate")
+        UserDefaults.standard.removeObject(forKey: "WorkoutManagerData")
+        do {
+            let data = try JSONEncoder().encode(WorkoutManager())
+            UserDefaults.standard.set(data, forKey: "WorkoutManagerData")
+            print("Dati salvati con successo")
+        } catch {
+            print("Errore nel salvataggio dei dati: \(error)")
+        }
         
         // Reset dell'array dei completamenti
         workoutManager.dailyChallengeCompleted = Array(repeating: false, count: 7)
+       
+
         
         // Reset delle variabili @AppStorage (le forza ai valori di default)
         selectedDifficultyLevel = "Facile"

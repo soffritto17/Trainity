@@ -124,6 +124,7 @@ struct HomeView: View {
                 Text(subtitle)
                     .font(.subheadline)
                     .foregroundColor(Color("blk").opacity(0.6))
+                    .multilineTextAlignment(.leading)
             }
             
             Spacer()
