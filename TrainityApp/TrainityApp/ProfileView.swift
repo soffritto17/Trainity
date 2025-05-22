@@ -44,16 +44,21 @@ struct ProfileView: View {
                         .padding(8)
                         .background(Color("wht"))
                         .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color("blk").opacity(0.2), lineWidth: 1)
+                        )
                     
-                    Button(action: {
-                        if !newNickname.isEmpty {
-                            workoutManager.nickname = newNickname
-                        }
-                        editingNickname = false
-                    }) {
+                    Button(action: saveNickname) {
                         Image(systemName: "checkmark.circle.fill")
                             .font(.title3)
                             .foregroundColor(Color("blk"))
+                    }
+                    
+                    Button(action: cancelEditing) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.title3)
+                            .foregroundColor(Color("blk").opacity(0.6))
                     }
                 }
                 .padding(.horizontal, 50)
@@ -64,10 +69,7 @@ struct ProfileView: View {
                         .fontWeight(.bold)
                         .foregroundColor(Color("blk"))
                     
-                    Button(action: {
-                        newNickname = workoutManager.nickname
-                        editingNickname = true
-                    }) {
+                    Button(action: startEditing) {
                         Image(systemName: "square.and.pencil")
                             .font(.body)
                             .foregroundColor(Color("blk"))
@@ -182,6 +184,29 @@ struct ProfileView: View {
                 .frame(height: 25)
         }
         .padding(.vertical, 5)
+    }
+    
+    // MARK: - Funzioni per gestire la modifica del nickname
+    
+    private func startEditing() {
+        newNickname = workoutManager.nickname
+        editingNickname = true
+    }
+    
+    private func saveNickname() {
+        let trimmedNickname = newNickname.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if !trimmedNickname.isEmpty {
+            workoutManager.updateNickname(trimmedNickname)
+            print("Nickname salvato: \(trimmedNickname)")
+        }
+        
+        editingNickname = false
+    }
+    
+    private func cancelEditing() {
+        newNickname = workoutManager.nickname // Ripristina il valore originale
+        editingNickname = false
     }
 }
 
