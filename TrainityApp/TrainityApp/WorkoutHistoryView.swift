@@ -49,38 +49,34 @@ struct WorkoutHistoryView: View {
                     } else {
                         List {
                             ForEach(workoutManager.workoutHistory.sorted(by: { $0.date > $1.date })) { record in
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        Text(record.workout.name)
-                                            .font(.headline)
-                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                NavigationLink(destination: WorkoutRecordDetailView(record: record)) {
+                                    VStack(alignment: .leading) {
+                                        HStack {
+                                            Text(record.workout.name)
+                                                .font(.headline)
+                                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                            
+                                            Spacer()
+                                            
+                                            Image(systemName: "checkmark.seal.fill")
+                                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                        }
                                         
-                                        Spacer()
+                                        HStack {
+                                            
+                                            
+                                            Text(formattedDate(record.date))
+                                                .font(.subheadline)
+                                                .foregroundColor(.gray)
+                                        }
                                         
-                                        Image(systemName: "checkmark.seal.fill")
-                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                        
                                     }
-                                    
-                                    HStack {
-                                        Label("\(record.duration) min", systemImage: "clock")
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                        
-                                        Spacer()
-                                        
-                                        Text(formattedDate(record.date))
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                    }
-                                    
-                                    Text(record.workout.goal)
-                                        .font(.caption)
-                                        .padding(5)
-                                        .background(Color(red: 0.7, green: 0.9, blue: 0.9))
-                                        .cornerRadius(5)
-                                        .padding(.top, 2)
+                                    .padding(.vertical, 5)
                                 }
-                                .padding(.vertical, 5)
+                            }
+                            .onDelete { offsets in
+                                workoutManager.deleteWorkoutRecord(at: offsets)
                             }
                         }
                         .background(Color(red: 0.9, green: 0.95, blue: 0.95))

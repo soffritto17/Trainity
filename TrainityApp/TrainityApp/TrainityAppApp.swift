@@ -456,7 +456,7 @@ class WorkoutManager: ObservableObject, Codable {
         checkAndAwardBadges(totalExercisesCompleted: 0) // Controlla solo per il badge challenge_master
         saveData() // Salva dopo ogni completamento
     }
-
+    
     func completeWorkout(_ workout: Workout) {
         // Verifica se è passato almeno 1 secondo dall'ultima registrazione
         // per evitare registrazioni duplicate accidentali
@@ -513,6 +513,38 @@ class WorkoutManager: ObservableObject, Codable {
         }
     }
     
+    // Funzione per eliminare un workout dalla cronologia
+    func deleteWorkoutRecord(at offsets: IndexSet) {
+        // Ordina la cronologia per data (più recente prima) per mantenere coerenza con la vista
+        let sortedHistory = workoutHistory.sorted { $0.date > $1.date }
+        
+        // Trova gli ID dei record da eliminare
+        var idsToDelete: [UUID] = []
+        for offset in offsets {
+            if offset < sortedHistory.count {
+                idsToDelete.append(sortedHistory[offset].id)
+            }
+        }
+        
+        // Rimuovi i record dalla cronologia originale
+        workoutHistory.removeAll { record in
+            idsToDelete.contains(record.id)
+        }
+        
+        // Ricalcola le statistiche e salva
+        recalculateAllStats()
+        saveData()
+        
+        print("Eliminati \(idsToDelete.count) record dalla cronologia")
+    }
+    
+    // Funzione per eliminare un singolo workout record per ID
+    func deleteWorkoutRecord(withId id: UUID) {
+        workoutHistory.removeAll { $0.id == id }
+        recalculateAllStats()
+        saveData()
+        print("Record eliminato dalla cronologia")
+    }
     
     // Funzione di utilità per assegnare un badge specifico
     private func awardBadge(withId id: String) {
