@@ -102,6 +102,19 @@ struct WorkoutRecordDetailView: View {
                                                 .frame(width: 70, alignment: .leading)
                                             
                                             HStack(spacing: 15) {
+                                                
+                                                
+                                                HStack(spacing: 4) {
+                                                    Image(systemName: "scalemass")
+                                                        .font(.caption)
+                                                        .foregroundColor(Color("blk").opacity(0.6))
+                                                    
+                                                    let actualWeight = exercise.actualWeights?[setIndex] ?? exercise.weight ?? 0.0
+                                                    Text("\(actualWeight, specifier: "%.1f") kg")
+                                                        .font(.subheadline)
+                                                        .foregroundColor(Color("blk").opacity(0.7))
+                                                }
+                                                
                                                 // Ripetizioni effettive per questa serie
                                                 HStack(spacing: 4) {
                                                     Image(systemName: "arrow.up.and.down")
@@ -114,17 +127,7 @@ struct WorkoutRecordDetailView: View {
                                                         .foregroundColor(Color("blk").opacity(0.7))
                                                 }
                                                 
-                                                // Peso effettivo per questa serie
-                                                HStack(spacing: 4) {
-                                                    Image(systemName: "scalemass")
-                                                        .font(.caption)
-                                                        .foregroundColor(Color("blk").opacity(0.6))
-                                                    
-                                                    let actualWeight = exercise.actualWeights?[setIndex] ?? exercise.weight ?? 0.0
-                                                    Text("\(actualWeight, specifier: "%.1f") kg")
-                                                        .font(.subheadline)
-                                                        .foregroundColor(Color("blk").opacity(0.7))
-                                                }
+                                        
                                                 
                                                 Spacer()
                                                 

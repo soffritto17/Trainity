@@ -8,8 +8,42 @@ struct ExerciseTrackingCard: View {
     let onSetComplete: (Int, Int) -> Void
     let onWeightUpdate: ([Double?]) -> Void // Modificato: ora passa array di pesi per tutte le serie
     
+    @Environment(\.colorScheme) var colorScheme // Aggiunto per rilevare dark mode
     @State private var currentReps: [String] = []
     @State private var currentWeights: [String] = []
+    
+    // Colori dinamici basati su dark mode
+    private var backgroundColor: Color {
+        colorScheme == .dark ? Color.gray.opacity(0.2) : Color("wht")
+    }
+    
+    private var textColor: Color {
+        colorScheme == .dark ? Color.white : Color("blk")
+    }
+    
+    private var accentColor: Color {
+        colorScheme == .dark ? Color.white : Color("blk")
+    }
+    
+    private var fieldBackgroundColor: Color {
+        colorScheme == .dark ? Color.gray.opacity(0.3) : Color.white
+    }
+    
+    private var shadowColor: Color {
+        colorScheme == .dark ? Color.white.opacity(0.1) : Color.gray.opacity(0.3)
+    }
+    
+    private var inactiveBackgroundColor: Color {
+        colorScheme == .dark ? Color.gray.opacity(0.1) : Color.white.opacity(0.8)
+    }
+    
+    private var seriesBackgroundColor: Color {
+        if isActive {
+            return colorScheme == .dark ? Color.gray.opacity(0.3) : Color.white
+        } else {
+            return colorScheme == .dark ? Color.gray.opacity(0.15) : Color.white.opacity(0.5)
+        }
+    }
     
     init(exercise: Exercise, isActive: Bool, isCompleted: Bool, completedReps: [Int], onSetComplete: @escaping (Int, Int) -> Void, onWeightUpdate: @escaping ([Double?]) -> Void) {
         self.exercise = exercise
@@ -42,7 +76,7 @@ struct ExerciseTrackingCard: View {
             HStack {
                 Text(exercise.name)
                     .font(.headline)
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .foregroundColor(accentColor)
                 
                 Spacer()
                 
@@ -59,24 +93,25 @@ struct ExerciseTrackingCard: View {
             // Visualizza il range delle ripetizioni (numero programma - 2)
             Text("Range ripetizioni: \(max(exercise.reps - 2, 1))-\(exercise.reps)")
                 .font(.subheadline)
-                .foregroundColor(.gray)
+                .foregroundColor(textColor.opacity(0.7))
             
             Text("Serie: \(exercise.sets)")
                 .font(.subheadline)
-                .foregroundColor(.gray)
+                .foregroundColor(textColor.opacity(0.7))
             
             // Serie
             ForEach(0..<exercise.sets, id: \.self) { setIndex in
                 HStack {
                     Text("Serie \(setIndex + 1):")
                         .font(.subheadline)
+                        .foregroundColor(textColor)
                     
                     Spacer()
                     
                     // Campo per i kg
                     Text("Kg:")
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundColor(textColor.opacity(0.7))
                     
                     TextField("0", text: Binding(
                         get: {
@@ -99,14 +134,15 @@ struct ExerciseTrackingCard: View {
                     .keyboardType(.decimalPad)
                     .frame(width: 50)
                     .padding(8)
-                    .background(Color.white)
+                    .background(fieldBackgroundColor)
+                    .foregroundColor(textColor)
                     .cornerRadius(8)
                     .disabled(!isActive && !isCompleted)
                     
                     // Campo per le ripetizioni
                     Text("Rep:")
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundColor(textColor.opacity(0.7))
                     
                     TextField("0", text: Binding(
                         get: {
@@ -130,20 +166,21 @@ struct ExerciseTrackingCard: View {
                     .keyboardType(.numberPad)
                     .frame(width: 50)
                     .padding(8)
-                    .background(Color.white)
+                    .background(fieldBackgroundColor)
+                    .foregroundColor(textColor)
                     .cornerRadius(8)
                     .disabled(!isActive && !isCompleted)
                 }
                 .padding(8)
-                .background(isActive ? Color.white : Color.white.opacity(0.5))
+                .background(seriesBackgroundColor)
                 .cornerRadius(8)
             }
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(isActive ? Color.white : Color.white.opacity(0.8))
-                .shadow(color: isActive ? Color.gray.opacity(0.3) : Color.clear, radius: 3)
+                .fill(isActive || isCompleted ? backgroundColor : inactiveBackgroundColor)
+                .shadow(color: isActive ? shadowColor : Color.clear, radius: 3)
         )
         .opacity(isActive || isCompleted ? 1.0 : 0.7)
     }
