@@ -17,25 +17,25 @@ struct ActiveWorkoutView: View {
     
     var body: some View {
         ZStack {
-            Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
+            Color("wht").edgesIgnoringSafeArea(.all)
             
             VStack {
                 // Header
                 Text("Allenamento: \(workout.name)")
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .foregroundColor(Color("blk"))
                     .padding(.top, 20)
                 
                 // Progress indicator
                 ProgressView(value: Double(currentExerciseIndex), total: Double(workout.exercises.count))
                     .padding(.horizontal)
                     .padding(.top, 10)
-                    .tint(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .tint(Color("blk"))
                 
                 Text("\(currentExerciseIndex)/\(workout.exercises.count) esercizi completati")
                     .font(.subheadline)
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .foregroundColor(Color("blk").opacity(0.6))
                     .padding(.top, 5)
                 
                 // Exercise list
@@ -77,7 +77,7 @@ struct ActiveWorkoutView: View {
                 // Mini timer display draggable
                 VStack {
                     Divider()
-                        .background(Color(red: 0.1, green: 0.4, blue: 0.4).opacity(0.3))
+                        .background(Color("blk").opacity(0.3))
                     
                     Button(action: {
                         showingTimerSheet = true
@@ -89,12 +89,12 @@ struct ActiveWorkoutView: View {
                             }) {
                                 ZStack {
                                     Circle()
-                                        .fill(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                        .fill(Color("blk"))
                                         .frame(width: 50, height: 50)
                                     
                                     Image(systemName: isTimerRunning ? "pause.fill" : "play.fill")
                                         .font(.title2)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color("wht"))
                                 }
                             }
                             .padding(.trailing, 10)
@@ -103,30 +103,31 @@ struct ActiveWorkoutView: View {
                             VStack(alignment: .leading) {
                                 Text("Timer Recupero")
                                     .font(.subheadline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color("blk").opacity(0.6))
                                 
                                 Text("\(timeRemaining) secondi")
                                     .font(.title2)
                                     .fontWeight(.bold)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color("blk"))
                             }
                             
                             Spacer()
                             
                             // Drag indicator
                             Image(systemName: "chevron.up")
-                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                .foregroundColor(Color("blk").opacity(0.6))
                                 .padding(.trailing)
                         }
                         .padding()
-                        .background(Color.white)
+                        .background(Color("wht"))
                         .cornerRadius(15)
+                        .shadow(color: Color("blk").opacity(0.1), radius: 5, x: 0, y: 2)
                         .padding(.horizontal)
                         .padding(.vertical, 10)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
-                .background(Color(red: 0.9, green: 0.95, blue: 0.95))
+                .background(Color("wht"))
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -145,7 +146,7 @@ struct ActiveWorkoutView: View {
             }) {
                 Text("Termina")
                     .font(.headline)
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .foregroundColor(Color("blk"))
             }
         )
         .sheet(isPresented: $showingTimerSheet) {
@@ -304,4 +305,3 @@ struct ActiveWorkoutView: View {
         }
     }
 }
-

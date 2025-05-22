@@ -13,38 +13,38 @@ struct WorkoutHistoryView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
+                Color("wht").edgesIgnoringSafeArea(.all)
                 
                 VStack {
                     Text("Cronologia Allenamenti")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .foregroundColor(Color("blk"))
                         .padding()
                     
                     if workoutManager.workoutHistory.isEmpty {
                         VStack {
                             Image(systemName: "calendar.badge.clock")
                                 .font(.system(size: 60))
-                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                .foregroundColor(Color("blk"))
                                 .padding()
                             
                             Text("Nessun allenamento completato")
                                 .font(.headline)
-                                .foregroundColor(.gray)
+                                .foregroundColor(Color("blk").opacity(0.6))
                                 .multilineTextAlignment(.center)
                             
                             Text("Completa il tuo primo allenamento per visualizzare la cronologia")
                                 .font(.subheadline)
-                                .foregroundColor(.gray)
+                                .foregroundColor(Color("blk").opacity(0.6))
                                 .multilineTextAlignment(.center)
                                 .padding()
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.white)
+                        .background(Color("wht"))
                         .cornerRadius(15)
-                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                        .shadow(color: Color("blk").opacity(0.1), radius: 5, x: 0, y: 2)
                         .padding(.horizontal)
                     } else {
                         List {
@@ -54,33 +54,31 @@ struct WorkoutHistoryView: View {
                                         HStack {
                                             Text(record.workout.name)
                                                 .font(.headline)
-                                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                                .foregroundColor(Color("blk"))
                                             
                                             Spacer()
                                             
                                             Image(systemName: "checkmark.seal.fill")
-                                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                                .foregroundColor(Color("blk"))
                                         }
                                         
                                         HStack {
-                                            
-                                            
                                             Text(formattedDate(record.date))
                                                 .font(.subheadline)
-                                                .foregroundColor(.gray)
+                                                .foregroundColor(Color("blk").opacity(0.6))
                                         }
-                                        
-                                        
                                     }
                                     .padding(.vertical, 5)
                                 }
+                                .listRowBackground(Color("wht"))
                             }
                             .onDelete { offsets in
                                 workoutManager.deleteWorkoutRecord(at: offsets)
                             }
                         }
-                        .background(Color(red: 0.9, green: 0.95, blue: 0.95))
+                        .background(Color("wht"))
                         .listStyle(InsetGroupedListStyle())
+                        .scrollContentBackground(.hidden)
                     }
                 }
             }
