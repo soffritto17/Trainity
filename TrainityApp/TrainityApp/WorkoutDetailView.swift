@@ -100,7 +100,7 @@ struct WorkoutDetailView: View {
                        let index = workoutManager.savedWorkouts.firstIndex(where: { $0.id == workout.id }) {
                         var updatedWorkout = workout
                         updatedWorkout.exercises.removeAll(where: { $0.id == exerciseToDelete.id })
-                        updatedWorkout.duration = updatedWorkout.exercises.count * 5
+                     
                         workoutManager.savedWorkouts[index] = updatedWorkout
                     }
                 },

@@ -31,16 +31,13 @@ struct MyWorkoutView: View {
                             HStack {
                                 Image(systemName: "dumbbell.fill")
                                     .foregroundColor(Color("blk"))
-                                Text(workout.goal)
-                                    .font(.headline)
-                                    .foregroundColor(Color("blk"))
+                                
                             }
                             
                             HStack {
                                 Image(systemName: "calendar")
                                     .foregroundColor(Color("blk"))
-                                Text("\(workout.duration) min")
-                                    .foregroundColor(Color("blk"))
+                               
                                 Spacer()
                                 Text("\(workout.exercises.count)")
                                     .foregroundColor(Color("blk"))

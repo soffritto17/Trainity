@@ -10,10 +10,7 @@ struct WorkoutRowView: View {
                 .foregroundColor(Color("blk"))
             
             HStack {
-                Label("\(workout.duration) min", systemImage: "clock")
-                    .font(.subheadline)
-                    .foregroundColor(Color("blk").opacity(0.6))
-                
+               
                 Spacer()
                 
                 Label("\(workout.exercises.count) esercizi", systemImage: "list.bullet")
@@ -21,9 +18,7 @@ struct WorkoutRowView: View {
                     .foregroundColor(Color("blk").opacity(0.6))
             }
             
-            Text("Obiettivo: \(workout.goal)")
-                .font(.caption)
-                .foregroundColor(Color("blk").opacity(0.6))
+          
         }
         .padding(.vertical, 8)
     }

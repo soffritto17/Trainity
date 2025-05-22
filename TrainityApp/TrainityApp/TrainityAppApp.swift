@@ -29,9 +29,7 @@ struct DailyChallenge: Codable {
 struct Workout: Identifiable,Codable{
     var id = UUID()
     var name: String
-    var duration: Int // in minuti
     var exercises: [Exercise]
-    var goal: String
     var restTime: Int // in secondi
     
 }
@@ -40,7 +38,6 @@ struct WorkoutRecord: Identifiable,Codable {
     var id = UUID()
     var workout: Workout
     var date: Date
-    var duration: Int
     var completed: Bool
     var caloriesBurned: Int = 0
 }
@@ -296,7 +293,7 @@ class WorkoutManager: ObservableObject, Codable {
         // Calcola la streak e le statistiche
         for record in workoutHistory {
             // Aggiungi durata
-            totalWorkoutMinutes += record.duration
+            
             
             // Aggiungi il giorno come attivo
             let dayString = dateFormatter.string(from: record.date)
@@ -318,9 +315,7 @@ class WorkoutManager: ObservableObject, Codable {
             }
             
             // Controlla la durata dell'allenamento
-            if record.duration >= 45 {
-                longWorkoutsCompleted += 1
-            }
+           
             
             // Conta gli esercizi completati
             if record.completed {
@@ -474,7 +469,6 @@ class WorkoutManager: ObservableObject, Codable {
         let record = WorkoutRecord(
             workout: workout,
             date: now,
-            duration: workout.duration,
             completed: true,
             caloriesBurned: 0
         )

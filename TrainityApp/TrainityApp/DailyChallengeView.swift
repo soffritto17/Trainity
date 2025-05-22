@@ -492,9 +492,9 @@ struct DailyChallengeView: View {
         currentChallengeIndex = (currentChallengeIndex + 1) % 4
         let workout = Workout(
             name: "Sfida Giornaliera - \(selectedDifficultyLevel) #\((currentChallengeIndex % 4) + 1)",
-            duration: challenge.estimatedTime,
+            
             exercises: challenge.exercises,
-            goal: "Daily Challenge",
+            
             restTime: getDifficultyRestTime(for: selectedDifficultyLevel)
         )
         workoutManager.completeWorkout(workout)

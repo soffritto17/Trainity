@@ -155,9 +155,9 @@ struct CreateNewWorkoutView: View {
         
         let newWorkout = Workout(
             name: workoutName,
-            duration: calculatedDuration,
+            
             exercises: exercises,
-            goal: goal,
+           
             restTime: restTime
         )
         

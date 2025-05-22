@@ -193,7 +193,7 @@ struct EditWorkoutView: View {
             var updatedWorkout = workout
             updatedWorkout.name = workoutName
             updatedWorkout.exercises = exercises
-            updatedWorkout.duration = exercises.count * 5
+           
             workoutManager.savedWorkouts[index] = updatedWorkout
         }
     }
