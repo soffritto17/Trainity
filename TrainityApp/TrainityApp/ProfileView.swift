@@ -75,10 +75,15 @@ struct ProfileView: View {
                 }
             }
             
-            HStack(spacing: 40) {
+            // MODIFICA: HStack con Spacer per distribuzione equa
+            HStack {
+                Spacer()
                 statItem(value: "\(workoutManager.totalWorkoutsCompleted)", label: "Allenamenti", icon: "figure.run")
+                Spacer()
                 statItem(value: "\(workoutManager.badgesEarned)", label: "Badge", icon: "trophy.fill")
+                Spacer()
                 statItem(value: "\(workoutManager.weeklyStreak)", label: "Streak", icon: "flame.fill")
+                Spacer()
             }
             .padding()
             
@@ -87,23 +92,17 @@ struct ProfileView: View {
                 .frame(height: 1)
                 .padding(.horizontal)
             
-            HStack(spacing: 0) {
-                Spacer()
-                Rectangle()
-                    .fill(Color("blk").opacity(0.1))
-                    .frame(width: 1, height: 30)
-                Spacer()
-                VStack {
-                    Text("\(workoutManager.dailyChallengeCompleted.filter { $0 }.count)")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(Color("blk"))
-                    Text("Sfide completate")
-                        .font(.caption)
-                        .foregroundColor(Color("blk").opacity(0.6))
-                }
-                Spacer()
+            // MODIFICA: Layout semplificato e centrato per "Sfide completate"
+            VStack {
+                Text("\(workoutManager.dailyChallengeCompleted.filter { $0 }.count)")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundColor(Color("blk"))
+                Text("Sfide completate")
+                    .font(.caption)
+                    .foregroundColor(Color("blk").opacity(0.6))
             }
+            .frame(maxWidth: .infinity)
             .padding(.vertical, 10)
         }
         .padding()
@@ -120,6 +119,7 @@ struct ProfileView: View {
             Image(systemName: icon)
                 .font(.system(size: 22))
                 .foregroundColor(Color("blk"))
+                .frame(width: 24, height: 24) // Dimensione fissa per le icone
             Text(value)
                 .font(.headline)
                 .fontWeight(.bold)
@@ -127,7 +127,9 @@ struct ProfileView: View {
             Text(label)
                 .font(.caption)
                 .foregroundColor(Color("blk").opacity(0.6))
+                .multilineTextAlignment(.center)
         }
+        .frame(minWidth: 80) // Larghezza minima per ogni elemento
     }
     
     private var badgesSectionView: some View {
