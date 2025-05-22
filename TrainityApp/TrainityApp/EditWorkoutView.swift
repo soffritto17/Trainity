@@ -14,8 +14,6 @@ struct EditWorkoutView: View {
     init(workout: Workout, workoutManager: WorkoutManager) {
         self.workout = workout
         self.workoutManager = workoutManager
-        
-        // Inizializza gli stati con le proprietà del workout
         _workoutName = State(initialValue: workout.name)
         _exercises = State(initialValue: workout.exercises)
     }
@@ -23,41 +21,39 @@ struct EditWorkoutView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
+                Color("wht").edgesIgnoringSafeArea(.all)
                 
                 ScrollView {
                     VStack(spacing: 20) {
                         Text("Modifica Programma")
                             .font(.largeTitle)
                             .fontWeight(.bold)
-                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                            .foregroundColor(Color("blk"))
                             .padding(.top, 20)
                         
-                        // Nome programma
                         VStack(alignment: .leading) {
                             Text("Nome programma")
                                 .font(.headline)
-                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                .foregroundColor(Color("blk"))
                             
                             TextField("Inserisci nome", text: $workoutName)
                                 .padding()
-                                .background(Color.white)
+                                .background(Color("wht"))
                                 .cornerRadius(10)
                         }
                         .padding(.horizontal)
                         
-                        // Esercizi
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("Esercizi")
                                     .font(.headline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color("blk"))
                                 
                                 Spacer()
                                 
                                 Text("Totale: \(exercises.count)")
                                     .font(.subheadline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color("blk"))
                             }
                             .padding(.horizontal)
                             
@@ -66,7 +62,7 @@ struct EditWorkoutView: View {
                                     .foregroundColor(.gray)
                                     .padding()
                                     .frame(maxWidth: .infinity)
-                                    .background(Color.white.opacity(0.5))
+                                    .background(Color("wht").opacity(0.5))
                                     .cornerRadius(10)
                                     .padding(.horizontal)
                             } else {
@@ -75,7 +71,7 @@ struct EditWorkoutView: View {
                                         HStack {
                                             Text(exercises[index].name)
                                                 .font(.headline)
-                                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                                .foregroundColor(Color("blk"))
                                             
                                             Spacer()
                                             
@@ -91,12 +87,11 @@ struct EditWorkoutView: View {
                                         .padding(.horizontal)
                                         .padding(.top)
                                         
-                                        // Dettagli serie e ripetizioni
                                         HStack {
                                             VStack(alignment: .leading) {
                                                 Text("Serie: \(exercises[index].sets)")
                                                     .font(.subheadline)
-                                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                                    .foregroundColor(Color("blk"))
                                                     .padding(.bottom, 4)
                                                 
                                                 Stepper("", value: $exercises[index].sets, in: 1...10)
@@ -108,7 +103,7 @@ struct EditWorkoutView: View {
                                             VStack(alignment: .leading) {
                                                 Text("Ripetizioni: \(exercises[index].reps)")
                                                     .font(.subheadline)
-                                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                                    .foregroundColor(Color("blk"))
                                                     .padding(.bottom, 4)
                                                 
                                                 Stepper("", value: $exercises[index].reps, in: 1...30)
@@ -118,7 +113,7 @@ struct EditWorkoutView: View {
                                         .padding(.horizontal)
                                         .padding(.bottom)
                                     }
-                                    .background(Color.white)
+                                    .background(Color("wht"))
                                     .cornerRadius(10)
                                     .padding(.horizontal)
                                     .padding(.vertical, 5)
@@ -133,10 +128,10 @@ struct EditWorkoutView: View {
                                     Text("Aggiungi Esercizio")
                                         .fontWeight(.semibold)
                                 }
-                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                .foregroundColor(Color("blk"))
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color.white)
+                                .background(Color("wht"))
                                 .cornerRadius(10)
                                 .padding(.horizontal)
                             }
@@ -150,10 +145,10 @@ struct EditWorkoutView: View {
                         }) {
                             Text("Salva Modifiche")
                                 .font(.headline)
-                                .foregroundColor(.white)
+                                .foregroundColor(Color("wht"))
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                .background(Color("blk"))
                                 .cornerRadius(10)
                         }
                         .padding(.horizontal, 40)
@@ -166,7 +161,7 @@ struct EditWorkoutView: View {
                 leading: Button("Annulla") {
                     presentationMode.wrappedValue.dismiss()
                 }
-                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .foregroundColor(Color("blk"))
             )
             .navigationBarTitleDisplayMode(.inline)
             .alert(isPresented: $showDeleteAlert) {
@@ -194,17 +189,11 @@ struct EditWorkoutView: View {
     }
     
     private func saveWorkout() {
-        // Cerca l'indice del workout nel workoutManager
         if let index = workoutManager.savedWorkouts.firstIndex(where: { $0.id == workout.id }) {
-            // Crea una copia aggiornata del workout
             var updatedWorkout = workout
             updatedWorkout.name = workoutName
             updatedWorkout.exercises = exercises
-            
-            // Calcola la durata in base agli esercizi
-            updatedWorkout.duration = exercises.count * 5 // esempio: 5 minuti per esercizio
-            
-            // Aggiorna il workout nel workoutManager
+            updatedWorkout.duration = exercises.count * 5
             workoutManager.savedWorkouts[index] = updatedWorkout
         }
     }

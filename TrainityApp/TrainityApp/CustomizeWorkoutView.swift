@@ -5,46 +5,31 @@ struct CustomizeWorkoutView: View {
     @State private var navigateToNewWorkout = false
     @Environment(\.presentationMode) var presentationMode
     
-    // Definisci un init() dove configuriamo l'aspetto UIKit sottostante
     init() {
-        // Configura l'aspetto globale dei UITableView
-        let tableViewAppearance = UITableView.appearance()
-        tableViewAppearance.backgroundColor = UIColor(red: 0.9, green: 0.95, blue: 0.95, alpha: 1.0)
-        
-        // Configura anche lo sfondo delle celle
-        let cellAppearance = UITableViewCell.appearance()
-        cellAppearance.backgroundColor = UIColor(red: 0.9, green: 0.95, blue: 0.95, alpha: 1.0)
-        
-        // Rimuove le linee separatrici tra le celle
-        tableViewAppearance.separatorStyle = .none
-        
-        // Importante: configura anche il colore di sfondo del grouped background
-        let groupedBackground = UIColor(red: 0.9, green: 0.95, blue: 0.95, alpha: 1.0)
-        UITableViewCell.appearance().backgroundColor = groupedBackground
-        UICollectionView.appearance().backgroundColor = groupedBackground
+        let bgColor = UIColor(named: "wht") ?? .white
+        UITableView.appearance().backgroundColor = bgColor
+        UITableViewCell.appearance().backgroundColor = bgColor
+        UITableView.appearance().separatorStyle = .none
+        UICollectionView.appearance().backgroundColor = bgColor
     }
     
     var body: some View {
-        // Il tuo layout originale esatto senza modifiche alla struttura
         ZStack {
-            // Colore aggiornato per corrispondere a WorkoutDetailView
-            Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
+            Color("wht").edgesIgnoringSafeArea(.all)
             
             VStack {
-                // Lista dei programmi salvati
                 if workoutManager.savedWorkouts.isEmpty {
                     VStack {
-                        
                         Spacer()
                         Text("Nessun programma salvato")
                             .font(.headline)
-                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                            .foregroundColor(Color("blk"))
                         Text("Premi + per creare un nuovo programma")
                             .font(.subheadline)
-                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                            .foregroundColor(Color("blk"))
                         Spacer()
                     }
-                    .background(Color(red: 0.9, green: 0.95, blue: 0.95))
+                    .background(Color("wht"))
                 } else {
                     List {
                         ForEach(workoutManager.savedWorkouts) { workout in
@@ -55,12 +40,12 @@ struct CustomizeWorkoutView: View {
                         .onDelete(perform: deleteWorkout)
                     }
                     .listStyle(InsetGroupedListStyle())
-                    .background(Color(red: 0.9, green: 0.95, blue: 0.95))
+                    .background(Color("wht"))
                     .scrollContentBackground(.hidden)
                 }
             }
-            .background(Color(red: 0.9, green: 0.95, blue: 0.95))
-            // NavigationLink nascosto
+            .background(Color("wht"))
+            
             NavigationLink(
                 destination: CreateNewWorkoutView().environmentObject(workoutManager),
                 isActive: $navigateToNewWorkout
@@ -75,13 +60,13 @@ struct CustomizeWorkoutView: View {
                 presentationMode.wrappedValue.dismiss()
             }) {
                 Image(systemName: "arrow.left")
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .foregroundColor(Color("blk"))
             },
             trailing: Button(action: {
                 navigateToNewWorkout = true
             }) {
                 Image(systemName: "plus")
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .foregroundColor(Color("blk"))
             }
         )
     }
@@ -91,12 +76,10 @@ struct CustomizeWorkoutView: View {
     }
 }
 
-// Estensione per modificare il colore di sfondo della View di sistema
 extension View {
     func listBackgroundModifier() -> some View {
         self.onAppear {
-            UITableView.appearance().backgroundColor = UIColor(red: 0.9, green: 0.95, blue: 0.95, alpha: 1.0)
+            UITableView.appearance().backgroundColor = UIColor(named: "wht") ?? .white
         }
     }
 }
-

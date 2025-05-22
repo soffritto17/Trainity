@@ -1,10 +1,3 @@
-//
-//  MyWorkoutView.swift
-//  TrainityApp
-//
-//  Created by Antonio Fiorito on 13/05/25.
-//
-
 import SwiftUI
 
 struct MyWorkoutView: View {
@@ -14,59 +7,58 @@ struct MyWorkoutView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
+                Color("wht").edgesIgnoringSafeArea(.all)
                 
                 VStack(spacing: 20) {
                     ZStack {
                         Circle()
-                            .fill(Color(red: 0.7, green: 0.9, blue: 0.9))
+                            .fill(Color("wht").opacity(0.3))
                             .frame(width: 100, height: 100)
                         
                         Image(systemName: "plus")
                             .font(.system(size: 40))
-                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                            .foregroundColor(Color("blk"))
                     }
                     .padding(.top, 30)
                     
                     Text("My Workout")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .foregroundColor(Color("blk"))
                     
-                    // Display selected workout or first workout if available
                     if let workout = selectedWorkout ?? workoutManager.savedWorkouts.first {
                         VStack(alignment: .leading, spacing: 15) {
                             HStack {
                                 Image(systemName: "dumbbell.fill")
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color("blk"))
                                 Text(workout.goal)
                                     .font(.headline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color("blk"))
                             }
                             
                             HStack {
                                 Image(systemName: "calendar")
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color("blk"))
                                 Text("\(workout.duration) min")
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color("blk"))
                                 Spacer()
                                 Text("\(workout.exercises.count)")
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color("blk"))
                             }
                             
                             ForEach(workout.exercises) { exercise in
                                 HStack {
                                     Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                        .foregroundColor(Color("blk"))
                                     
                                     Text(exercise.name)
                                         .font(.headline)
-                                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                        .foregroundColor(Color("blk"))
                                     
                                     Spacer()
                                     
                                     Text("\(exercise.sets)x \(exercise.reps)")
-                                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                        .foregroundColor(Color("blk"))
                                 }
                                 .padding(.vertical, 5)
                             }
@@ -76,21 +68,21 @@ struct MyWorkoutView: View {
                             }) {
                                 Text("Start Workout")
                                     .font(.headline)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color("wht"))
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .background(Color("blk"))
                                     .cornerRadius(10)
                             }
                             .padding(.top)
                         }
                         .padding()
-                        .background(Color.white)
+                        .background(Color("wht"))
                         .cornerRadius(10)
                         .padding(.horizontal)
                     } else {
                         Text("No workouts saved")
-                            .foregroundColor(.gray)
+                            .foregroundColor(Color("blk").opacity(0.5))
                             .padding()
                     }
                     
@@ -101,4 +93,3 @@ struct MyWorkoutView: View {
         }
     }
 }
-

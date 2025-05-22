@@ -16,26 +16,20 @@ struct ExerciseEditRow: View {
             HStack {
                 Text(exercise.name)
                     .font(.headline)
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                
+                    .foregroundColor(Color("blk"))
                 Spacer()
             }
             
             HStack {
                 Text("Serie:")
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color("blk").opacity(0.6))
                 
                 TextField("0", text: Binding(
-                    get: {
-                        setsText
-                    },
+                    get: { setsText },
                     set: { newValue in
-                        // Filtra per permettere solo numeri
                         let filtered = newValue.filter { "0123456789".contains($0) }
                         setsText = filtered
-                        
-                        // Aggiorna il valore dell'esercizio
                         if let sets = Int(filtered), sets > 0 {
                             exercise.sets = sets
                         }
@@ -44,7 +38,7 @@ struct ExerciseEditRow: View {
                 .keyboardType(.numberPad)
                 .frame(width: 50)
                 .padding(8)
-                .background(Color.white)
+                .background(Color("wht"))
                 .cornerRadius(8)
                 .multilineTextAlignment(.center)
                 
@@ -52,18 +46,13 @@ struct ExerciseEditRow: View {
                 
                 Text("Rep:")
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color("blk").opacity(0.6))
                 
                 TextField("0", text: Binding(
-                    get: {
-                        repsText
-                    },
+                    get: { repsText },
                     set: { newValue in
-                        // Filtra per permettere solo numeri
                         let filtered = newValue.filter { "0123456789".contains($0) }
                         repsText = filtered
-                        
-                        // Aggiorna il valore dell'esercizio
                         if let reps = Int(filtered), reps > 0 {
                             exercise.reps = reps
                         }
@@ -72,13 +61,13 @@ struct ExerciseEditRow: View {
                 .keyboardType(.numberPad)
                 .frame(width: 50)
                 .padding(8)
-                .background(Color.white)
+                .background(Color("wht"))
                 .cornerRadius(8)
                 .multilineTextAlignment(.center)
             }
         }
         .padding()
-        .background(Color.white)
+        .background(Color("wht"))
         .cornerRadius(10)
     }
 }

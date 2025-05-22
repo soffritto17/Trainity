@@ -1,10 +1,3 @@
-//
-//  ExerciseRowView.swift
-//  TrainityApp
-//
-//  Created by Giovanni De Rosa on 15/05/25.
-//
-
 import SwiftUI
 
 struct ExerciseRow: View {
@@ -16,26 +9,26 @@ struct ExerciseRow: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text(exercise.name)
                     .font(.headline)
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .foregroundColor(Color("blk"))
                 
                 HStack {
                     Text("Serie: \(exercise.sets)")
                         .font(.subheadline)
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .foregroundColor(Color("blk"))
                     
                     Text("•")
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .foregroundColor(Color("blk"))
                     
                     Text("Ripetizioni: \(exercise.reps)")
                         .font(.subheadline)
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .foregroundColor(Color("blk"))
                     
                     Text("•")
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .foregroundColor(Color("blk"))
                     
                     Text("Peso: \(exercise.weight ?? 0.0, specifier: "%.1f") kg")
                         .font(.subheadline)
-                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                        .foregroundColor(Color("blk"))
                 }
             }
             
@@ -48,8 +41,7 @@ struct ExerciseRow: View {
             }
         }
         .padding()
-        .background(Color.white)
+        .background(Color("wht"))
         .cornerRadius(10)
     }
 }
-

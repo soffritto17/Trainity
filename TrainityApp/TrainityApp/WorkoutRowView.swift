@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct WorkoutRowView: View {
@@ -8,23 +7,23 @@ struct WorkoutRowView: View {
         VStack(alignment: .leading, spacing: 5) {
             Text(workout.name)
                 .font(.headline)
-                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                .foregroundColor(Color("blk"))
             
             HStack {
                 Label("\(workout.duration) min", systemImage: "clock")
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color("blk").opacity(0.6))
                 
                 Spacer()
                 
                 Label("\(workout.exercises.count) esercizi", systemImage: "list.bullet")
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color("blk").opacity(0.6))
             }
             
             Text("Obiettivo: \(workout.goal)")
                 .font(.caption)
-                .foregroundColor(.gray)
+                .foregroundColor(Color("blk").opacity(0.6))
         }
         .padding(.vertical, 8)
     }

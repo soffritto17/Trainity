@@ -17,18 +17,17 @@ struct ExerciseTrackingCard: View {
         self.completedReps = completedReps
         self.onSetComplete = onSetComplete
         
-        // Inizializza la state variable
         _currentReps = State(initialValue: completedReps.map { $0 > 0 ? "\($0)" : "" })
         _currentWeights = State(initialValue: Array(repeating: exercise.weight != nil ? String(format: "%.1f", exercise.weight!) : "", count: exercise.sets))
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            // Header dell'esercizio
+            // Header
             HStack {
                 Text(exercise.name)
                     .font(.headline)
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .foregroundColor(Color("blk"))
                 
                 Spacer()
                 
@@ -42,39 +41,34 @@ struct ExerciseTrackingCard: View {
                 }
             }
             
-            // Visualizza il range delle ripetizioni (numero programma - 2)
             Text("Range ripetizioni: \(max(exercise.reps - 2, 1))-\(exercise.reps)")
                 .font(.subheadline)
-                .foregroundColor(.gray)
+                .foregroundColor(Color("blk").opacity(0.6))
             
             Text("Serie: \(exercise.sets)")
                 .font(.subheadline)
-                .foregroundColor(.gray)
+                .foregroundColor(Color("blk").opacity(0.6))
             
-            // Serie
             ForEach(0..<exercise.sets, id: \.self) { setIndex in
                 HStack {
                     Text("Serie \(setIndex + 1):")
                         .font(.subheadline)
+                        .foregroundColor(Color("blk"))
                     
                     Spacer()
                     
-                    // Campo per i kg
                     Text("Kg:")
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color("blk").opacity(0.6))
                     
                     TextField("0", text: Binding(
                         get: {
                             currentWeights.count > setIndex ? currentWeights[setIndex] : ""
                         },
                         set: { newValue in
-                            // Assicurati che l'array sia abbastanza grande
                             while currentWeights.count <= setIndex {
                                 currentWeights.append("")
                             }
-                            
-                            // Filtra per permettere solo numeri e punto decimale
                             let filtered = newValue.filter { "0123456789.".contains($0) }
                             currentWeights[setIndex] = filtered
                         }
@@ -82,29 +76,24 @@ struct ExerciseTrackingCard: View {
                     .keyboardType(.decimalPad)
                     .frame(width: 50)
                     .padding(8)
-                    .background(Color.white)
+                    .background(Color("wht"))
                     .cornerRadius(8)
                     .disabled(!isActive && !isCompleted)
                     
-                    // Modificato "Ripetizioni:" in "Rep:"
                     Text("Rep:")
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color("blk").opacity(0.6))
                     
                     TextField("0", text: Binding(
                         get: {
                             currentReps.count > setIndex ? currentReps[setIndex] : ""
                         },
                         set: { newValue in
-                            // Assicurati che l'array sia abbastanza grande
                             while currentReps.count <= setIndex {
                                 currentReps.append("")
                             }
-                            
-                            // Aggiorna il valore
                             currentReps[setIndex] = newValue.filter { "0123456789".contains($0) }
                             
-                            // Notifica il completamento della serie se viene inserito un valore
                             if let reps = Int(currentReps[setIndex]), reps > 0 {
                                 onSetComplete(setIndex, reps)
                             }
@@ -113,22 +102,21 @@ struct ExerciseTrackingCard: View {
                     .keyboardType(.numberPad)
                     .frame(width: 50)
                     .padding(8)
-                    .background(Color.white)
+                    .background(Color("wht"))
                     .cornerRadius(8)
                     .disabled(!isActive && !isCompleted)
                 }
                 .padding(8)
-                .background(isActive ? Color.white : Color.white.opacity(0.5))
+                .background(Color("wht").opacity(isActive ? 1.0 : 0.5))
                 .cornerRadius(8)
             }
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(isActive ? Color.white : Color.white.opacity(0.8))
-                .shadow(color: isActive ? Color.gray.opacity(0.3) : Color.clear, radius: 3)
+                .fill(Color("wht").opacity(isActive ? 1.0 : 0.8))
+                .shadow(color: isActive ? Color("blk").opacity(0.15) : .clear, radius: 3)
         )
         .opacity(isActive || isCompleted ? 1.0 : 0.7)
     }
 }
-

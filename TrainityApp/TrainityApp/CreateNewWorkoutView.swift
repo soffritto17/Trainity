@@ -13,41 +13,38 @@ struct CreateNewWorkoutView: View {
     
     var body: some View {
         ZStack {
-            Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
+            Color("wht").edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 0) {
-                // Titolo in alto
                 Text("Crea programma")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .foregroundColor(Color("blk"))
                     .padding(.top, 20)
                     .padding(.bottom, 30)
                 
-                // Resto del contenuto in uno ScrollView
                 ScrollView {
                     VStack(spacing: 20) {
                         // Nome programma
                         VStack(alignment: .leading) {
                             Text("Nome programma")
                                 .font(.headline)
-                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                .foregroundColor(Color("blk"))
                             
                             TextField("Inserisci nome", text: $workoutName)
                                 .padding()
-                                .background(Color.white)
+                                .background(Color("wht"))
                                 .cornerRadius(10)
                         }
                         .padding(.horizontal)
                         
-                        // Exercises section
+                        // Esercizi
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("Esercizi")
                                     .font(.headline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
-                                
+                                    .foregroundColor(Color("blk"))
                                 Spacer()
                             }
                             .padding(.horizontal)
@@ -57,7 +54,7 @@ struct CreateNewWorkoutView: View {
                                     .foregroundColor(.gray)
                                     .padding()
                                     .frame(maxWidth: .infinity)
-                                    .background(Color.white.opacity(0.5))
+                                    .background(Color("wht").opacity(0.5))
                                     .cornerRadius(10)
                                     .padding(.horizontal)
                             } else {
@@ -76,27 +73,27 @@ struct CreateNewWorkoutView: View {
                                     Text("Aggiungi Esercizio")
                                         .fontWeight(.semibold)
                                 }
-                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                .foregroundColor(Color("blk"))
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color.white)
+                                .background(Color("wht"))
                                 .cornerRadius(10)
                                 .padding(.horizontal)
                             }
                         }
                         
-                        // Pulsante per eliminare esercizi
+                        // Eliminazione esercizi
                         if !exercises.isEmpty {
                             VStack(alignment: .leading) {
                                 Text("Gestione esercizi")
                                     .font(.headline)
-                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                    .foregroundColor(Color("blk"))
                                     .padding(.horizontal)
                                 
                                 ForEach(exercises.indices, id: \.self) { index in
                                     HStack {
                                         Text(exercises[index].name)
-                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                            .foregroundColor(Color("blk"))
                                         
                                         Spacer()
                                         
@@ -108,7 +105,7 @@ struct CreateNewWorkoutView: View {
                                         }
                                     }
                                     .padding()
-                                    .background(Color.white)
+                                    .background(Color("wht"))
                                     .cornerRadius(10)
                                     .padding(.horizontal)
                                 }
@@ -123,10 +120,10 @@ struct CreateNewWorkoutView: View {
                         }) {
                             Text("Salva Programma")
                                 .font(.headline)
-                                .foregroundColor(.white)
+                                .foregroundColor(Color("wht"))
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color(red: 0.1, green: 0.4, blue: 0.4))
+                                .background(Color("blk"))
                                 .cornerRadius(10)
                         }
                         .padding(.horizontal, 40)
@@ -142,7 +139,7 @@ struct CreateNewWorkoutView: View {
                 presentationMode.wrappedValue.dismiss()
             }) {
                 Image(systemName: "arrow.left")
-                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
+                    .foregroundColor(Color("blk"))
             }
         )
         .sheet(isPresented: $showExerciseSelector) {
@@ -154,8 +151,7 @@ struct CreateNewWorkoutView: View {
     }
     
     private func saveWorkout() {
-        // Calcola la durata in base agli esercizi
-        let calculatedDuration = exercises.count * 5 // semplice esempio: 5 minuti per esercizio
+        let calculatedDuration = exercises.count * 5
         
         let newWorkout = Workout(
             name: workoutName,
