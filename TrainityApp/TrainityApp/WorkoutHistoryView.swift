@@ -1,3 +1,10 @@
+//
+//  WorkoutHistoryView.swift
+//  TrainityApp
+//
+//  Created by Antonio Fiorito on 15/05/25.
+//
+
 import SwiftUI
 
 struct WorkoutHistoryView: View {
@@ -6,38 +13,38 @@ struct WorkoutHistoryView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color("wht").edgesIgnoringSafeArea(.all)
+                Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
                 
                 VStack {
                     Text("Cronologia Allenamenti")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                        .foregroundColor(Color("blk"))
+                        .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                         .padding()
                     
                     if workoutManager.workoutHistory.isEmpty {
                         VStack {
                             Image(systemName: "calendar.badge.clock")
                                 .font(.system(size: 60))
-                                .foregroundColor(Color("blk"))
+                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                                 .padding()
                             
                             Text("Nessun allenamento completato")
                                 .font(.headline)
-                                .foregroundColor(Color("blk").opacity(0.5))
+                                .foregroundColor(.gray)
                                 .multilineTextAlignment(.center)
                             
                             Text("Completa il tuo primo allenamento per visualizzare la cronologia")
                                 .font(.subheadline)
-                                .foregroundColor(Color("blk").opacity(0.5))
+                                .foregroundColor(.gray)
                                 .multilineTextAlignment(.center)
                                 .padding()
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color("wht"))
+                        .background(Color.white)
                         .cornerRadius(15)
-                        .shadow(color: Color("blk").opacity(0.1), radius: 5, x: 0, y: 2)
+                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                         .padding(.horizontal)
                     } else {
                         List {
@@ -46,42 +53,37 @@ struct WorkoutHistoryView: View {
                                     HStack {
                                         Text(record.workout.name)
                                             .font(.headline)
-                                            .foregroundColor(Color("blk"))
+                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                                         
                                         Spacer()
                                         
                                         Image(systemName: "checkmark.seal.fill")
-                                            .foregroundColor(Color("blk"))
+                                            .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                                     }
                                     
                                     HStack {
                                         Label("\(record.duration) min", systemImage: "clock")
                                             .font(.subheadline)
-                                            .foregroundColor(Color("blk").opacity(0.5))
+                                            .foregroundColor(.gray)
                                         
                                         Spacer()
                                         
                                         Text(formattedDate(record.date))
                                             .font(.subheadline)
-                                            .foregroundColor(Color("blk").opacity(0.5))
+                                            .foregroundColor(.gray)
                                     }
                                     
                                     Text(record.workout.goal)
                                         .font(.caption)
                                         .padding(5)
-                                        .background(Color("blk").opacity(0.05))
+                                        .background(Color(red: 0.7, green: 0.9, blue: 0.9))
                                         .cornerRadius(5)
                                         .padding(.top, 2)
                                 }
                                 .padding(.vertical, 5)
                             }
                         }
-                        .onAppear {
-                            if UserDefaults.standard.data(forKey: "WorkoutHistory") != nil {
-                                // load logic if necessary
-                            }
-                        }
-                        .background(Color("wht"))
+                        .background(Color(red: 0.9, green: 0.95, blue: 0.95))
                         .listStyle(InsetGroupedListStyle())
                     }
                 }
@@ -100,5 +102,4 @@ struct WorkoutHistoryView: View {
 
 #Preview {
     WorkoutHistoryView()
-        .environmentObject(WorkoutManager())
 }

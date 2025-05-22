@@ -19,14 +19,14 @@ struct Exercise: Identifiable, Codable {
     var isCompleted: Bool = false
 }
 
-struct DailyChallenge {
+struct DailyChallenge: Codable {
     var exercises: [Exercise]
     var difficulty: String
     var description: String
     var estimatedTime: Int // in minuti
 }
 
-struct Workout: Identifiable {
+struct Workout: Identifiable,Codable{
     var id = UUID()
     var name: String
     var duration: Int // in minuti
@@ -36,7 +36,7 @@ struct Workout: Identifiable {
     
 }
 
-struct WorkoutRecord: Identifiable {
+struct WorkoutRecord: Identifiable,Codable {
     var id = UUID()
     var workout: Workout
     var date: Date
@@ -45,7 +45,7 @@ struct WorkoutRecord: Identifiable {
     var caloriesBurned: Int = 0
 }
 
-struct Badge: Identifiable {
+struct Badge: Identifiable,Codable{
     var id: String
     var name: String
     var description: String
@@ -53,7 +53,7 @@ struct Badge: Identifiable {
     var isEarned: Bool = false
 }
 
-class WorkoutManager: ObservableObject {
+class WorkoutManager: ObservableObject, Codable {
     // Proprietà pubblicate
     @Published var dailyChallengeCompleted = [false, false, false, false, false, false, false]
     @Published var savedWorkouts: [Workout] = []
@@ -70,8 +70,8 @@ class WorkoutManager: ObservableObject {
     @Published var activeWorkoutDays: Int = 0
     
     // Nuove proprietà per tracciare il tempo effettivo dell'allenamento
-        @Published var currentWorkoutStartTime: Date?
-        @Published var isWorkoutActive: Bool = false
+    @Published var currentWorkoutStartTime: Date?
+    @Published var isWorkoutActive: Bool = false
     
     // Contatori specifici per i badge
     private var morningWorkoutsCompleted: Int = 0    // Allenamenti mattutini
@@ -82,11 +82,178 @@ class WorkoutManager: ObservableObject {
     private var differentDaysWithWorkouts: Int = 0   // Diversi giorni con allenamenti
     private var consecutiveDaysStreak: Int = 0       // Giorni consecutivi di allenamento
     
-
+    // Proprietà per evitare duplicati
+    private var lastWorkoutCompletionTime: Date? = nil
+    
+    // MARK: - Codable Implementation
+    
+    enum CodingKeys: String, CodingKey {
+        case dailyChallengeCompleted
+        case savedWorkouts
+        case workoutHistory
+        case nickname
+        case totalWorkoutsCompleted
+        case weeklyStreak
+        case badgesEarned
+        case badges
+        case totalCaloriesBurned
+        case totalWorkoutMinutes
+        case activeWorkoutDays
+        case currentWorkoutStartTime
+        case isWorkoutActive
+        case morningWorkoutsCompleted
+        case eveningWorkoutsCompleted
+        case weekendWorkoutsCompleted
+        case longWorkoutsCompleted
+        case dailyChallengesCompleted
+        case differentDaysWithWorkouts
+        case consecutiveDaysStreak
+        case lastWorkoutCompletionTime
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Decodifica tutte le proprietà
+        let dailyChallengeCompleted = try container.decodeIfPresent([Bool].self, forKey: .dailyChallengeCompleted) ?? [false, false, false, false, false, false, false]
+        let savedWorkouts = try container.decodeIfPresent([Workout].self, forKey: .savedWorkouts) ?? []
+        let workoutHistory = try container.decodeIfPresent([WorkoutRecord].self, forKey: .workoutHistory) ?? []
+        let nickname = try container.decodeIfPresent(String.self, forKey: .nickname) ?? "Atleta"
+        let totalWorkoutsCompleted = try container.decodeIfPresent(Int.self, forKey: .totalWorkoutsCompleted) ?? 0
+        let weeklyStreak = try container.decodeIfPresent(Int.self, forKey: .weeklyStreak) ?? 1
+        let badgesEarned = try container.decodeIfPresent(Int.self, forKey: .badgesEarned) ?? 0
+        let badges = try container.decodeIfPresent([Badge].self, forKey: .badges) ?? []
+        let totalCaloriesBurned = try container.decodeIfPresent(Int.self, forKey: .totalCaloriesBurned) ?? 0
+        let totalWorkoutMinutes = try container.decodeIfPresent(Int.self, forKey: .totalWorkoutMinutes) ?? 0
+        let activeWorkoutDays = try container.decodeIfPresent(Int.self, forKey: .activeWorkoutDays) ?? 0
+        let currentWorkoutStartTime = try container.decodeIfPresent(Date.self, forKey: .currentWorkoutStartTime)
+        let isWorkoutActive = try container.decodeIfPresent(Bool.self, forKey: .isWorkoutActive) ?? false
+        
+        // Proprietà private
+        self.morningWorkoutsCompleted = try container.decodeIfPresent(Int.self, forKey: .morningWorkoutsCompleted) ?? 0
+        self.eveningWorkoutsCompleted = try container.decodeIfPresent(Int.self, forKey: .eveningWorkoutsCompleted) ?? 0
+        self.weekendWorkoutsCompleted = try container.decodeIfPresent(Int.self, forKey: .weekendWorkoutsCompleted) ?? 0
+        self.longWorkoutsCompleted = try container.decodeIfPresent(Int.self, forKey: .longWorkoutsCompleted) ?? 0
+        self.dailyChallengesCompleted = try container.decodeIfPresent(Int.self, forKey: .dailyChallengesCompleted) ?? 0
+        self.differentDaysWithWorkouts = try container.decodeIfPresent(Int.self, forKey: .differentDaysWithWorkouts) ?? 0
+        self.consecutiveDaysStreak = try container.decodeIfPresent(Int.self, forKey: .consecutiveDaysStreak) ?? 0
+        self.lastWorkoutCompletionTime = try container.decodeIfPresent(Date.self, forKey: .lastWorkoutCompletionTime)
+        
+        // Assegna alle proprietà @Published
+        self.dailyChallengeCompleted = dailyChallengeCompleted
+        self.savedWorkouts = savedWorkouts
+        self.workoutHistory = workoutHistory
+        self.nickname = nickname
+        self.totalWorkoutsCompleted = totalWorkoutsCompleted
+        self.weeklyStreak = weeklyStreak
+        self.badgesEarned = badgesEarned
+        self.badges = badges.isEmpty ? createDefaultBadges() : badges
+        self.totalCaloriesBurned = totalCaloriesBurned
+        self.totalWorkoutMinutes = totalWorkoutMinutes
+        self.activeWorkoutDays = activeWorkoutDays
+        self.currentWorkoutStartTime = currentWorkoutStartTime
+        self.isWorkoutActive = isWorkoutActive
+        
+        // Ricalcola le statistiche se necessario
+        if badges.isEmpty {
+            recalculateAllStats()
+        }
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        // Codifica tutte le proprietà @Published
+        try container.encode(dailyChallengeCompleted, forKey: .dailyChallengeCompleted)
+        try container.encode(savedWorkouts, forKey: .savedWorkouts)
+        try container.encode(workoutHistory, forKey: .workoutHistory)
+        try container.encode(nickname, forKey: .nickname)
+        try container.encode(totalWorkoutsCompleted, forKey: .totalWorkoutsCompleted)
+        try container.encode(weeklyStreak, forKey: .weeklyStreak)
+        try container.encode(badgesEarned, forKey: .badgesEarned)
+        try container.encode(badges, forKey: .badges)
+        try container.encode(totalCaloriesBurned, forKey: .totalCaloriesBurned)
+        try container.encode(totalWorkoutMinutes, forKey: .totalWorkoutMinutes)
+        try container.encode(activeWorkoutDays, forKey: .activeWorkoutDays)
+        try container.encodeIfPresent(currentWorkoutStartTime, forKey: .currentWorkoutStartTime)
+        try container.encode(isWorkoutActive, forKey: .isWorkoutActive)
+        
+        // Codifica le proprietà private
+        try container.encode(morningWorkoutsCompleted, forKey: .morningWorkoutsCompleted)
+        try container.encode(eveningWorkoutsCompleted, forKey: .eveningWorkoutsCompleted)
+        try container.encode(weekendWorkoutsCompleted, forKey: .weekendWorkoutsCompleted)
+        try container.encode(longWorkoutsCompleted, forKey: .longWorkoutsCompleted)
+        try container.encode(dailyChallengesCompleted, forKey: .dailyChallengesCompleted)
+        try container.encode(differentDaysWithWorkouts, forKey: .differentDaysWithWorkouts)
+        try container.encode(consecutiveDaysStreak, forKey: .consecutiveDaysStreak)
+        try container.encodeIfPresent(lastWorkoutCompletionTime, forKey: .lastWorkoutCompletionTime)
+    }
+    
+    // MARK: - Initialization
     
     init() {
-        // Inizializza tutti i badge (esistenti e nuovi)
-        badges = [
+        loadData() // Carica i dati salvati
+        badges = badges.isEmpty ? createDefaultBadges() : badges
+        recalculateAllStats()
+    }
+    
+    // MARK: - Data Persistence
+    
+    private func loadData() {
+        if let data = UserDefaults.standard.data(forKey: "WorkoutManagerData") {
+            do {
+                let decodedManager = try JSONDecoder().decode(WorkoutManager.self, from: data)
+                
+                // Copia i dati caricati nelle proprietà @Published
+                self.dailyChallengeCompleted = decodedManager.dailyChallengeCompleted
+                self.savedWorkouts = decodedManager.savedWorkouts
+                self.workoutHistory = decodedManager.workoutHistory
+                self.nickname = decodedManager.nickname
+                self.totalWorkoutsCompleted = decodedManager.totalWorkoutsCompleted
+                self.weeklyStreak = decodedManager.weeklyStreak
+                self.badgesEarned = decodedManager.badgesEarned
+                self.badges = decodedManager.badges
+                self.totalCaloriesBurned = decodedManager.totalCaloriesBurned
+                self.totalWorkoutMinutes = decodedManager.totalWorkoutMinutes
+                self.activeWorkoutDays = decodedManager.activeWorkoutDays
+                self.currentWorkoutStartTime = decodedManager.currentWorkoutStartTime
+                self.isWorkoutActive = decodedManager.isWorkoutActive
+                
+                // Copia anche le proprietà private
+                self.morningWorkoutsCompleted = decodedManager.morningWorkoutsCompleted
+                self.eveningWorkoutsCompleted = decodedManager.eveningWorkoutsCompleted
+                self.weekendWorkoutsCompleted = decodedManager.weekendWorkoutsCompleted
+                self.longWorkoutsCompleted = decodedManager.longWorkoutsCompleted
+                self.dailyChallengesCompleted = decodedManager.dailyChallengesCompleted
+                self.differentDaysWithWorkouts = decodedManager.differentDaysWithWorkouts
+                self.consecutiveDaysStreak = decodedManager.consecutiveDaysStreak
+                self.lastWorkoutCompletionTime = decodedManager.lastWorkoutCompletionTime
+                
+                print("Dati caricati con successo")
+            } catch {
+                print("Errore nel caricamento dei dati: \(error)")
+                // Se il caricamento fallisce, usa valori di default
+                badges = createDefaultBadges()
+            }
+        } else {
+            // Prima volta che si apre l'app
+            badges = createDefaultBadges()
+            print("Nessun dato salvato trovato, inizializzazione con valori di default")
+        }
+    }
+    
+    private func saveData() {
+        do {
+            let data = try JSONEncoder().encode(self)
+            UserDefaults.standard.set(data, forKey: "WorkoutManagerData")
+            print("Dati salvati con successo")
+        } catch {
+            print("Errore nel salvataggio dei dati: \(error)")
+        }
+    }
+    
+    private func createDefaultBadges() -> [Badge] {
+        return [
             // Badge esistenti
             Badge(id: "first_workout", name: "Principiante", description: "Completa il tuo primo allenamento", imageName: "star.fill"),
             Badge(id: "week_streak", name: "Determinato", description: "Completa 5 allenamenti", imageName: "flame.fill"),
@@ -102,10 +269,9 @@ class WorkoutManager: ObservableObject {
             Badge(id: "variety", name: "Versatilità", description: "Completa allenamenti in 5 giorni diversi della settimana", imageName: "chart.bar.fill"),
             Badge(id: "exercise_master", name: "Maestro degli Esercizi", description: "Completa 100 esercizi totali", imageName: "dumbbell.fill")
         ]
-        
-        // Inizializza le statistiche in base alla cronologia esistente
-        recalculateAllStats()
     }
+    
+    // MARK: - Stats and Badge Management
     
     // Calcola tutte le statistiche in base alla cronologia
     func recalculateAllStats() {
@@ -288,10 +454,8 @@ class WorkoutManager: ObservableObject {
     func completeDailyChallenge() {
         dailyChallengesCompleted += 1
         checkAndAwardBadges(totalExercisesCompleted: 0) // Controlla solo per il badge challenge_master
+        saveData() // Salva dopo ogni completamento
     }
-    
-    // Proprietà per evitare duplicati
-    private var lastWorkoutCompletionTime: Date? = nil
 
     func completeWorkout(_ workout: Workout) {
         // Verifica se è passato almeno 1 secondo dall'ultima registrazione
@@ -320,7 +484,33 @@ class WorkoutManager: ObservableObject {
         // Aggiorna le statistiche
         recalculateAllStats()
         
+        // Salva i dati aggiornati
+        saveData()
+        
         print("Workout completato: \(workout.name)")
+    }
+    
+    // Funzione per salvare un nuovo workout
+    func saveWorkout(_ workout: Workout) {
+        savedWorkouts.append(workout)
+        saveData()
+        print("Workout salvato: \(workout.name)")
+    }
+    
+    // Funzione per aggiornare il nickname
+    func updateNickname(_ newNickname: String) {
+        nickname = newNickname
+        saveData()
+    }
+    
+    // Funzione per completare una daily challenge
+    func completeDailyChallenge(dayIndex: Int) {
+        if dayIndex < dailyChallengeCompleted.count {
+            dailyChallengeCompleted[dayIndex] = true
+            dailyChallengesCompleted += 1
+            checkAndAwardBadges(totalExercisesCompleted: 0)
+            saveData()
+        }
     }
     
     
@@ -335,4 +525,3 @@ class WorkoutManager: ObservableObject {
         }
     }
 }
-
