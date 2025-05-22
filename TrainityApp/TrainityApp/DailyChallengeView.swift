@@ -23,9 +23,9 @@ struct DailyChallengeView: View {
             "Facile": [
                 DailyChallenge(
                     exercises: [
-                        Exercise(name: "Jumping Jacks", sets: 3, reps: 12),
-                        Exercise(name: "Squats", sets: 2, reps: 10),
-                        Exercise(name: "Push Ups", sets: 2, reps: 8)
+                        Exercise(name: "Wall Push-ups", sets: 2, reps: 8),
+                        Exercise(name: "Squats", sets: 2, reps: 8),
+                        Exercise(name: "Push Ups", sets: 2, reps: 6)
                     ],
                     difficulty: "Facile",
                     description: "Un allenamento leggero per iniziare la giornata con energia!",
@@ -185,39 +185,39 @@ struct DailyChallengeView: View {
     var body: some View {
         ZStack {
             // Colore di sfondo più chiaro come nello screenshot
-            Color(red: 0.94, green: 0.98, blue: 0.99).edgesIgnoringSafeArea(.all)
+            Color("wht").edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 20) {
                 // Icona del manubrio
                 ZStack {
                     Circle()
-                        .fill(Color(red: 0.25, green: 0.45, blue: 0.45))
+                        .fill(Color("blk"))
                         .frame(width: 80, height: 80)
                         .shadow(radius: 3)
                     
-                    Image(systemName: "dumbbell.fill")
+                    Image(systemName: "figure.walk")  // icona più pertinente daily habits
                         .font(.system(size: 36))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color("wht"))
                 }
                 .padding(.top, 20)
                 
                 // Sezione del calendario settimanale
                 VStack(spacing: 8) {
                     HStack(spacing: 15) {
+                        let weekdays = ["L", "M", "M", "G", "V", "S", "D"]
                         ForEach(0..<7) { day in
-                            let weekdays = ["L", "M", "M", "G", "V", "S", "D"]
                             ZStack {
                                 Circle()
-                                    .fill(workoutManager.dailyChallengeCompleted[day] ? Color(red: 0.25, green: 0.45, blue: 0.45) : Color.white)
+                                    .fill(workoutManager.dailyChallengeCompleted[day] ? Color("blk") : Color("wht"))
                                     .frame(width: 40, height: 40)
                                     .overlay(
                                         Circle()
-                                            .stroke(Color(red: 0.25, green: 0.45, blue: 0.45), lineWidth: 2)
+                                            .stroke(Color("blk"), lineWidth: 2)
                                     )
                                     .shadow(radius: 1)
                                 
                                 Text(weekdays[day])
-                                    .foregroundColor(workoutManager.dailyChallengeCompleted[day] ? .white : Color(red: 0.25, green: 0.45, blue: 0.45))
+                                    .foregroundColor(workoutManager.dailyChallengeCompleted[day] ? Color("wht") : Color("blk"))
                                     .font(.headline)
                             }
                         }
@@ -225,7 +225,7 @@ struct DailyChallengeView: View {
                     
                     Text("\(completedDays) / 7 Completati")
                         .font(.headline)
-                        .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                        .foregroundColor(Color("blk"))
                 }
                 
                 // Sezione del livello attuale
@@ -233,7 +233,7 @@ struct DailyChallengeView: View {
                     HStack {
                         Text("Livello attuale:")
                             .font(.headline)
-                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                            .foregroundColor(Color("blk"))
                         
                         Text(selectedDifficultyLevel)
                             .font(.headline)
@@ -253,10 +253,10 @@ struct DailyChallengeView: View {
                             }) {
                                 Label("Consigli", systemImage: "info.circle")
                                     .font(.subheadline)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color("wht"))
                                     .padding(.horizontal, 10)
                                     .padding(.vertical, 6)
-                                    .background(Color(red: 0.25, green: 0.45, blue: 0.45))
+                                    .background(Color("blk"))
                                     .cornerRadius(8)
                             }
                         }
@@ -265,10 +265,9 @@ struct DailyChallengeView: View {
                     
                     // Mostra i dettagli della sfida corrente
                     if let challenge = currentChallenge {
-                        // Sfide completate sul totale
                         Text("Sfide completate: \(completedChallengesCount)")
                             .font(.subheadline)
-                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                            .foregroundColor(Color("blk"))
                             .padding(.bottom, 5)
                         
                         ScrollView {
@@ -281,7 +280,7 @@ struct DailyChallengeView: View {
                                         
                                         Text("Tempo stimato: \(challenge.estimatedTime) min")
                                             .font(.subheadline)
-                                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                                            .foregroundColor(Color("blk"))
                                     }
                                     
                                     Spacer()
@@ -294,12 +293,12 @@ struct DailyChallengeView: View {
                                 
                                 Text(challenge.description)
                                     .font(.subheadline)
-                                    .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                                    .foregroundColor(Color("blk"))
                                     .padding(.horizontal)
                                 
                                 Text("Esercizi:")
                                     .font(.headline)
-                                    .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                                    .foregroundColor(Color("blk"))
                                     .padding(.horizontal)
                                     .padding(.top, 5)
                                 
@@ -307,17 +306,17 @@ struct DailyChallengeView: View {
                                     HStack {
                                         Image(systemName: "circle.fill")
                                             .font(.system(size: 8))
-                                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                                            .foregroundColor(Color("blk"))
                                         
                                         Text(exercise.name)
                                             .font(.body)
-                                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                                            .foregroundColor(Color("blk"))
                                         
                                         Spacer()
                                         
                                         Text("\(exercise.sets) × \(exercise.reps)")
                                             .font(.body)
-                                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                                            .foregroundColor(Color("blk"))
                                     }
                                     .padding(.vertical, 5)
                                     .padding(.horizontal)
@@ -325,7 +324,7 @@ struct DailyChallengeView: View {
                             }
                             .padding(.vertical)
                         }
-                        .background(Color.white)
+                        .background(Color("wht"))
                         .cornerRadius(10)
                         .shadow(radius: 2)
                         .padding(.horizontal)
@@ -345,10 +344,10 @@ struct DailyChallengeView: View {
                             } label: {
                                 Text("Livello")
                                     .font(.headline)
-                                    .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                                    .foregroundColor(Color("blk"))
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(Color.white)
+                                    .background(Color("wht"))
                                     .cornerRadius(10)
                                     .shadow(radius: 1)
                             }
@@ -358,10 +357,10 @@ struct DailyChallengeView: View {
                             }) {
                                 Text("Completa")
                                     .font(.headline)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color("wht"))
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(Color(red: 0.25, green: 0.45, blue: 0.45))
+                                    .background(Color("blk"))
                                     .cornerRadius(10)
                                     .shadow(radius: 1)
                             }
@@ -374,7 +373,6 @@ struct DailyChallengeView: View {
                 Spacer()
             }
             
-            // Sheet per i consigli sul passaggio di livello
             if showingLevelUpTips {
                 Color.black.opacity(0.4)
                     .edgesIgnoringSafeArea(.all)
@@ -386,7 +384,7 @@ struct DailyChallengeView: View {
                     Text("Sei pronto per il prossimo livello!")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                        .foregroundColor(Color("blk"))
                     
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.system(size: 60))
@@ -395,13 +393,13 @@ struct DailyChallengeView: View {
                     Text("Hai completato \(completedChallengesCount) sfide di livello \(selectedDifficultyLevel). Il tuo corpo e la tua mente si sono adattati e ora puoi passare al livello \(nextLevel)!")
                         .font(.body)
                         .multilineTextAlignment(.center)
-                        .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                        .foregroundColor(Color("blk"))
                         .padding()
                     
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Cosa ti aspetta nel livello \(nextLevel):")
                             .font(.headline)
-                            .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                            .foregroundColor(Color("blk"))
                         
                         HStack {
                             Image(systemName: "flame.fill")
@@ -422,7 +420,7 @@ struct DailyChallengeView: View {
                         }
                     }
                     .padding()
-                    .background(Color(red: 0.94, green: 0.98, blue: 0.99))
+                    .background(Color("wht"))
                     .cornerRadius(10)
                     
                     HStack(spacing: 20) {
@@ -431,10 +429,10 @@ struct DailyChallengeView: View {
                         }) {
                             Text("Non ancora")
                                 .font(.headline)
-                                .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                                .foregroundColor(Color("blk"))
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.white)
+                                .background(Color("wht"))
                                 .cornerRadius(10)
                                 .shadow(radius: 1)
                         }
@@ -445,7 +443,7 @@ struct DailyChallengeView: View {
                         }) {
                             Text("Cambia livello")
                                 .font(.headline)
-                                .foregroundColor(.white)
+                                .foregroundColor(Color("wht"))
                                 .frame(maxWidth: .infinity)
                                 .padding()
                                 .background(difficultyColor(for: nextLevel))
@@ -455,7 +453,7 @@ struct DailyChallengeView: View {
                     }
                 }
                 .padding()
-                .background(Color.white)
+                .background(Color("wht"))
                 .cornerRadius(15)
                 .shadow(radius: 10)
                 .padding(.horizontal, 30)
@@ -469,7 +467,7 @@ struct DailyChallengeView: View {
                 presentationMode.wrappedValue.dismiss()
             }) {
                 Image(systemName: "arrow.left")
-                    .foregroundColor(Color(red: 0.25, green: 0.45, blue: 0.45))
+                    .foregroundColor(Color("blk"))
             }
         )
         .onAppear {
@@ -477,33 +475,21 @@ struct DailyChallengeView: View {
         }
     }
     
-    // Funzioni di supporto
-    
     // Cambia il livello di difficoltà
     private func changeDifficultyLevel(to level: String) {
         selectedDifficultyLevel = level
         if level != "Facile" {
-            // Resetta il contatore delle sfide completate quando cambi livello
             completedChallengesCount = 0
         }
     }
     
     // Completa la sfida corrente
     private func completeCurrentChallenge(_ challenge: DailyChallenge) {
-        // Segna la sfida come completata
         let today = Calendar.current.component(.weekday, from: Date()) - 1
         workoutManager.dailyChallengeCompleted[today % 7] = true
-        
-        // Aggiorna il conteggio delle sfide completate
         completedChallengesCount += 1
-        
-        // Imposta la data dell'ultima sfida completata
         lastChallengeDate = Date()
-        
-        // Passa alla prossima sfida nella rotazione
         currentChallengeIndex = (currentChallengeIndex + 1) % 4
-        
-        // Salva come allenamento completato
         let workout = Workout(
             name: "Sfida Giornaliera - \(selectedDifficultyLevel) #\((currentChallengeIndex % 4) + 1)",
             duration: challenge.estimatedTime,
@@ -514,16 +500,15 @@ struct DailyChallengeView: View {
         workoutManager.completeWorkout(workout)
     }
     
-    // Verifica se è un nuovo giorno e aggiorna la sfida se necessario
+    // Controlla nuovo giorno
     private func checkForNewDay() {
         let calendar = Calendar.current
         if !calendar.isDate(lastChallengeDate, inSameDayAs: Date()) {
-            // È un nuovo giorno, potremmo cambiare la sfida
-            // La rotazione avviene solo quando l'utente completa una sfida
+            // Rotazione solo se sfida completata
         }
     }
     
-    // Ottieni il tempo di riposo basato sulla difficoltà
+    // Tempi di riposo per livello
     private func getDifficultyRestTime(for difficulty: String) -> Int {
         switch difficulty {
         case "Facile": return 30
@@ -533,21 +518,21 @@ struct DailyChallengeView: View {
         }
     }
     
-    // Funzione per determinare il colore in base alla difficoltà
+    // Colori per livello
     private func difficultyColor(for difficulty: String) -> Color {
         switch difficulty {
         case "Facile":
-            return Color(red: 0.0, green: 0.6, blue: 0.3)
+            return Color("blk") // Verde scuro
         case "Medio":
-            return Color(red: 0.9, green: 0.6, blue: 0.0)
+            return Color(red: 0.9, green: 0.6, blue: 0.0) // Arancio
         case "Difficile":
-            return Color(red: 0.8, green: 0.2, blue: 0.2)
+            return Color(red: 0.8, green: 0.2, blue: 0.2) // Rosso scuro
         default:
             return Color.gray
         }
     }
     
-    // Funzione per determinare l'icona in base alla difficoltà
+    // Icone per livello
     private func difficultyIcon(for difficulty: String) -> String {
         switch difficulty {
         case "Facile":
@@ -570,4 +555,3 @@ struct DailyChallengeView_Previews: PreviewProvider {
         }
     }
 }
-
