@@ -6,12 +6,12 @@ struct ExerciseTrackingCard: View {
     let isCompleted: Bool
     let completedReps: [Int]
     let onSetComplete: (Int, Int) -> Void
-    let onWeightUpdate: (Double?) -> Void // Nuovo callback per aggiornare il peso
+    let onWeightUpdate: ([Double?]) -> Void // Modificato: ora passa array di pesi per tutte le serie
     
     @State private var currentReps: [String] = []
     @State private var currentWeights: [String] = []
     
-    init(exercise: Exercise, isActive: Bool, isCompleted: Bool, completedReps: [Int], onSetComplete: @escaping (Int, Int) -> Void, onWeightUpdate: @escaping (Double?) -> Void) {
+    init(exercise: Exercise, isActive: Bool, isCompleted: Bool, completedReps: [Int], onSetComplete: @escaping (Int, Int) -> Void, onWeightUpdate: @escaping ([Double?]) -> Void) {
         self.exercise = exercise
         self.isActive = isActive
         self.isCompleted = isCompleted
@@ -21,7 +21,19 @@ struct ExerciseTrackingCard: View {
         
         // Inizializza la state variable
         _currentReps = State(initialValue: completedReps.map { $0 > 0 ? "\($0)" : "" })
-        _currentWeights = State(initialValue: Array(repeating: exercise.weight != nil ? String(format: "%.1f", exercise.weight!) : "", count: exercise.sets))
+        
+        // Inizializza i pesi per ogni serie
+        var initialWeights: [String] = []
+        for i in 0..<exercise.sets {
+            if let actualWeights = exercise.actualWeights, i < actualWeights.count, let weight = actualWeights[i] {
+                initialWeights.append(String(format: "%.1f", weight))
+            } else if let weight = exercise.weight {
+                initialWeights.append(String(format: "%.1f", weight))
+            } else {
+                initialWeights.append("")
+            }
+        }
+        _currentWeights = State(initialValue: initialWeights)
     }
     
     var body: some View {
@@ -80,8 +92,8 @@ struct ExerciseTrackingCard: View {
                             let filtered = newValue.filter { "0123456789.".contains($0) }
                             currentWeights[setIndex] = filtered
                             
-                            // Aggiorna il peso dell'esercizio con il primo valore inserito o con la media
-                            updateExerciseWeight()
+                            // Aggiorna tutti i pesi per tutte le serie
+                            updateAllWeights()
                         }
                     ))
                     .keyboardType(.decimalPad)
@@ -136,16 +148,18 @@ struct ExerciseTrackingCard: View {
         .opacity(isActive || isCompleted ? 1.0 : 0.7)
     }
     
-    // Funzione per aggiornare il peso dell'esercizio
-    private func updateExerciseWeight() {
-        let validWeights = currentWeights.compactMap { Double($0) }.filter { $0 > 0 }
+    // Funzione per aggiornare tutti i pesi dell'esercizio
+    private func updateAllWeights() {
+        var weightsArray: [Double?] = []
         
-        if validWeights.isEmpty {
-            onWeightUpdate(nil)
-        } else {
-            // Usa il primo peso valido inserito o la media di tutti i pesi
-            let averageWeight = validWeights.reduce(0, +) / Double(validWeights.count)
-            onWeightUpdate(averageWeight)
+        for weightString in currentWeights {
+            if let weight = Double(weightString), weight > 0 {
+                weightsArray.append(weight)
+            } else {
+                weightsArray.append(nil)
+            }
         }
+        
+        onWeightUpdate(weightsArray)
     }
 }

@@ -17,6 +17,10 @@ struct Exercise: Identifiable, Codable {
     var reps: Int
     var weight: Double?
     var isCompleted: Bool = false
+    
+    // Nuovi campi per salvare i dati effettivi per ogni serie
+    var actualReps: [Int]? // Ripetizioni effettive per ogni serie
+    var actualWeights: [Double?]? // Pesi effettivi per ogni serie
 }
 
 struct DailyChallenge: Codable {
@@ -29,7 +33,9 @@ struct DailyChallenge: Codable {
 struct Workout: Identifiable,Codable{
     var id = UUID()
     var name: String
+    
     var exercises: [Exercise]
+    
     var restTime: Int // in secondi
     
 }
@@ -38,6 +44,7 @@ struct WorkoutRecord: Identifiable,Codable {
     var id = UUID()
     var workout: Workout
     var date: Date
+    
     var completed: Bool
     var caloriesBurned: Int = 0
 }
@@ -203,7 +210,6 @@ class WorkoutManager: ObservableObject, Codable {
                 
                 // Copia i dati caricati nelle proprietà @Published
                 self.dailyChallengeCompleted = decodedManager.dailyChallengeCompleted
-                print("dailyChallengeCompleted: \(dailyChallengeCompleted)")
                 self.savedWorkouts = decodedManager.savedWorkouts
                 self.workoutHistory = decodedManager.workoutHistory
                 self.nickname = decodedManager.nickname
@@ -316,7 +322,7 @@ class WorkoutManager: ObservableObject, Codable {
             }
             
             // Controlla la durata dell'allenamento
-           
+            
             
             // Conta gli esercizi completati
             if record.completed {
@@ -470,6 +476,7 @@ class WorkoutManager: ObservableObject, Codable {
         let record = WorkoutRecord(
             workout: workout,
             date: now,
+            
             completed: true,
             caloriesBurned: 0
         )
@@ -501,7 +508,6 @@ class WorkoutManager: ObservableObject, Codable {
     // Funzione per completare una daily challenge
     func completeDailyChallenge(dayIndex: Int) {
         if dayIndex < dailyChallengeCompleted.count {
-            print("Completata sfida del giorno \(dayIndex )")
             dailyChallengeCompleted[dayIndex] = true
             dailyChallengesCompleted += 1
             checkAndAwardBadges(totalExercisesCompleted: 0)

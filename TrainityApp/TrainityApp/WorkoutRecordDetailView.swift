@@ -92,6 +92,8 @@ struct WorkoutRecordDetailView: View {
                                 // Dettagli per ogni serie
                                 VStack(alignment: .leading, spacing: 8) {
                                     ForEach(1...exercise.sets, id: \.self) { setNumber in
+                                        let setIndex = setNumber - 1
+                                        
                                         HStack {
                                             Text("Serie \(setNumber):")
                                                 .font(.subheadline)
@@ -100,22 +102,26 @@ struct WorkoutRecordDetailView: View {
                                                 .frame(width: 70, alignment: .leading)
                                             
                                             HStack(spacing: 15) {
-                                                // Ripetizioni per questa serie
+                                                // Ripetizioni effettive per questa serie
                                                 HStack(spacing: 4) {
                                                     Image(systemName: "arrow.up.and.down")
                                                         .font(.caption)
                                                         .foregroundColor(Color("blk").opacity(0.6))
-                                                    Text("\(exercise.reps) rep")
+                                                    
+                                                    let actualReps = exercise.actualReps?[setIndex] ?? exercise.reps
+                                                    Text("\(actualReps) rep")
                                                         .font(.subheadline)
                                                         .foregroundColor(Color("blk").opacity(0.7))
                                                 }
                                                 
-                                                // Peso per questa serie
+                                                // Peso effettivo per questa serie
                                                 HStack(spacing: 4) {
                                                     Image(systemName: "scalemass")
                                                         .font(.caption)
                                                         .foregroundColor(Color("blk").opacity(0.6))
-                                                    Text("\(exercise.weight ?? 0.0, specifier: "%.1f") kg")
+                                                    
+                                                    let actualWeight = exercise.actualWeights?[setIndex] ?? exercise.weight ?? 0.0
+                                                    Text("\(actualWeight, specifier: "%.1f") kg")
                                                         .font(.subheadline)
                                                         .foregroundColor(Color("blk").opacity(0.7))
                                                 }
@@ -173,13 +179,9 @@ struct WorkoutRecordDetailView: View {
             leading: Button(action: {
                 presentationMode.wrappedValue.dismiss()
             }) {
-                HStack(spacing: 6) {
-                    Image(systemName: "arrow.left")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(Color("blk"))
-                    
-                    
-                }
+                Image(systemName: "arrow.left")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(Color("blk"))
             }
         )
         .navigationBarTitleDisplayMode(.inline)

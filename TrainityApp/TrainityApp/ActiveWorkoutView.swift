@@ -7,7 +7,7 @@ struct ActiveWorkoutView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var workoutManager: WorkoutManager
     @State private var completedSets: [String: [Int]] = [:]
-    @State private var exerciseWeights: [String: Double] = [:] // Nuovo: traccia i pesi degli esercizi
+    @State private var exerciseWeights: [String: [Double?]] = [:] // Modificato: ora traccia array di pesi per ogni esercizio
     @State private var currentExerciseIndex = 0
     @State private var showingCompletionAlert = false
     @State private var showingTimerSheet = false
@@ -18,25 +18,25 @@ struct ActiveWorkoutView: View {
     
     var body: some View {
         ZStack {
-            Color("wht").edgesIgnoringSafeArea(.all)
+            Color(red: 0.9, green: 0.95, blue: 0.95).edgesIgnoringSafeArea(.all)
             
             VStack {
                 // Header
                 Text("Allenamento: \(workout.name)")
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(Color("blk"))
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                     .padding(.top, 20)
                 
                 // Progress indicator
                 ProgressView(value: Double(currentExerciseIndex), total: Double(workout.exercises.count))
                     .padding(.horizontal)
                     .padding(.top, 10)
-                    .tint(Color("blk"))
+                    .tint(Color(red: 0.1, green: 0.4, blue: 0.4))
                 
                 Text("\(currentExerciseIndex)/\(workout.exercises.count) esercizi completati")
                     .font(.subheadline)
-                    .foregroundColor(Color("blk"))
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                     .padding(.top, 5)
                 
                 // Exercise list
@@ -66,14 +66,10 @@ struct ActiveWorkoutView: View {
                                         }
                                     }
                                 },
-                                onWeightUpdate: { weight in
-                                    // NUOVO: Salva il peso dell'esercizio
-                                    if let weight = weight {
-                                        exerciseWeights[exercise.id.uuidString] = weight
-                                        print("Peso aggiornato per \(exercise.name): \(weight) kg")
-                                    } else {
-                                        exerciseWeights.removeValue(forKey: exercise.id.uuidString)
-                                    }
+                                onWeightUpdate: { weights in
+                                    // NUOVO: Salva i pesi per ogni serie dell'esercizio
+                                    exerciseWeights[exercise.id.uuidString] = weights
+                                    print("Pesi aggiornati per \(exercise.name): \(weights)")
                                 }
                             )
                             .padding(.horizontal)
@@ -87,7 +83,7 @@ struct ActiveWorkoutView: View {
                 // Mini timer display draggable
                 VStack {
                     Divider()
-                        .background(Color("blk").opacity(0.3))
+                        .background(Color(red: 0.1, green: 0.4, blue: 0.4).opacity(0.3))
                     
                     Button(action: {
                         showingTimerSheet = true
@@ -99,12 +95,12 @@ struct ActiveWorkoutView: View {
                             }) {
                                 ZStack {
                                     Circle()
-                                        .fill(Color("blk"))
+                                        .fill(Color(red: 0.1, green: 0.4, blue: 0.4))
                                         .frame(width: 50, height: 50)
                                     
                                     Image(systemName: isTimerRunning ? "pause.fill" : "play.fill")
                                         .font(.title2)
-                                        .foregroundColor(Color("wht"))
+                                        .foregroundColor(.white)
                                 }
                             }
                             .padding(.trailing, 10)
@@ -113,30 +109,30 @@ struct ActiveWorkoutView: View {
                             VStack(alignment: .leading) {
                                 Text("Timer Recupero")
                                     .font(.subheadline)
-                                    .foregroundColor(Color("blk"))
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                                 
                                 Text("\(timeRemaining) secondi")
                                     .font(.title2)
                                     .fontWeight(.bold)
-                                    .foregroundColor(Color("blk"))
+                                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                             }
                             
                             Spacer()
                             
                             // Drag indicator
                             Image(systemName: "chevron.up")
-                                .foregroundColor(Color("blk"))
+                                .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
                                 .padding(.trailing)
                         }
                         .padding()
-                        .background(Color("wht"))
+                        .background(Color.white)
                         .cornerRadius(15)
                         .padding(.horizontal)
                         .padding(.vertical, 10)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
-                .background(Color("wht"))
+                .background(Color(red: 0.9, green: 0.95, blue: 0.95))
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -155,7 +151,7 @@ struct ActiveWorkoutView: View {
             }) {
                 Text("Termina")
                     .font(.headline)
-                    .foregroundColor(Color("blk"))
+                    .foregroundColor(Color(red: 0.1, green: 0.4, blue: 0.4))
             }
         )
         .sheet(isPresented: $showingTimerSheet) {
@@ -187,7 +183,7 @@ struct ActiveWorkoutView: View {
         }
     }
     
-    // AGGIORNATO: Funzione per salvare l'allenamento nella cronologia con i pesi
+    // AGGIORNATO: Funzione per salvare l'allenamento nella cronologia con i dati reali per serie
     private func saveWorkoutToHistory() {
         print("Salvaggio allenamento nella cronologia...")
         
@@ -198,17 +194,31 @@ struct ActiveWorkoutView: View {
         
         print("Durata calcolata: \(durationInMinutes) minuti")
         
-        // NUOVO: Crea una copia del workout con i pesi aggiornati
+        // NUOVO: Crea una copia del workout con i dati reali per ogni serie
         var updatedWorkout = workout
         for i in 0..<updatedWorkout.exercises.count {
             let exerciseId = updatedWorkout.exercises[i].id.uuidString
-            if let weight = exerciseWeights[exerciseId] {
-                updatedWorkout.exercises[i].weight = weight
-                print("Peso salvato per \(updatedWorkout.exercises[i].name): \(weight) kg")
+            
+            // Salva le ripetizioni effettive per ogni serie
+            if let completedRepsForExercise = completedSets[exerciseId] {
+                updatedWorkout.exercises[i].actualReps = completedRepsForExercise
+                print("Ripetizioni effettive salvate per \(updatedWorkout.exercises[i].name): \(completedRepsForExercise)")
+            }
+            
+            // Salva i pesi effettivi per ogni serie
+            if let weightsForExercise = exerciseWeights[exerciseId] {
+                updatedWorkout.exercises[i].actualWeights = weightsForExercise
+                // Calcola peso medio per compatibilità con il campo weight
+                let validWeights = weightsForExercise.compactMap { $0 }
+                if !validWeights.isEmpty {
+                    let averageWeight = validWeights.reduce(0, +) / Double(validWeights.count)
+                    updatedWorkout.exercises[i].weight = averageWeight
+                }
+                print("Pesi effettivi salvati per \(updatedWorkout.exercises[i].name): \(weightsForExercise)")
             }
         }
         
-        // Usa il workout aggiornato con i pesi
+        // Usa il workout aggiornato con i dati reali
         workoutManager.completeWorkout(updatedWorkout)
         
         if let encodedData = try? JSONEncoder().encode(workoutManager.workoutHistory) {
@@ -216,7 +226,7 @@ struct ActiveWorkoutView: View {
             print("Salvataggio completato in UserDefaults")
         }
         
-        print("Allenamento aggiunto alla cronologia con pesi. Totale record: \(workoutManager.workoutHistory.count)")
+        print("Allenamento aggiunto alla cronologia con dati reali per serie. Totale record: \(workoutManager.workoutHistory.count)")
     }
     
     private func setupTimer() {
