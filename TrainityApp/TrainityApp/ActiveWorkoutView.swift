@@ -44,7 +44,7 @@ struct ActiveWorkoutView: View {
             
             VStack {
                 // Header
-                Text("Allenamento: \(workout.name)")
+                Text("Workout: \(workout.name)")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(textColor)
@@ -56,7 +56,7 @@ struct ActiveWorkoutView: View {
                     .padding(.top, 10)
                     .tint(accentColor)
                 
-                Text("\(currentExerciseIndex)/\(workout.exercises.count) esercizi completati")
+                Text("\(currentExerciseIndex)/\(workout.exercises.count) exercises completed")
                     .font(.subheadline)
                     .foregroundColor(textColor.opacity(0.7))
                     .padding(.top, 5)
@@ -129,11 +129,11 @@ struct ActiveWorkoutView: View {
                             
                             // Timer display
                             VStack(alignment: .leading) {
-                                Text("Timer Recupero")
+                                Text("Rest Timer")
                                     .font(.subheadline)
                                     .foregroundColor(textColor)
                                 
-                                Text("\(timeRemaining) secondi")
+                                Text("\(timeRemaining) seconds")
                                     .font(.title2)
                                     .fontWeight(.bold)
                                     .foregroundColor(textColor)
@@ -172,7 +172,7 @@ struct ActiveWorkoutView: View {
                 
                 presentationMode.wrappedValue.dismiss()
             }) {
-                Text("Termina")
+                Text("End")
                     .font(.headline)
                     .foregroundColor(accentColor)
             }
