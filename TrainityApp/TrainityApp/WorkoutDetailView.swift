@@ -16,7 +16,7 @@ struct WorkoutDetailView: View {
                 ScrollView {
                     VStack(spacing: 20) {
                         VStack(alignment: .leading, spacing: 15) {
-                            Text("Esercizi:")
+                            Text("Exercises:")
                                 .font(.headline)
                                 .foregroundColor(Color("blk"))
                                 .padding(.bottom, 5)
@@ -45,7 +45,7 @@ struct WorkoutDetailView: View {
                         Button(action: {
                             showingEditView = true
                         }) {
-                            Text("Modifica")
+                            Text("Edit")
                                 .font(.headline)
                                 .foregroundColor(Color("blk"))
                                 .frame(minWidth: 0, maxWidth: .infinity)
@@ -59,7 +59,7 @@ struct WorkoutDetailView: View {
                         }
                         
                         NavigationLink(destination: ActiveWorkoutView(workout: workout)) {
-                            Text("Inizia Allenamento")
+                            Text("Start Workout")
                                 .font(.headline)
                                 .foregroundColor(Color("wht"))
                                 .frame(minWidth: 0, maxWidth: .infinity)
@@ -95,9 +95,9 @@ struct WorkoutDetailView: View {
         }
         .alert(isPresented: $showingDeleteAlert) {
             Alert(
-                title: Text("Eliminare esercizio"),
-                message: Text("Sei sicuro di voler eliminare questo esercizio?"),
-                primaryButton: .destructive(Text("Elimina")) {
+                title: Text("Delete Exercise"),
+                message: Text("Are you sure you want to delete this exercise?"),
+                primaryButton: .destructive(Text("Delete")) {
                     if let exerciseToDelete = exerciseToDelete,
                        let index = workoutManager.savedWorkouts.firstIndex(where: { $0.id == workout.id }) {
                         var updatedWorkout = workout
@@ -106,7 +106,7 @@ struct WorkoutDetailView: View {
                         workoutManager.savedWorkouts[index] = updatedWorkout
                     }
                 },
-                secondaryButton: .cancel(Text("Annulla"))
+                secondaryButton: .cancel(Text("Cancel"))
             )
         }
     }

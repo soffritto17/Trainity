@@ -25,18 +25,18 @@ struct EditWorkoutView: View {
                 
                 ScrollView {
                     VStack(spacing: 20) {
-                        Text("Modifica Programma")
+                        Text("Edit Workout")
                             .font(.largeTitle)
                             .fontWeight(.bold)
                             .foregroundColor(Color("blk"))
                             .padding(.top, 20)
                         
                         VStack(alignment: .leading) {
-                            Text("Nome programma")
+                            Text("Workout Name")
                                 .font(.headline)
                                 .foregroundColor(Color("blk"))
                             
-                            TextField("Inserisci nome", text: $workoutName)
+                            TextField("Insert Name", text: $workoutName)
                                 .padding()
                                 .background(Color("wht"))
                                 .cornerRadius(10)
@@ -45,20 +45,20 @@ struct EditWorkoutView: View {
                         
                         VStack(alignment: .leading) {
                             HStack {
-                                Text("Esercizi")
+                                Text("Exercises")
                                     .font(.headline)
                                     .foregroundColor(Color("blk"))
                                 
                                 Spacer()
                                 
-                                Text("Totale: \(exercises.count)")
+                                Text("Total: \(exercises.count)")
                                     .font(.subheadline)
                                     .foregroundColor(Color("blk"))
                             }
                             .padding(.horizontal)
                             
                             if exercises.isEmpty {
-                                Text("Nessun esercizio aggiunto")
+                                Text("No exercises added yet.")
                                     .foregroundColor(.gray)
                                     .padding()
                                     .frame(maxWidth: .infinity)
@@ -89,7 +89,7 @@ struct EditWorkoutView: View {
                                         
                                         HStack {
                                             VStack(alignment: .leading) {
-                                                Text("Serie: \(exercises[index].sets)")
+                                                Text("Set: \(exercises[index].sets)")
                                                     .font(.subheadline)
                                                     .foregroundColor(Color("blk"))
                                                     .padding(.bottom, 4)
@@ -101,7 +101,7 @@ struct EditWorkoutView: View {
                                             Spacer()
                                             
                                             VStack(alignment: .leading) {
-                                                Text("Ripetizioni: \(exercises[index].reps)")
+                                                Text("Reps: \(exercises[index].reps)")
                                                     .font(.subheadline)
                                                     .foregroundColor(Color("blk"))
                                                     .padding(.bottom, 4)
@@ -125,7 +125,7 @@ struct EditWorkoutView: View {
                             }) {
                                 HStack {
                                     Image(systemName: "plus.circle.fill")
-                                    Text("Aggiungi Esercizio")
+                                    Text("Add Exercise")
                                         .fontWeight(.semibold)
                                 }
                                 .foregroundColor(Color("blk"))
@@ -143,7 +143,7 @@ struct EditWorkoutView: View {
                             saveWorkout()
                             presentationMode.wrappedValue.dismiss()
                         }) {
-                            Text("Salva Modifiche")
+                            Text("Save Edits")
                                 .font(.headline)
                                 .foregroundColor(Color("wht"))
                                 .frame(maxWidth: .infinity)
@@ -158,7 +158,7 @@ struct EditWorkoutView: View {
                 }
             }
             .navigationBarItems(
-                leading: Button("Annulla") {
+                leading: Button("Cancel") {
                     presentationMode.wrappedValue.dismiss()
                 }
                     .foregroundColor(Color("blk"))
@@ -166,15 +166,15 @@ struct EditWorkoutView: View {
             .navigationBarTitleDisplayMode(.inline)
             .alert(isPresented: $showDeleteAlert) {
                 Alert(
-                    title: Text("Eliminare esercizio"),
-                    message: Text("Sei sicuro di voler eliminare questo esercizio?"),
-                    primaryButton: .destructive(Text("Elimina")) {
+                    title: Text("Delete Exercise"),
+                    message: Text("Are you sure you want to delete this exercise?"),
+                    primaryButton: .destructive(Text("Delete")) {
                         if let index = exerciseToDeleteIndex {
                             exercises.remove(at: index)
                             exerciseToDeleteIndex = nil
                         }
                     },
-                    secondaryButton: .cancel(Text("Annulla")) {
+                    secondaryButton: .cancel(Text("Cancel")) {
                         exerciseToDeleteIndex = nil
                     }
                 )

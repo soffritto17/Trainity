@@ -16,7 +16,7 @@ struct WorkoutHistoryView: View {
                 Color("wht").edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    Text("Cronologia")
+                    Text("Workout History")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(Color("blk"))
@@ -29,12 +29,12 @@ struct WorkoutHistoryView: View {
                                 .foregroundColor(Color("blk"))
                                 .padding()
                             
-                            Text("Nessun allenamento completato")
+                            Text("No Workouts Completed")
                                 .font(.headline)
                                 .foregroundColor(Color("blk").opacity(0.6))
                                 .multilineTextAlignment(.center)
                             
-                            Text("Completa il tuo primo allenamento per visualizzare la cronologia")
+                            Text("Complete your first workout to see your progress")
                                 .font(.subheadline)
                                 .foregroundColor(Color("blk").opacity(0.6))
                                 .multilineTextAlignment(.center)

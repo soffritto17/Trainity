@@ -208,14 +208,14 @@ struct ActiveWorkoutView: View {
     
     // AGGIORNATO: Funzione per salvare l'allenamento nella cronologia con i dati reali per serie
     private func saveWorkoutToHistory() {
-        print("Salvaggio allenamento nella cronologia...")
+        print("Saving workout in workout history...")
         
         // Calcola la durata effettiva dell'allenamento
         let endTime = Date()
         let durationInSeconds = startTime != nil ? endTime.timeIntervalSince(startTime!) : 0
         let durationInMinutes = max(Int(durationInSeconds / 60), 1) // Almeno 1 minuto
         
-        print("Durata calcolata: \(durationInMinutes) minuti")
+        print("Calculated duration: \(durationInMinutes) minutes")
         
         // NUOVO: Crea una copia del workout con i dati reali per ogni serie
         var updatedWorkout = workout
@@ -225,7 +225,7 @@ struct ActiveWorkoutView: View {
             // Salva le ripetizioni effettive per ogni serie
             if let completedRepsForExercise = completedSets[exerciseId] {
                 updatedWorkout.exercises[i].actualReps = completedRepsForExercise
-                print("Ripetizioni effettive salvate per \(updatedWorkout.exercises[i].name): \(completedRepsForExercise)")
+                print("Saved reps for \(updatedWorkout.exercises[i].name): \(completedRepsForExercise)")
             }
             
             // Salva i pesi effettivi per ogni serie
@@ -237,7 +237,7 @@ struct ActiveWorkoutView: View {
                     let averageWeight = validWeights.reduce(0, +) / Double(validWeights.count)
                     updatedWorkout.exercises[i].weight = averageWeight
                 }
-                print("Pesi effettivi salvati per \(updatedWorkout.exercises[i].name): \(weightsForExercise)")
+                print("Saved weights for \(updatedWorkout.exercises[i].name): \(weightsForExercise)")
             }
         }
         
@@ -246,10 +246,10 @@ struct ActiveWorkoutView: View {
         
         if let encodedData = try? JSONEncoder().encode(workoutManager.workoutHistory) {
             UserDefaults.standard.set(encodedData, forKey: "workoutHistory")
-            print("Salvataggio completato in UserDefaults")
+            print("Completed saving in UserDefaults")
         }
         
-        print("Allenamento aggiunto alla cronologia con dati reali per serie. Totale record: \(workoutManager.workoutHistory.count)")
+        print("Added workout to history with real data per set. Record count: \(workoutManager.workoutHistory.count)")
     }
     
     private func setupTimer() {
@@ -338,7 +338,7 @@ struct ActiveWorkoutView: View {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
-            print("Errore configurazione audio: \(error)")
+            print("Audio configuration error: \(error)")
         }
         
         // Suono di allarme forte (sistema iOS)

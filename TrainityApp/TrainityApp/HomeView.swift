@@ -4,21 +4,21 @@ struct HomeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     
     let motivationalQuotes = [
-        "Il fitness è come una relazione. Devi rimanerci fedele perché funzioni.",
-        "La forza non viene da ciò che puoi fare. Viene dal superare ciò che pensavi di non poter fare.",
-        "Ci vuole un po' più di forza per fare un altro passo in avanti.",
-        "Il cambiamento avviene quando l'impegno supera la resistenza.",
-        "Il miglior progetto su cui puoi lavorare sei tu stesso.",
-        "Più sudi in allenamento, meno sanguini in battaglia.",
-        "Credi in te stesso e sarai inarrestabile.",
-        "La fatica dura un'ora. L'orgoglio dura per sempre.",
-        "Nessun dolore, nessun guadagno. Nessun sforzo, nessun risultato.",
-        "La costanza è più importante della perfezione.",
-        "Il tuo corpo può sopportare quasi tutto. È la tua mente che devi convincere.",
-        "Investi in te stesso. È il miglior investimento che farai mai.",
-        "Non aspettare. Il momento non sarà mai perfetto.",
-        "Gli ostacoli sono quelle cose spaventose che vedi quando togli gli occhi dal tuo obiettivo.",
-        "Rendi il tuo corpo l'arma più forte, non la tua debolezza."
+        "Fitness is like a relationship. You have to stay faithful to it for it to work.",
+        "Strength doesn't come from what you can do. It comes from overcoming what you thought you couldn't do.",
+        "It takes a little more strength to take another step forward.",
+        "Change happens when commitment exceeds resistance.",
+        "The best project you can work on is yourself.",
+        "The more you sweat in training, the less you bleed in battle.",
+        "Believe in yourself and you'll be unstoppable.",
+        "Fatigue lasts an hour. Pride lasts forever.",
+        "No pain, no gain. No effort, no result.",
+        "Consistency is more important than perfection.",
+        "Your body can handle almost anything. It's your mind you have to convince.",
+        "Invest in yourself. It's the best investment you'll ever make.",
+        "Don't wait. The moment will never be perfect.",
+        "Obstacles are those frightening things you see when you take your eyes off your goal.",
+        "Make your body your strongest weapon, not your weakness."
     ]
     
     var todaysQuote: String {

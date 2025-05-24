@@ -12,21 +12,21 @@ struct ExerciseRow: View {
                     .foregroundColor(Color("blk"))
                 
                 HStack {
-                    Text("Serie: \(exercise.sets)")
+                    Text("Set: \(exercise.sets)")
                         .font(.subheadline)
                         .foregroundColor(Color("blk"))
                     
                     Text("•")
                         .foregroundColor(Color("blk"))
                     
-                    Text("Ripetizioni: \(exercise.reps)")
+                    Text("Reps: \(exercise.reps)")
                         .font(.subheadline)
                         .foregroundColor(Color("blk"))
                     
                     Text("•")
                         .foregroundColor(Color("blk"))
                     
-                    Text("Peso: \(exercise.weight ?? 0.0, specifier: "%.1f") kg")
+                    Text("Weight: \(exercise.weight ?? 0.0, specifier: "%.1f") kg")
                         .font(.subheadline)
                         .foregroundColor(Color("blk"))
                 }

@@ -7,8 +7,8 @@ struct ExerciseSelectorView: View {
     @Environment(\.presentationMode) var presentationMode
     
     let exerciseDatabase = [
-        "Panca Piana", "Squat", "Stacchi da Terra", "Pull Up", "Push Up",
-        "Crunch", "Plank", "Curl Bicipiti", "Tricipiti", "Calf Raise",
+        "Bench Press", "Squat", "Deadlifts", "Pull Up", "Push Up",
+        "Crunch", "Plank", "Biceps Curl", "Triceps", "Calf Raise",
         "Leg Press", "Lat Machine", "Shoulder Press", "Lunges", "Dip"
     ]
     
@@ -26,7 +26,7 @@ struct ExerciseSelectorView: View {
                 Color("wht").edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    TextField("Cerca esercizio", text: $searchText)
+                    TextField("Search Exercise", text: $searchText)
                         .padding()
                         .background(Color("wht"))
                         .cornerRadius(10)
@@ -47,12 +47,12 @@ struct ExerciseSelectorView: View {
                     .scrollContentBackground(.hidden)
                     .background(Color("wht"))
                 }
-                .navigationTitle("Seleziona Esercizio")
+                .navigationTitle("Select Exercise")
                 .navigationBarItems(
                     trailing: Button(action: {
                         presentationMode.wrappedValue.dismiss()
                     }) {
-                        Text("Chiudi")
+                        Text("Close")
                             .foregroundColor(Color("blk"))
                     }
                 )

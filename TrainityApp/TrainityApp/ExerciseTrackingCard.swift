@@ -84,25 +84,25 @@ struct ExerciseTrackingCard: View {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.green)
                 } else if isActive {
-                    Text("In corso")
+                    Text("In progress")
                         .font(.subheadline)
                         .foregroundColor(.orange)
                 }
             }
             
             // Visualizza il range delle ripetizioni (numero programma - 2)
-            Text("Range ripetizioni: \(max(exercise.reps - 2, 1))-\(exercise.reps)")
+            Text("Reps Range: \(max(exercise.reps - 2, 1))-\(exercise.reps)")
                 .font(.subheadline)
                 .foregroundColor(textColor.opacity(0.7))
             
-            Text("Serie: \(exercise.sets)")
+            Text("Set: \(exercise.sets)")
                 .font(.subheadline)
                 .foregroundColor(textColor.opacity(0.7))
             
             // Serie
             ForEach(0..<exercise.sets, id: \.self) { setIndex in
                 HStack {
-                    Text("Serie \(setIndex + 1):")
+                    Text("Set \(setIndex + 1):")
                         .font(.subheadline)
                         .foregroundColor(textColor)
                     

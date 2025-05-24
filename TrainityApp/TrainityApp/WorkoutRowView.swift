@@ -13,7 +13,7 @@ struct WorkoutRowView: View {
                
                 Spacer()
                 
-                Label("\(workout.exercises.count) esercizi", systemImage: "list.bullet")
+                Label("\(workout.exercises.count) exercises", systemImage: "list.bullet")
                     .font(.subheadline)
                     .foregroundColor(Color("blk").opacity(0.6))
             }

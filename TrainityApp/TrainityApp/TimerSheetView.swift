@@ -12,7 +12,7 @@ struct TimerSheetView: View {
             Color("wht").edgesIgnoringSafeArea(.all)
             
             VStack {
-                Text("Timer di Recupero")
+                Text("Rest Timer")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(Color("blk"))
@@ -35,7 +35,7 @@ struct TimerSheetView: View {
                             .font(.system(size: 70, weight: .bold))
                             .foregroundColor(Color("blk"))
                         
-                        Text("secondi")
+                        Text("seconds")
                             .font(.title3)
                             .foregroundColor(Color("blk"))
                     }

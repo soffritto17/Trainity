@@ -18,7 +18,7 @@ struct ProfileView: View {
                     .padding(.bottom)
                 }
             }
-            .navigationBarTitle("Profilo", displayMode: .inline)
+            .navigationBarTitle("Profile", displayMode: .inline)
         }
     }
     
@@ -80,9 +80,9 @@ struct ProfileView: View {
             // MODIFICA: HStack con Spacer per distribuzione equa
             HStack {
                 Spacer()
-                statItem(value: "\(workoutManager.totalWorkoutsCompleted)", label: "Allenamenti", icon: "figure.run")
+                statItem(value: "\(workoutManager.totalWorkoutsCompleted)", label: "Workouts", icon: "figure.run")
                 Spacer()
-                statItem(value: "\(workoutManager.badgesEarned)", label: "Badge", icon: "trophy.fill")
+                statItem(value: "\(workoutManager.badgesEarned)", label: "Badges", icon: "trophy.fill")
                 Spacer()
                 statItem(value: "\(workoutManager.weeklyStreak)", label: "Streak", icon: "flame.fill")
                 Spacer()
@@ -100,7 +100,7 @@ struct ProfileView: View {
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(Color("blk"))
-                Text("Sfide completate")
+                Text("Completed Challenges")
                     .font(.caption)
                     .foregroundColor(Color("blk").opacity(0.6))
             }
@@ -136,7 +136,7 @@ struct ProfileView: View {
     
     private var badgesSectionView: some View {
         VStack(alignment: .leading) {
-            Text("I tuoi Badge")
+            Text("Your Badges")
                 .font(.headline)
                 .foregroundColor(Color("blk"))
                 .padding(.horizontal)
@@ -198,7 +198,7 @@ struct ProfileView: View {
         
         if !trimmedNickname.isEmpty {
             workoutManager.updateNickname(trimmedNickname)
-            print("Nickname salvato: \(trimmedNickname)")
+            print("Saved Nickname: \(trimmedNickname)")
         }
         
         editingNickname = false

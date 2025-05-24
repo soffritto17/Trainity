@@ -16,7 +16,7 @@ struct CreateNewWorkoutView: View {
             Color("wht").edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 0) {
-                Text("Crea programma")
+                Text("Create Workout")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
@@ -28,11 +28,11 @@ struct CreateNewWorkoutView: View {
                     VStack(spacing: 20) {
                         // Nome programma
                         VStack(alignment: .leading) {
-                            Text("Nome programma")
+                            Text("Workout Name")
                                 .font(.headline)
                                 .foregroundColor(Color("blk"))
                             
-                            TextField("Inserisci nome", text: $workoutName)
+                            TextField("Insert Name", text: $workoutName)
                                 .padding()
                                 .background(Color("wht"))
                                 .cornerRadius(10)
@@ -42,7 +42,7 @@ struct CreateNewWorkoutView: View {
                         // Esercizi
                         VStack(alignment: .leading) {
                             HStack {
-                                Text("Esercizi")
+                                Text("Exercises")
                                     .font(.headline)
                                     .foregroundColor(Color("blk"))
                                 Spacer()
@@ -50,7 +50,7 @@ struct CreateNewWorkoutView: View {
                             .padding(.horizontal)
                             
                             if exercises.isEmpty {
-                                Text("Nessun esercizio aggiunto")
+                                Text("No exercises added yet.")
                                     .foregroundColor(.gray)
                                     .padding()
                                     .frame(maxWidth: .infinity)
@@ -70,7 +70,7 @@ struct CreateNewWorkoutView: View {
                             }) {
                                 HStack {
                                     Image(systemName: "plus.circle.fill")
-                                    Text("Aggiungi Esercizio")
+                                    Text("Add Exercise")
                                         .fontWeight(.semibold)
                                 }
                                 .foregroundColor(Color("blk"))
@@ -85,7 +85,7 @@ struct CreateNewWorkoutView: View {
                         // Eliminazione esercizi
                         if !exercises.isEmpty {
                             VStack(alignment: .leading) {
-                                Text("Gestione esercizi")
+                                Text("Manage Exercises")
                                     .font(.headline)
                                     .foregroundColor(Color("blk"))
                                     .padding(.horizontal)
@@ -118,7 +118,7 @@ struct CreateNewWorkoutView: View {
                             saveWorkout()
                             presentationMode.wrappedValue.dismiss()
                         }) {
-                            Text("Salva Programma")
+                            Text("Save Workout")
                                 .font(.headline)
                                 .foregroundColor(Color("wht"))
                                 .frame(maxWidth: .infinity)

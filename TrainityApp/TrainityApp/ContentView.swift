@@ -14,13 +14,13 @@ struct ContentView: View {
             WorkoutHistoryView()
                 .environmentObject(workoutManager)
                 .tabItem {
-                    Label("Cronologia", systemImage: "clock.arrow.circlepath")
+                    Label("Workout History", systemImage: "clock.arrow.circlepath")
                 }
             
             ProfileView()
                 .environmentObject(workoutManager)
                 .tabItem {
-                    Label("Profilo", systemImage: "person.fill")
+                    Label("Profile", systemImage: "person.fill")
                 }
         }
         .accentColor(Color("blk"))

@@ -27,7 +27,7 @@ struct WorkoutRecordDetailView: View {
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundColor(.green)
-                            Text("Completato")
+                            Text("Completed")
                                 .font(.headline)
                                 .foregroundColor(.green)
                         }
@@ -40,12 +40,12 @@ struct WorkoutRecordDetailView: View {
                     
                     // Informazioni dell'allenamento
                     VStack(alignment: .leading, spacing: 15) {
-                        Text("Dettagli Allenamento")
+                        Text("Workout Details")
                             .font(.headline)
                             .foregroundColor(Color("blk"))
                         
                         HStack {
-                            Label("Data", systemImage: "calendar")
+                            Label("Date", systemImage: "calendar")
                                 .foregroundColor(Color("blk").opacity(0.6))
                             Spacer()
                             Text(formattedDateTime(record.date))
@@ -53,7 +53,7 @@ struct WorkoutRecordDetailView: View {
                         }
                         
                         HStack {
-                            Label("Esercizi", systemImage: "figure.strengthtraining.traditional")
+                            Label("Exercises", systemImage: "figure.strengthtraining.traditional")
                                 .foregroundColor(Color("blk").opacity(0.6))
                             Spacer()
                             Text("\(record.workout.exercises.count)")
@@ -62,7 +62,7 @@ struct WorkoutRecordDetailView: View {
                         
                         if record.caloriesBurned > 0 {
                             HStack {
-                                Label("Calorie", systemImage: "flame")
+                                Label("Calories", systemImage: "flame")
                                     .foregroundColor(Color("blk").opacity(0.6))
                                 Spacer()
                                 Text("\(record.caloriesBurned) cal")
@@ -78,7 +78,7 @@ struct WorkoutRecordDetailView: View {
                     
                     // Lista degli esercizi con dettagli per serie
                     VStack(alignment: .leading, spacing: 15) {
-                        Text("Esercizi Completati")
+                        Text("Completed exercises")
                             .font(.headline)
                             .foregroundColor(Color("blk"))
                         
@@ -95,7 +95,7 @@ struct WorkoutRecordDetailView: View {
                                         let setIndex = setNumber - 1
                                         
                                         HStack {
-                                            Text("Serie \(setNumber):")
+                                            Text("Set \(setNumber):")
                                                 .font(.subheadline)
                                                 .fontWeight(.medium)
                                                 .foregroundColor(Color("blk"))
@@ -149,14 +149,14 @@ struct WorkoutRecordDetailView: View {
                                     HStack(spacing: 4) {
                                         Image(systemName: "checkmark.circle.fill")
                                             .foregroundColor(.green)
-                                        Text("Esercizio completato")
+                                        Text("Completed exercise")
                                             .font(.caption)
                                             .foregroundColor(.green)
                                     }
                                     
                                     Spacer()
                                     
-                                    Text("Totale: \(exercise.sets) serie")
+                                    Text("Total: \(exercise.sets) sets")
                                         .font(.caption)
                                         .foregroundColor(Color("blk").opacity(0.6))
                                 }
@@ -188,7 +188,7 @@ struct WorkoutRecordDetailView: View {
             }
         )
         .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle("Dettagli Allenamento")
+        .navigationTitle("Workout Details")
     }
     
     func formattedDateTime(_ date: Date) -> String {

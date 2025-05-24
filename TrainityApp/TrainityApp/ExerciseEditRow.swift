@@ -21,7 +21,7 @@ struct ExerciseEditRow: View {
             }
             
             HStack {
-                Text("Serie:")
+                Text("Set:")
                     .font(.subheadline)
                     .foregroundColor(Color("blk").opacity(0.6))
                 

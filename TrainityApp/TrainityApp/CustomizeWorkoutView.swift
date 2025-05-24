@@ -27,12 +27,12 @@ struct CustomizeWorkoutView: View {
                             .foregroundColor(Color("blk").opacity(0.3))
                         
                         VStack(spacing: 10) {
-                            Text("Nessun programma salvato")
+                            Text("No Workout Saved")
                                 .font(.title2)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color("blk"))
                             
-                            Text("Premi + per creare un nuovo programma")
+                            Text("Press + to create a new workout")
                                 .font(.body)
                                 .foregroundColor(Color("blk").opacity(0.7))
                                 .multilineTextAlignment(.center)
@@ -67,7 +67,7 @@ struct CustomizeWorkoutView: View {
                 EmptyView()
             }
         }
-        .navigationTitle("I Miei Programmi")
+        .navigationTitle("My Workouts")
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading: Button(action: {
