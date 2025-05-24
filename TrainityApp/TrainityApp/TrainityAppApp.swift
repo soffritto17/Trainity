@@ -257,23 +257,23 @@ class WorkoutManager: ObservableObject, Codable {
     }
     
     private func createDefaultBadges() -> [Badge] {
-        return [
-            // Badge esistenti
-            Badge(id: "first_workout", name: "Principiante", description: "Completa il tuo primo allenamento", imageName: "star.fill"),
-            Badge(id: "week_streak", name: "Determinato", description: "Completa 5 allenamenti", imageName: "flame.fill"),
-            Badge(id: "muscle_builder", name: "Esperto", description: "Completa 20 allenamenti", imageName: "trophy.fill"),
-            Badge(id: "constancy", name: "Costanza", description: "Completa allenamenti per 7 giorni consecutivi", imageName: "figure.walk.motion"),
-            Badge(id: "champion", name: "Campione", description: "Completa 30 allenamenti totali", imageName: "trophy.fill"),
-            
-            // Nuovi badge
-            Badge(id: "early_bird", name: "Mattiniero", description: "Completa 5 allenamenti prima delle 9:00", imageName: "sunrise.fill"),
-            Badge(id: "night_owl", name: "Nottambulo", description: "Completa 5 allenamenti dopo le 20:00", imageName: "moon.stars.fill"),
-            Badge(id: "weekend_warrior", name: "Guerriero del Weekend", description: "Completa 3 allenamenti durante i weekend", imageName: "figure.run"),
-            Badge(id: "challenge_master", name: "Maestro delle Sfide", description: "Completa 5 sfide giornaliere", imageName: "checkmark.seal.fill"),
-            Badge(id: "variety", name: "Versatilità", description: "Completa allenamenti in 5 giorni diversi della settimana", imageName: "chart.bar.fill"),
-            Badge(id: "exercise_master", name: "Maestro degli Esercizi", description: "Completa 100 esercizi totali", imageName: "dumbbell.fill")
-        ]
-    }
+            return [
+                // Existing badges
+                Badge(id: "first_workout", name: "Beginner", description: "Complete your first workout", imageName: "star.fill"),
+                Badge(id: "week_streak", name: "Determined", description: "Complete 5 workouts", imageName: "flame.fill"),
+                Badge(id: "muscle_builder", name: "Expert", description: "Complete 20 workouts", imageName: "trophy.fill"),
+                Badge(id: "constancy", name: "Consistency", description: "Complete workouts for 7 consecutive days", imageName: "figure.walk.motion"),
+                Badge(id: "champion", name: "Champion", description: "Complete 30 total workouts", imageName: "trophy.fill"),
+                
+                // New badges
+                Badge(id: "early_bird", name: "Early Bird", description: "Complete 5 workouts before 9:00 AM", imageName: "sunrise.fill"),
+                Badge(id: "night_owl", name: "Night Owl", description: "Complete 5 workouts after 8:00 PM", imageName: "moon.stars.fill"),
+                Badge(id: "weekend_warrior", name: "Weekend Warrior", description: "Complete 3 workouts during weekends", imageName: "figure.run"),
+                Badge(id: "challenge_master", name: "Challenge Master", description: "Complete 5 daily challenges", imageName: "checkmark.seal.fill"),
+                Badge(id: "variety", name: "Versatility", description: "Complete workouts on 5 different days of the week", imageName: "chart.bar.fill"),
+                Badge(id: "exercise_master", name: "Exercise Master", description: "Complete 100 total exercises", imageName: "dumbbell.fill")
+            ]
+        }
     
     // MARK: - Stats and Badge Management
     
