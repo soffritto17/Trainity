@@ -130,7 +130,7 @@ struct ImprovedWorkoutRowView: View {
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(Color("blk").opacity(0.6))
                             
-                            Text("\(workout.exercises.count) esercizi")
+                            Text("\(workout.exercises.count) exercises")
                                 .font(.subheadline)
                                 .foregroundColor(Color("blk").opacity(0.7))
                         }

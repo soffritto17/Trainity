@@ -1,54 +1,98 @@
 import SwiftUI
 
+// MARK: - Enum for difficulty levels
+enum DifficultyLevel: String, CaseIterable, Codable {
+    case easy = "easy"
+    case medium = "medium"
+    case hard = "hard"
+    
+    // Localized names
+    var localizedName: String {
+        switch self {
+        case .easy: return "Easy"
+        case .medium: return "Medium"
+        case .hard: return "Hard"
+        }
+    }
+    
+    // Colors for each level
+    var color: Color {
+        switch self {
+        case .easy: return Color("blk")
+        case .medium: return Color(red: 0.9, green: 0.6, blue: 0.0)
+        case .hard: return Color(red: 0.8, green: 0.2, blue: 0.2)
+        }
+    }
+    
+    // Rest times
+    var restTime: Int {
+        switch self {
+        case .easy: return 30
+        case .medium: return 20
+        case .hard: return 15
+        }
+    }
+}
+
 struct DailyChallengeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @Environment(\.presentationMode) var presentationMode
     @State private var showingChallengeDetails = false
     @State private var showingLevelUpTips = false
     
-    // Nuove variabili di stato
-    @AppStorage("selectedDifficultyLevel") private var selectedDifficultyLevel: String = "Facile"
+    // Use enum instead of string for level
+    @AppStorage("selectedDifficultyLevel") private var selectedDifficultyLevelRaw: String = DifficultyLevel.easy.rawValue
     @AppStorage("currentChallengeIndex") private var currentChallengeIndex: Int = 0
     @AppStorage("completedChallengesCount") private var completedChallengesCount: Int = 0
     @AppStorage("lastChallengeDate") private var lastChallengeDate: Date = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
     
-    // Calcola quanti giorni sono stati completati nella settimana corrente
+    // Computed property for current level
+    private var selectedDifficultyLevel: DifficultyLevel {
+        get {
+            return DifficultyLevel(rawValue: selectedDifficultyLevelRaw) ?? .easy
+        }
+        set {
+            selectedDifficultyLevelRaw = newValue.rawValue
+        }
+    }
+    
+    // Calculate how many days have been completed in the current week
     private var completedDays: Int {
         workoutManager.dailyChallengeCompleted.filter { $0 }.count
     }
     
-    // Genera quattro allenamenti diversi per ogni livello di difficoltà
-    private var challenges: [String: [DailyChallenge]] {
+    // Generate four different workouts for each difficulty level
+    private var challenges: [DifficultyLevel: [DailyChallenge]] {
         [
-            "Facile": [
+            .easy: [
                 DailyChallenge(
                     exercises: [
                         Exercise(name: "Wall Push-ups", sets: 2, reps: 8),
                         Exercise(name: "Squats", sets: 2, reps: 8),
                         Exercise(name: "Push Ups", sets: 2, reps: 6)
                     ],
-                    difficulty: "Facile",
-                    description: "Un allenamento leggero per iniziare la giornata con energia!",
+                    difficulty: DifficultyLevel.easy.localizedName,
+                    description: "A light workout to start the day with energy!",
                     estimatedTime: 15
                 ),
                 DailyChallenge(
                     exercises: [
                         Exercise(name: "High Knees", sets: 2, reps: 20),
                         Exercise(name: "Glute Bridges", sets: 3, reps: 12),
-                        Exercise(name: "Plank", sets: 2, reps: 20) // secondi
+                        Exercise(name: "Plank", sets: 2, reps: 20) // seconds
                     ],
-                    difficulty: "Facile",
-                    description: "Un allenamento semplice per migliorare la resistenza di base.",
+                    difficulty: DifficultyLevel.easy.localizedName,
+                    description: "A simple workout to improve basic endurance.",
                     estimatedTime: 15
                 ),
                 DailyChallenge(
                     exercises: [
                         Exercise(name: "Arm Circles", sets: 2, reps: 15),
                         Exercise(name: "Walking Lunges", sets: 2, reps: 10),
-                        Exercise(name: "Wall Sit", sets: 2, reps: 20) // secondi
+                        Exercise(name: "Wall Sit", sets: 2, reps: 20) // seconds
                     ],
-                    difficulty: "Facile",
-                    description: "Concentrati sulla forma corretta per massimizzare i benefici.",
+                    difficulty: DifficultyLevel.easy.localizedName,
+                    description: "Focus on proper form to maximize benefits.",
                     estimatedTime: 15
                 ),
                 DailyChallenge(
@@ -57,21 +101,21 @@ struct DailyChallengeView: View {
                         Exercise(name: "Seated Leg Raises", sets: 3, reps: 10),
                         Exercise(name: "Modified Push Ups", sets: 2, reps: 8)
                     ],
-                    difficulty: "Facile",
-                    description: "Un allenamento completo del corpo a bassa intensità.",
+                    difficulty: DifficultyLevel.easy.localizedName,
+                    description: "A complete low-intensity full-body workout.",
                     estimatedTime: 15
                 )
             ],
-            "Medio": [
+            .medium: [
                 DailyChallenge(
                     exercises: [
                         Exercise(name: "Burpees", sets: 3, reps: 10),
                         Exercise(name: "Lunges", sets: 3, reps: 12),
                         Exercise(name: "Mountain Climbers", sets: 3, reps: 20),
-                        Exercise(name: "Plank", sets: 3, reps: 30) // secondi
+                        Exercise(name: "Plank", sets: 3, reps: 30) // seconds
                     ],
-                    difficulty: "Medio",
-                    description: "Un allenamento di media intensità per migliorare forza e resistenza.",
+                    difficulty: DifficultyLevel.medium.localizedName,
+                    description: "A medium-intensity workout to improve strength and endurance.",
                     estimatedTime: 25
                 ),
                 DailyChallenge(
@@ -81,8 +125,8 @@ struct DailyChallengeView: View {
                         Exercise(name: "Bicycle Crunches", sets: 3, reps: 20),
                         Exercise(name: "Russian Twists", sets: 3, reps: 15)
                     ],
-                    difficulty: "Medio",
-                    description: "Lavora sul core e sulla forza del tronco in questa sfida.",
+                    difficulty: DifficultyLevel.medium.localizedName,
+                    description: "Work on core and trunk strength in this challenge.",
                     estimatedTime: 25
                 ),
                 DailyChallenge(
@@ -92,33 +136,33 @@ struct DailyChallengeView: View {
                         Exercise(name: "Curtsy Lunges", sets: 3, reps: 12),
                         Exercise(name: "Tricep Dips", sets: 3, reps: 12)
                     ],
-                    difficulty: "Medio",
-                    description: "Migliora la mobilità e la forza con questo circuito.",
+                    difficulty: DifficultyLevel.medium.localizedName,
+                    description: "Improve mobility and strength with this circuit.",
                     estimatedTime: 25
                 ),
                 DailyChallenge(
                     exercises: [
-                        Exercise(name: "Side Plank", sets: 3, reps: 20), // secondi per lato
+                        Exercise(name: "Side Plank", sets: 3, reps: 20), // seconds per side
                         Exercise(name: "Donkey Kicks", sets: 3, reps: 15),
                         Exercise(name: "Shoulder Taps", sets: 3, reps: 16),
                         Exercise(name: "Flutter Kicks", sets: 3, reps: 30)
                     ],
-                    difficulty: "Medio",
-                    description: "Concentrati sulla stabilizzazione e sul core con questo workout.",
+                    difficulty: DifficultyLevel.medium.localizedName,
+                    description: "Focus on stabilization and core with this workout.",
                     estimatedTime: 25
                 )
             ],
-            "Difficile": [
+            .hard: [
                 DailyChallenge(
                     exercises: [
                         Exercise(name: "Burpees", sets: 4, reps: 15),
                         Exercise(name: "Jump Squats", sets: 4, reps: 20),
                         Exercise(name: "Push Up with Rotation", sets: 4, reps: 12),
                         Exercise(name: "Mountain Climbers", sets: 4, reps: 30),
-                        Exercise(name: "Plank with Shoulder Tap", sets: 3, reps: 40) // secondi
+                        Exercise(name: "Plank with Shoulder Tap", sets: 3, reps: 40) // seconds
                     ],
-                    difficulty: "Difficile",
-                    description: "Una sfida intensa per atleti esperti!",
+                    difficulty: DifficultyLevel.hard.localizedName,
+                    description: "An intense challenge for experienced athletes!",
                     estimatedTime: 35
                 ),
                 DailyChallenge(
@@ -129,8 +173,8 @@ struct DailyChallengeView: View {
                         Exercise(name: "V-Ups", sets: 4, reps: 15),
                         Exercise(name: "Alternating Superman", sets: 3, reps: 20)
                     ],
-                    difficulty: "Difficile",
-                    description: "Un allenamento ad alta intensità per massimizzare il condizionamento.",
+                    difficulty: DifficultyLevel.hard.localizedName,
+                    description: "A high-intensity workout to maximize conditioning.",
                     estimatedTime: 35
                 ),
                 DailyChallenge(
@@ -139,10 +183,10 @@ struct DailyChallengeView: View {
                         Exercise(name: "Pistol Squats", sets: 3, reps: 8),
                         Exercise(name: "Tuck Jumps", sets: 4, reps: 15),
                         Exercise(name: "Dragon Flags", sets: 3, reps: 10),
-                        Exercise(name: "Hollow Body Holds", sets: 3, reps: 45) // secondi
+                        Exercise(name: "Hollow Body Holds", sets: 3, reps: 45) // seconds
                     ],
-                    difficulty: "Difficile",
-                    description: "Questa sfida metterà alla prova la tua forza e resistenza.",
+                    difficulty: DifficultyLevel.hard.localizedName,
+                    description: "This challenge will test your strength and endurance.",
                     estimatedTime: 35
                 ),
                 DailyChallenge(
@@ -151,34 +195,34 @@ struct DailyChallengeView: View {
                         Exercise(name: "Box Jumps", sets: 4, reps: 15),
                         Exercise(name: "Wide Push-ups", sets: 4, reps: 15),
                         Exercise(name: "Single Leg Burpees", sets: 3, reps: 10),
-                        Exercise(name: "L-Sit Hold", sets: 3, reps: 30) // secondi
+                        Exercise(name: "L-Sit Hold", sets: 3, reps: 30) // seconds
                     ],
-                    difficulty: "Difficile",
-                    description: "Un allenamento avanzato che richiede forza e controllo del corpo.",
+                    difficulty: DifficultyLevel.hard.localizedName,
+                    description: "An advanced workout requiring strength and body control.",
                     estimatedTime: 35
                 )
             ]
         ]
     }
     
-    // Ottieni la sfida corrente
+    // Get current challenge
     private var currentChallenge: DailyChallenge? {
         guard let challengesForLevel = challenges[selectedDifficultyLevel] else { return nil }
         return challengesForLevel[currentChallengeIndex % challengesForLevel.count]
     }
     
-    // Verifica se l'utente è pronto per avanzare di livello
+    // Check if user is ready to advance to next level
     private var readyForNextLevel: Bool {
-        if selectedDifficultyLevel == "Difficile" { return false }
+        if selectedDifficultyLevel == .hard { return false }
         return completedChallengesCount >= 8
     }
     
-    // Determina il prossimo livello di difficoltà
-    private var nextLevel: String {
+    // Determine next difficulty level
+    private var nextLevel: DifficultyLevel {
         switch selectedDifficultyLevel {
-        case "Facile": return "Medio"
-        case "Medio": return "Difficile"
-        default: return selectedDifficultyLevel
+        case .easy: return .medium
+        case .medium: return .hard
+        case .hard: return .hard
         }
     }
     
@@ -187,7 +231,7 @@ struct DailyChallengeView: View {
             Color("wht").edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 25) {
-                // Header con icona
+                // Header with icon
                 VStack(spacing: 15) {
                     ZStack {
                         Circle()
@@ -207,13 +251,13 @@ struct DailyChallengeView: View {
                 }
                 .padding(.top, 10)
                 
-                // Progresso settimanale
+                // Weekly progress
                 VStack(spacing: 12) {
                     HStack(spacing: 12) {
-                        let weekdays = ["L", "M", "M", "G", "V", "S", "D"]
-                        // Calcolo corretto: Lunedì=0, Martedì=1, ..., Domenica=6
-                        let todayWeekday = Calendar.current.component(.weekday, from: Date()) // 1=Dom, 2=Lun, ..., 7=Sab
-                        let todayIndex = todayWeekday == 1 ? 6 : todayWeekday - 2 // Converte in 0-6 con Lun=0
+                        let weekdays = ["M", "T", "W", "T", "F", "S", "S"]
+                        // Correct calculation: Monday=0, Tuesday=1, ..., Sunday=6
+                        let todayWeekday = Calendar.current.component(.weekday, from: Date()) // 1=Sun, 2=Mon, ..., 7=Sat
+                        let todayIndex = todayWeekday == 1 ? 6 : todayWeekday - 2 // Convert to 0-6 with Mon=0
                         
                         ForEach(0..<7) { day in
                             ZStack {
@@ -248,7 +292,7 @@ struct DailyChallengeView: View {
                     }
                     
                     HStack(spacing: 4) {
-                        Text("\(completedDays) / 7 giorni completati")
+                        Text("\(completedDays) / 7 days completed")
                             .font(.subheadline)
                             .foregroundColor(Color("blk").opacity(0.7))
                         
@@ -260,21 +304,21 @@ struct DailyChallengeView: View {
                     }
                 }
                 
-                // Sezione livello con badge migliorato
+                // Level section with improved badge
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Livello attuale")
+                        Text("Current Level")
                             .font(.subheadline)
                             .foregroundColor(Color("blk").opacity(0.7))
                         
                         HStack(spacing: 8) {
-                            Text(selectedDifficultyLevel)
+                            Text(selectedDifficultyLevel.localizedName)
                                 .font(.title3)
                                 .fontWeight(.semibold)
-                                .foregroundColor(difficultyColor(for: selectedDifficultyLevel))
+                                .foregroundColor(selectedDifficultyLevel.color)
                             
                             Circle()
-                                .fill(difficultyColor(for: selectedDifficultyLevel))
+                                .fill(selectedDifficultyLevel.color)
                                 .frame(width: 8, height: 8)
                         }
                     }
@@ -295,21 +339,21 @@ struct DailyChallengeView: View {
                             .foregroundColor(Color("wht"))
                             .padding(.horizontal, 12)
                             .padding(.vertical, 8)
-                            .background(difficultyColor(for: nextLevel))
+                            .background(nextLevel.color)
                             .cornerRadius(20)
-                            .shadow(color: difficultyColor(for: nextLevel).opacity(0.3), radius: 4, x: 0, y: 2)
+                            .shadow(color: nextLevel.color.opacity(0.3), radius: 4, x: 0, y: 2)
                         }
                     }
                 }
                 .padding(.horizontal)
                 
-                // Card dell'allenamento odierno
+                // Today's workout card
                 if let challenge = currentChallenge {
                     VStack(spacing: 0) {
-                        // Header della card
+                        // Card header
                         VStack(spacing: 8) {
                             HStack {
-                                Text("Allenamento di oggi")
+                                Text("Today's Workout")
                                     .font(.headline)
                                     .foregroundColor(Color("blk"))
                                 
@@ -318,10 +362,10 @@ struct DailyChallengeView: View {
                                 Text("\(challenge.estimatedTime) min")
                                     .font(.subheadline)
                                     .fontWeight(.medium)
-                                    .foregroundColor(difficultyColor(for: selectedDifficultyLevel))
+                                    .foregroundColor(selectedDifficultyLevel.color)
                                     .padding(.horizontal, 10)
                                     .padding(.vertical, 4)
-                                    .background(difficultyColor(for: selectedDifficultyLevel).opacity(0.15))
+                                    .background(selectedDifficultyLevel.color.opacity(0.15))
                                     .cornerRadius(12)
                             }
                             
@@ -337,12 +381,12 @@ struct DailyChallengeView: View {
                         Divider()
                             .background(Color("blk").opacity(0.1))
                         
-                        // Lista esercizi
+                        // Exercise list
                         ScrollView {
                             LazyVStack(spacing: 0) {
                                 ForEach(Array(challenge.exercises.enumerated()), id: \.element.id) { index, exercise in
                                     HStack(spacing: 12) {
-                                        // Numero esercizio
+                                        // Exercise number
                                         ZStack {
                                             Circle()
                                                 .fill(Color("blk").opacity(0.1))
@@ -360,7 +404,7 @@ struct DailyChallengeView: View {
                                                 .fontWeight(.medium)
                                                 .foregroundColor(Color("blk"))
                                             
-                                            Text("\(exercise.sets) serie × \(exercise.reps) ripetizioni")
+                                            Text("\(exercise.sets) sets × \(exercise.reps) reps")
                                                 .font(.caption)
                                                 .foregroundColor(Color("blk").opacity(0.6))
                                         }
@@ -386,15 +430,15 @@ struct DailyChallengeView: View {
                     .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 4)
                     .padding(.horizontal)
                     
-                    // Bottoni di azione
+                    // Action buttons
                     HStack(spacing: 15) {
                         Menu {
-                            ForEach(["Facile", "Medio", "Difficile"], id: \.self) { level in
+                            ForEach(DifficultyLevel.allCases, id: \.self) { level in
                                 Button(action: {
                                     changeDifficultyLevel(to: level)
                                 }) {
                                     HStack {
-                                        Text(level)
+                                        Text(level.localizedName)
                                         if selectedDifficultyLevel == level {
                                             Image(systemName: "checkmark")
                                         }
@@ -405,7 +449,7 @@ struct DailyChallengeView: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "slider.horizontal.3")
                                     .font(.system(size: 16))
-                                Text("Cambia livello")
+                                Text("Change Level")
                                     .fontWeight(.medium)
                             }
                             .foregroundColor(Color("blk"))
@@ -422,7 +466,7 @@ struct DailyChallengeView: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "checkmark.circle.fill")
                                     .font(.system(size: 16))
-                                Text("Completa")
+                                Text("Complete")
                                     .fontWeight(.semibold)
                             }
                             .foregroundColor(Color("wht"))
@@ -439,7 +483,7 @@ struct DailyChallengeView: View {
                 Spacer()
             }
             
-            // Overlay per level up
+            // Level up overlay
             if showingLevelUpTips {
                 Color.black.opacity(0.4)
                     .edgesIgnoringSafeArea(.all)
@@ -448,42 +492,42 @@ struct DailyChallengeView: View {
                     }
                 
                 VStack(spacing: 20) {
-                    Text("Sei pronto per il prossimo livello!")
+                    Text("You're ready for the next level!")
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(Color("blk"))
                     
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.system(size: 60))
-                        .foregroundColor(difficultyColor(for: nextLevel))
+                        .foregroundColor(nextLevel.color)
                     
-                    Text("Hai completato \(completedChallengesCount) sfide di livello \(selectedDifficultyLevel). Il tuo corpo e la tua mente si sono adattati e ora puoi passare al livello \(nextLevel)!")
+                    Text("You've completed \(completedChallengesCount) challenges at \(selectedDifficultyLevel.localizedName) level. Your body and mind have adapted and now you can move to \(nextLevel.localizedName) level!")
                         .font(.body)
                         .multilineTextAlignment(.center)
                         .foregroundColor(Color("blk"))
                         .padding()
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Cosa ti aspetta nel livello \(nextLevel):")
+                        Text("What awaits you at \(nextLevel.localizedName) level:")
                             .font(.headline)
                             .foregroundColor(Color("blk"))
                         
                         HStack {
                             Image(systemName: "flame.fill")
-                                .foregroundColor(difficultyColor(for: nextLevel))
-                            Text("Intensità maggiore")
+                                .foregroundColor(nextLevel.color)
+                            Text("Higher intensity")
                         }
                         
                         HStack {
                             Image(systemName: "stopwatch.fill")
-                                .foregroundColor(difficultyColor(for: nextLevel))
-                            Text("Allenamenti più lunghi")
+                                .foregroundColor(nextLevel.color)
+                            Text("Longer workouts")
                         }
                         
                         HStack {
                             Image(systemName: "figure.strengthtraining.traditional")
-                                .foregroundColor(difficultyColor(for: nextLevel))
-                            Text("Più esercizi per sessione")
+                                .foregroundColor(nextLevel.color)
+                            Text("More exercises per session")
                         }
                     }
                     .padding()
@@ -494,7 +538,7 @@ struct DailyChallengeView: View {
                         Button(action: {
                             showingLevelUpTips = false
                         }) {
-                            Text("Non ancora")
+                            Text("Not Yet")
                                 .font(.headline)
                                 .foregroundColor(Color("blk"))
                                 .frame(maxWidth: .infinity)
@@ -508,12 +552,12 @@ struct DailyChallengeView: View {
                             changeDifficultyLevel(to: nextLevel)
                             showingLevelUpTips = false
                         }) {
-                            Text("Cambia livello")
+                            Text("Level Up")
                                 .font(.headline)
                                 .foregroundColor(Color("wht"))
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(difficultyColor(for: nextLevel))
+                                .background(nextLevel.color)
                                 .cornerRadius(10)
                                 .shadow(radius: 1)
                         }
@@ -539,154 +583,114 @@ struct DailyChallengeView: View {
             }
         )
         .onAppear {
+            // TEMPORARY RESET - Remove after testing
+            // resetAllData()
+            // workoutManager.dailyChallengeCompleted[0] = true
+            // workoutManager.dailyChallengeCompleted[1] = true
             
-            // RESET TEMPORANEO - Rimuovi dopo il test
-           //resetAllData()
-            //workoutManager.dailyChallengeCompleted[0] = true
-            //workoutManager.dailyChallengeCompleted[1] = true
-    
             checkForNewDay()
             checkForNewWeek()
         }
     }
     
-    // Cambia il livello di difficoltà
-    private func changeDifficultyLevel(to level: String) {
-        selectedDifficultyLevel = level
-        if level != "Facile" {
+    // Change difficulty level
+    private func changeDifficultyLevel(to level: DifficultyLevel) {
+        selectedDifficultyLevelRaw = level.rawValue
+        if level != .easy {
             completedChallengesCount = 0
         }
     }
     
-    // Completa la sfida corrente
+    // Complete current challenge
     private func completeCurrentChallenge(_ challenge: DailyChallenge) {
-        // Calcolo corretto del giorno della settimana (stesso del display)
-        let todayWeekday = Calendar.current.component(.weekday, from: Date()) // 1=Dom, 2=Lun, ..., 7=Sab
-        let todayIndex = todayWeekday == 1 ? 6 : todayWeekday - 2 // Converte in 0-6 con Lun=0
+        // Correct calculation of weekday (same as display)
+        let todayWeekday = Calendar.current.component(.weekday, from: Date()) // 1=Sun, 2=Mon, ..., 7=Sat
+        let todayIndex = todayWeekday == 1 ? 6 : todayWeekday - 2 // Convert to 0-6 with Mon=0
         print("Today index: \(todayIndex)")
         workoutManager.dailyChallengeCompleted[todayIndex] = true
         completedChallengesCount += 1
         lastChallengeDate = Date()
         currentChallengeIndex = (currentChallengeIndex + 1) % 4
+        
         let workout = Workout(
-            name: "Sfida Giornaliera - \(selectedDifficultyLevel)",
+            name: "Daily Challenge - \(selectedDifficultyLevel.localizedName)",
             exercises: challenge.exercises,
-            restTime: getDifficultyRestTime(for: selectedDifficultyLevel)
+            restTime: selectedDifficultyLevel.restTime
         )
 
         workoutManager.completeWorkout(workout)
     }
     
-    // FUNZIONE TEMPORANEA DI RESET - Rimuovi dopo il test
-
+    // TEMPORARY RESET FUNCTION - Remove after testing
     private func resetAllData() {
-        // Cancella tutti i UserDefaults
+        // Clear all UserDefaults
         UserDefaults.standard.removeObject(forKey: "lastWeekStart")
         UserDefaults.standard.removeObject(forKey: "selectedDifficultyLevel")
         UserDefaults.standard.removeObject(forKey: "currentChallengeIndex")
         UserDefaults.standard.removeObject(forKey: "completedChallengesCount")
         UserDefaults.standard.removeObject(forKey: "lastChallengeDate")
         UserDefaults.standard.removeObject(forKey: "WorkoutManagerData")
+        
         do {
             let data = try JSONEncoder().encode(WorkoutManager())
             UserDefaults.standard.set(data, forKey: "WorkoutManagerData")
-            print("Dati salvati con successo")
+            print("Data saved successfully")
         } catch {
-            print("Errore nel salvataggio dei dati: \(error)")
+            print("Error saving data: \(error)")
         }
         
-        // Reset dell'array dei completamenti
+        // Reset completion array
         workoutManager.dailyChallengeCompleted = Array(repeating: false, count: 7)
-       
-
         
-        // Reset delle variabili @AppStorage (le forza ai valori di default)
-        selectedDifficultyLevel = "Facile"
+        // Reset @AppStorage variables (force them to default values)
+        selectedDifficultyLevelRaw = DifficultyLevel.easy.rawValue
         currentChallengeIndex = 0
         completedChallengesCount = 0
         lastChallengeDate = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
         
-        print("🔄 RESET COMPLETO ESEGUITO")
+        print("🔄 COMPLETE RESET PERFORMED")
     }
     
-    // Controlla nuovo giorno
+    // Check for new day
     private func checkForNewDay() {
         let calendar = Calendar.current
         if !calendar.isDate(lastChallengeDate, inSameDayAs: Date()) {
-            // Rotazione solo se sfida completata
+            // Rotation only if challenge completed
         }
     }
     
-    // Controlla nuova settimana e resetta se necessario
+    // Check for new week and reset if necessary
     private func checkForNewWeek() {
         let calendar = Calendar.current
         let today = Date()
         
-        // Ottieni l'inizio della settimana corrente (lunedì)
+        // Get start of current week (Monday)
         let weekday = calendar.component(.weekday, from: today)
-        let daysFromMonday = weekday == 1 ? 6 : weekday - 2 // Domenica = 6 giorni da lunedì
+        let daysFromMonday = weekday == 1 ? 6 : weekday - 2 // Sunday = 6 days from Monday
         
         guard let startOfWeek = calendar.date(byAdding: .day, value: -daysFromMonday, to: today) else { return }
         guard let startOfWeekNormalized = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: startOfWeek) else { return }
         
-        // Controlla se è una nuova settimana rispetto all'ultima volta
+        // Check if it's a new week compared to last time
         if let lastWeekStart = getLastWeekStart() {
             if !calendar.isDate(lastWeekStart, inSameDayAs: startOfWeekNormalized) {
-                // Nuova settimana - resetta tutti i completamenti
+                // New week - reset all completions
                 workoutManager.dailyChallengeCompleted = Array(repeating: false, count: 7)
                 setLastWeekStart(startOfWeekNormalized)
             }
         } else {
-            // Prima volta - salva l'inizio della settimana corrente
+            // First time - save current week start
             setLastWeekStart(startOfWeekNormalized)
         }
     }
     
-    // Funzioni helper per salvare/recuperare l'inizio dell'ultima settimana
+    // Helper functions to save/retrieve last week start
     private func getLastWeekStart() -> Date? {
         return UserDefaults.standard.object(forKey: "lastWeekStart") as? Date
     }
     
     private func setLastWeekStart(_ date: Date) {
         UserDefaults.standard.set(date, forKey: "lastWeekStart")
-    }
-    
-    // Tempi di riposo per livello
-    private func getDifficultyRestTime(for difficulty: String) -> Int {
-        switch difficulty {
-        case "Facile": return 30
-        case "Medio": return 20
-        case "Difficile": return 15
-        default: return 30
-        }
-    }
-    
-    // Colori per livello
-    private func difficultyColor(for difficulty: String) -> Color {
-        switch difficulty {
-        case "Facile":
-            return Color("blk")
-        case "Medio":
-            return Color(red: 0.9, green: 0.6, blue: 0.0)
-        case "Difficile":
-            return Color(red: 0.8, green: 0.2, blue: 0.2)
-        default:
-            return Color.gray
-        }
-    }
-    
-    // Icone per livello
-    private func difficultyIcon(for difficulty: String) -> String {
-        switch difficulty {
-        case "Facile":
-            return "1.circle.fill"
-        case "Medio":
-            return "2.circle.fill"
-        case "Difficile":
-            return "3.circle.fill"
-        default:
-            return "questionmark.circle.fill"
-        }
     }
 }
 
